@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/basic_information/edit_profile_page.dart';
+import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 
 class ProfileWidget extends StatefulWidget {
@@ -32,6 +33,7 @@ class _UserProfileState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.kBackground,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -47,10 +49,21 @@ class _UserProfileState extends State<ProfileWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                         child: Row(
                           children: [
-                            const Icon(Icons.numbers, color: Colors.white),
+                            Container(
+                                width:
+                                    40.0, // Adjusted width for the circular container
+                                height:
+                                    40.0, // Adjusted height for the circular container
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors
+                                      .kBackground, // Adjusted circle color
+                                ),
+                                child: const Icon(Icons.numbers,
+                                    color: AppColors.kPrimary)),
                             const SizedBox(width: 8.0),
                             Text(
                               'Customer Number: ${userData['Customer Code']}',
@@ -67,10 +80,21 @@ class _UserProfileState extends State<ProfileWidget> {
                         color: Colors.grey[300],
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                         child: Row(
                           children: [
-                            const Icon(Icons.person, color: Colors.white),
+                            Container(
+                                width:
+                                    40.0, // Adjusted width for the circular container
+                                height:
+                                    40.0, // Adjusted height for the circular container
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors
+                                      .kBackground, // Adjusted circle color
+                                ),
+                                child: const Icon(Icons.person,
+                                    color: AppColors.kPrimary)),
                             const SizedBox(width: 8.0),
                             Text(
                               'Customer Name: ${userData['Customer Name']}',
@@ -86,19 +110,22 @@ class _UserProfileState extends State<ProfileWidget> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 8.0),
 
               // Basic Information card
               Card(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Basic Information:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.green, // Adjusted font color
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Basic Information:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                          color: Colors.green, // Adjusted font color
+                        ),
                       ),
                     ),
                     // Divider line after 'Basic Information:'
@@ -106,7 +133,7 @@ class _UserProfileState extends State<ProfileWidget> {
                       thickness: 1,
                       color: Colors.grey[300],
                     ),
-                    const SizedBox(height: 8.0),
+
                     ...[
                       {
                         'field': 'Mobile',
@@ -168,9 +195,23 @@ class _UserProfileState extends State<ProfileWidget> {
                                 vertical: 8.0, horizontal: 8.0),
                             child: Row(
                               children: [
-                                Icon(
-                                  item['icon'] as IconData,
-                                  color: Colors.green, // Adjusted icon color
+                                Container(
+                                  width:
+                                      40.0, // Adjusted width for the circular container
+                                  height:
+                                      40.0, // Adjusted height for the circular container
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors
+                                        .kBackground, // Adjusted circle color
+                                  ),
+                                  child: Center(
+                                    child: Icon(
+                                      item['icon'] as IconData,
+                                      color: AppColors
+                                          .kPrimary, // Adjusted icon color
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(width: 8.0),
                                 Text(

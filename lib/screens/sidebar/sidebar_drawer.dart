@@ -4,7 +4,6 @@ import 'package:krishajdealer/screens/dispatch_order/dispatch_order_details_scre
 import 'package:krishajdealer/screens/ledger/ledger_screen.dart';
 import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/screens/orders/special_order_screen.dart';
-import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/reports/aging-report_screen.dart';
 import 'package:krishajdealer/screens/reports/aging_report_bill_wise_screen.dart';
 import 'package:krishajdealer/screens/reports/credit_note_details_screen.dart';
@@ -13,6 +12,7 @@ import 'package:krishajdealer/screens/reports/order_placement_through_mrp_screen
 import 'package:krishajdealer/screens/reports/mrp_vs_order_placement_report_screen.dart';
 import 'package:krishajdealer/screens/reports/product_wise_sales_report_screen.dart';
 import 'package:krishajdealer/screens/sales_team/sales_team_info_screen.dart';
+import 'package:krishajdealer/utils/colors.dart';
 
 class Section {
   final String name;
@@ -44,11 +44,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     ),
   ];
   final List<Section> orderSections = [
-    Section(
-      name: 'Orders',
-      icon: Icons.shopping_cart,
-      screen: const SubmittedOrderListScreen(),
-    ),
+    // Section(
+    //   name: 'Orders',
+    //   icon: Icons.shopping_cart,
+    //   screen: const SubmittedOrderListScreen(),
+    // ),
     Section(
       name: 'Orders Placement',
       icon: Icons.note_add,
@@ -180,7 +180,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     ));
     widgets.addAll(sections.map((section) {
       return ListTile(
-        leading: Icon(section.icon),
+        leading: Container(
+          width: 40.0,
+          height: 40.0,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.kPrimary, // Adjusted circle color
+          ),
+          child: Icon(section.icon,
+              color: Colors.white), // You can customize the icon color
+        ),
         title: Text(
           section.name,
           style: TextStyle(
