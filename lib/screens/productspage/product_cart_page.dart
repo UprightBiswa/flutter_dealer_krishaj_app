@@ -34,11 +34,23 @@ class ShoppingCartPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Column(
-                  children: List.generate(
-                    3, // Replace with the actual count of saved products
-                    (index) => _buildCartItem(),
-                  ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount:
+                      5, // Replace with the actual count of saved products
+                  separatorBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: Divider(
+                      thickness: 1,
+                      height: 0,
+                      color: Colors.black12,
+                    ),
+                  ), // Divider line
+                  itemBuilder: (context, index) => _buildCartItem(),
+                ),
+                SizedBox(
+                  height: 8,
                 ),
                 _buildTotalSection(),
                 SizedBox(
@@ -71,33 +83,38 @@ class ShoppingCartPage extends StatelessWidget {
   Widget _buildCartItem() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(8.0),
       width: double.infinity,
       child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.kAppBackground, AppColors.kBackground],
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   gradient: const LinearGradient(
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //     colors: [AppColors.kAppBackground, AppColors.kBackground],
+        //   ),
+        // ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              width: 100,
-              height: 100,
+            Padding(
               padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  bottomLeft: Radius.circular(12.0),
+              child: Container(
+                width: 100,
+                height: 100,
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    bottomLeft: Radius.circular(12.0),
+                    bottomRight: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0),
+                  ),
+                  border: Border.all(color: Colors.black12),
                 ),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: Image.asset(
-                'assets/images/Direct.jpg',
-                fit: BoxFit.cover,
+                child: Image.asset(
+                  'assets/images/Direct.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Expanded(
@@ -105,6 +122,7 @@ class ShoppingCartPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Product Name with a Very Long Title',
@@ -132,7 +150,7 @@ class ShoppingCartPage extends StatelessWidget {
                     Text(
                       'Unit of Measure: 100g',
                       style: TextStyle(
-                        fontSize: 10, // Adjusted font size
+                        fontSize: 12, // Adjusted font size
                         color: Colors.black,
                       ),
                     ),
@@ -141,19 +159,16 @@ class ShoppingCartPage extends StatelessWidget {
               ),
             ),
             Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    // Remove product logic
-                  },
-                  child: Icon(
+              child: MaterialButton(
+                onPressed: () {
+                  // Remove product logic
+                },
+                child: Icon(
                   Icons.delete,
                   color: Colors.white,
                 ),
                 color: Colors.red,
                 shape: CircleBorder(),
-                ),
               ),
             ),
           ],
@@ -171,7 +186,7 @@ class ShoppingCartPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total Products: 3', // Replace with the actual count of products
+            'Bill Details', // Replace with the actual count of products
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

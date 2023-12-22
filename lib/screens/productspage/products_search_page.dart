@@ -209,8 +209,8 @@ class _SearchPageState extends State<SearchPage> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 2.0,
-                  mainAxisSpacing: 2.0,
+                  crossAxisSpacing: 0.0,
+                  mainAxisSpacing: 0.0,
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
