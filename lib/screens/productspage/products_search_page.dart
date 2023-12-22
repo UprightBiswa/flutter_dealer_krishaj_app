@@ -148,7 +148,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -179,7 +179,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ],
               ),
-            if (recentSearches.isNotEmpty) const SizedBox(height: 16),
+            // if (recentSearches.isNotEmpty) const SizedBox(height: 8),
             if (recentSearches.isNotEmpty)
               SizedBox(
                 height: 40,
@@ -204,13 +204,13 @@ class _SearchPageState extends State<SearchPage> {
                   },
                 ),
               ),
-            if (recentSearches.isNotEmpty) const SizedBox(height: 16),
+            if (recentSearches.isNotEmpty) const SizedBox(height: 8),
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 0.0,
-                  mainAxisSpacing: 0.0,
+                  crossAxisSpacing: 2.0,
+                  mainAxisSpacing: 2.0,
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
