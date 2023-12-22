@@ -14,6 +14,7 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
+import 'package:krishajdealer/utils/assets.dart';
 import 'package:krishajdealer/utils/colors.dart';
 
 class SubmittedOrderListScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class SubmittedOrderListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        backgroundColor: AppColors.kBackground,
+        backgroundColor: AppColors.kAppBackground,
         // appBar: AppBar(title: const Text(' Order Page')),
         // drawer: const DrawerWidget(),
         body: SafeArea(
@@ -110,12 +111,11 @@ class SearchButton extends StatelessWidget {
             color: Colors.white,
           ),
           child: const Padding(
-            padding:
-                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
             child: Row(
               children: [
                 Icon(Icons.search, color: Colors.grey),
-                 SizedBox(width: 10.0),
+                SizedBox(width: 10.0),
                 Text(
                   'Search for products, brands,etc.',
                   style: TextStyle(
@@ -150,12 +150,9 @@ class PromoCard extends StatelessWidget {
           children: [
             Opacity(
               opacity: .5,
-              child: Image.network(
-                  "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/BACKGROUND%202.png?alt=media&token=0d003860-ba2f-4782-a5ee-5d5684cdc244",
-                  fit: BoxFit.cover),
+              child: Image.asset(AppAssets.banner1, fit: BoxFit.cover),
             ),
-            Image.network(
-                "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Image.png?alt=media&token=8256c357-cf86-4f76-8c4d-4322d1ebc06c"),
+            Image.asset(AppAssets.banner2),
             const Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -263,18 +260,11 @@ class CardListView extends StatelessWidget {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: const [
-            Card(
-                "Vegan",
-                "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33",
-                "8 min away"),
-            Card(
-                "Italian ",
-                "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Restaurant%20Image.png?alt=media&token=43509b4c-269e-4279-8c88-36dc9ed27a66",
-                "12 min away"),
-            Card(
-                "Vegan",
-                "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33",
-                "15 min away"),
+            Card("Direct", "assets/images/Direct.jpg",
+                "Cymoxanil 8% + Mancozeb 64% WP"),
+            Card("Kursor ", "assets/images/Koup01.png", "thifluzamide 24% SC"),
+            Card("Kure", "assets/images/PRIVINTAL-BV.png",
+                "Tebuconazole 25.9% EC"),
           ],
         ),
       ),
@@ -301,6 +291,7 @@ class Card extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.5),
+          border: Border.all(color: Colors.grey),
           boxShadow: [
             BoxShadow(
                 offset: const Offset(10, 20),
@@ -311,9 +302,11 @@ class Card extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.network(imageUrl, height: 70, fit: BoxFit.cover),
+            Image.asset(imageUrl, height: 70, fit: BoxFit.cover),
             const Spacer(),
             Text(text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.black,
@@ -325,6 +318,8 @@ class Card extends StatelessWidget {
             ),
             Text(
               subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: Colors.grey,

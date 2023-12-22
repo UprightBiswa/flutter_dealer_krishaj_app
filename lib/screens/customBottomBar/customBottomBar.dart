@@ -34,9 +34,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kBackground,
+      backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.kBackground,
+        backgroundColor: AppColors.kAppBackground,
         title: Text(getAppBarTitle(_selectedIndex)),
       ),
       drawer: const DrawerWidget(),

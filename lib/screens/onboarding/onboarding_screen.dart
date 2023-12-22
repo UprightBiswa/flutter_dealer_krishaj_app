@@ -1,4 +1,3 @@
-
 import 'package:animate_do/animate_do.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:krishajdealer/screens/authentication/logn_screen.dart';
 import 'package:krishajdealer/utils/assets.dart';
 import 'package:krishajdealer/utils/colors.dart';
+
 class FoochiOnboardingView extends StatefulWidget {
   const FoochiOnboardingView({super.key});
 
@@ -56,7 +56,8 @@ class _FoochiOnboardingViewState extends State<FoochiOnboardingView> {
                   // Navigate to FoochiSignInView when "Get Started" is tapped
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const FoochiSignInView()),
+                    MaterialPageRoute(
+                        builder: (context) => const FoochiSignInView()),
                   );
                 } else {
                   pageController.nextPage(
@@ -76,7 +77,6 @@ class _FoochiOnboardingViewState extends State<FoochiOnboardingView> {
     );
   }
 }
-
 
 class CustomOutlinedButton extends StatefulWidget {
   final VoidCallback onTap;
@@ -185,22 +185,22 @@ class Onboarding {
 
 List<Onboarding> onboardingList = [
   Onboarding(
-      title1: 'Diverse ',
-      title2: 'and fresh food',
+      title1: 'Empowering Agriculture ',
+      title2: 'with KREPL Solutions',
       description:
-          'With an extensive menu prepared by talented chefs, fresh quality food.',
+          'Innovative solutions for advanced agriculture. Experience the future with KREPL',
       image: AppAssets.kOnboardingFirst),
   Onboarding(
-      title1: 'Easy to ',
-      title2: 'change dish ingredients',
+      title1: 'Precision Farming ',
+      title2: 'by KREPL',
       description:
-          'You are a foodie, you can add or subtract ingredients in the dish.',
+          "Tailor your success with KREPL's precise agrochemical solutions.",
       image: AppAssets.kOnboardingSecond),
   Onboarding(
-      title1: 'Delivery ',
-      title2: 'Is given on time',
+      title1: 'Timely Growth ',
+      title2: 'by KREPL',
       description:
-          'With an extensive menu prepared by talented chefs, fresh quality food.',
+          "On-time deliveries, superior agrochemicals—experience growth with KREPL.",
       image: AppAssets.kOnboardingThird)
 ];
 
@@ -266,7 +266,10 @@ class OnBoardingCard extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               onBoarding.description,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: AppColors.kSecondary),
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.kSecondary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),

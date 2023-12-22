@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/classes/language.dart';
 import 'package:krishajdealer/classes/language_constrants.dart';
@@ -49,7 +47,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
       if (isLoggedIn) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  const CustomBottomNavigationBar()),
+          MaterialPageRoute(
+              builder: (context) => const CustomBottomNavigationBar()),
         );
       } else {
         Navigator.pushReplacement(
@@ -78,67 +77,83 @@ class _LanguageScreenState extends State<LanguageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kBackground,
+      appBar: AppBar(
+        backgroundColor: AppColors.kBackground,
+      ),
       body: SafeArea(
         child: Builder(
           builder: (context) {
             return Stack(
               children: <Widget>[
                 Positioned(
-                  top: 100,
-                  left: 0,
-                  right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      width: 150,
-                      height: 150,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 300,
+                  top: 10,
                   left: 0,
                   right: 0,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Center(
-                        child: Text(
-                          'Choose your preferred language:',
-                          style: TextStyle(fontSize: 18),
-                        ),
+                    children: [
+                      Image.asset(
+                        'assets/images/logo.png',
+                        width: 100,
+                        height: 100,
                       ),
                       const SizedBox(height: 16),
-                      // Radio buttons to select the language
-                      const Divider(),
-                      ...languageList
-                          .map(
-                            (language) => ListTile(
-                              title: Text(
-                                language.name,
-                                style: TextStyle(
-                                  color: selectedLanguage == language
-                                      ? AppColors.kPrimary
-                                      : Colors.black,
+                      Text(
+                        'Choose your preferred language:',
+                        style: TextStyle(
+                            color: const Color.fromRGBO(0, 0, 0, 1),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          // Radio buttons to select the language
+
+                          ...languageList
+                              .map(
+                                (language) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  child: ListTile(
+                                    title: Text(
+                                      language.name,
+                                      style: TextStyle(
+                                        color: selectedLanguage == language
+                                            ? AppColors.kPrimary
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                    leading: Radio<Language>(
+                                      value: language,
+                                      groupValue: selectedLanguage,
+                                      onChanged: (Language? value) {
+                                        setState(() {
+                                          selectedLanguage = value;
+                                        });
+                                        // Debug print statements
+                                        print(
+                                            'Selected language changed to: ${selectedLanguage?.name}');
+                                      },
+                                      activeColor: AppColors.kPrimary,
+                                    ),
+                                    // Add BoxDecoration to each language button
+                                    tileColor: selectedLanguage == language
+                                        ? AppColors.kPrimary.withOpacity(0.1)
+                                        : Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: BorderSide(
+                                        color: AppColors.kPrimary,
+                                        width: 2,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              leading: Radio<Language>(
-                                value: language,
-                                groupValue: selectedLanguage,
-                                onChanged: (Language? value) {
-                                  setState(() {
-                                    selectedLanguage = value;
-                                  });
-                                  // Debug print statements
-                                  print(
-                                      'Selected language changed to: ${selectedLanguage?.name}');
-                                },
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      const Divider(),
+                              )
+                              .toList(),
+                        ],
+                      ),
                     ],
                   ),
                 ),

@@ -114,81 +114,146 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.green,
-            ),
-            child: Text(
-              'Welcome, DealerName',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+    return SizedBox(
+      child: Drawer(
+        elevation: 10,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: AppColors.kPrimary,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Row with Vendor Name and Circular Logo
+                  Row(
+                    children: [
+                      // Circular Logo (You can replace this with your logo)
+                      Container(
+                        width: 25.0,
+                        height: 25.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Adjust the border radius for rounded corners
+                          color: Colors.white, // Adjust the background color
+                        ),
+                        child: const Icon(
+                          Icons.person,
+                          size: 20.0,
+                          color: Colors.green, // Adjust the icon color
+                        ),
+                      ),
+                      const SizedBox(width: 8.0), // Adjust spacing
+                      // Vendor Name
+                      const Text(
+                        'Welcome, Biswajit Das',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black, // Adjust text color
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8.0), // Adjust spacing
+
+                  // Row with Vendor Number
+                  const Row(
+                    children: [
+                      // Vendor Number
+                      Text(
+                        'Vendor Id: 1234',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black38, // Adjust text color
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: Text(
-              'Home',
-              style: TextStyle(
-                fontWeight: _selectedTabIndex == -1
-                    ? FontWeight.bold
-                    : FontWeight.normal,
-              ),
-            ),
-            onTap: () {
-              setState(() {
-                _selectedTabIndex = -1;
-              });
-              Navigator.pop(context);
-              // Navigator.pop(context);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CustomBottomNavigationBar(),
+
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  fontWeight: _selectedTabIndex == -1
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                  fontSize: 16, // Adjust font size
                 ),
-              );
-            },
-          ),
-          const Divider(),
-          _buildGroup("Team Group", salesSections),
-          const Divider(),
-          _buildGroup("Order Group", orderSections),
-          const Divider(),
-          _buildGroup("Report Group", reportSections),
-          const Divider(),
-          _buildGroup("Other Group", otherSections),
-          const Divider(),
-        ],
+              ),
+              onTap: () {
+                setState(() {
+                  _selectedTabIndex = -1;
+                });
+                Navigator.pop(context);
+                // Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CustomBottomNavigationBar(),
+                  ),
+                );
+              },
+            ),
+            const Divider(
+              height: 1,
+            ),
+            _buildGroup("Team Group", salesSections),
+            const Divider(
+              height: 1,
+            ),
+            _buildGroup("Order Group", orderSections),
+            const Divider(
+              height: 1,
+            ),
+            _buildGroup("Report Group", reportSections),
+            const Divider(
+              height: 1,
+            ),
+            _buildGroup("Other Group", otherSections),
+            // const Divider(
+            //   height: 1,
+            // ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildGroup(String groupName, List<Section> sections) {
     List<Widget> widgets = [];
-    widgets.add(ListTile(
-      title: Text(
+    widgets.add(Container(
+      padding:
+          const EdgeInsets.only(left: 16, top: 8, bottom: 4), // Adjust padding
+      child: Text(
         groupName,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
+          fontSize: 14, // Adjust font size
         ),
       ),
     ));
     widgets.addAll(sections.map((section) {
       return ListTile(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16), // Adjust padding
         leading: Container(
-          width: 40.0,
-          height: 40.0,
+          width: 30.0,
+          height: 30.0,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: AppColors.kPrimary, // Adjusted circle color
           ),
-          child: Icon(section.icon,
-              color: Colors.white), // You can customize the icon color
+          child: Icon(
+            section.icon, size: 18, // Adjust icon size
+            color: Colors.white,
+          ), // You can customize the icon color
         ),
         title: Text(
           section.name,
@@ -196,6 +261,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             fontWeight: _selectedTabIndex == sections.indexOf(section)
                 ? FontWeight.bold
                 : FontWeight.normal,
+            fontSize: 16, // Adjust font size
           ),
         ),
         onTap: () {
@@ -214,6 +280,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       );
     }));
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: widgets,
     );
   }

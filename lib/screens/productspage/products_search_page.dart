@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/screens/productspage/productdetailspage.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/cardwidget/custom_card_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Product {
-  final String name;
   final String brand;
+  final String technical;
   final String imageUrl;
 
-  Product({required this.name, required this.brand, required this.imageUrl});
+  Product(
+      {required this.brand, required this.technical, required this.imageUrl});
 }
 
 class SearchPage extends StatefulWidget {
@@ -23,45 +25,37 @@ class _SearchPageState extends State<SearchPage> {
   List<String> recentSearches = [];
   List<Product> products = [
     Product(
-        name: 'Product 1',
-        brand: 'Brand A',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
     Product(
-        name: 'Product 2',
-        brand: 'Brand B',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
     Product(
-        name: 'Product 1',
-        brand: 'Brand A',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
     Product(
-        name: 'Product 1',
-        brand: 'Brand A',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
     Product(
-        name: 'Product 1',
-        brand: 'Brand A',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
     Product(
-        name: 'Product 1',
-        brand: 'Brand A',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
     Product(
-        name: 'Product 1',
-        brand: 'Brand A',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
     Product(
-        name: 'Product 1',
-        brand: 'Brand A',
-        imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/Resturant%20Image%20(1).png?alt=media&token=461162b1-686b-4b0e-a3ee-fae1cb8b5b33'),
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg'),
   ];
 
   @override
@@ -93,11 +87,12 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         elevation: 0,
-        backgroundColor: AppColors.kBackground,
+        backgroundColor: AppColors.kAppBackground,
         title: SizedBox(
           height: 40,
           child: TextField(
@@ -214,15 +209,30 @@ class _SearchPageState extends State<SearchPage> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 2.0,
+                  mainAxisSpacing: 2.0,
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
-                  return CardWidget(
-                    products[index].name,
-                    products[index].imageUrl,
-                    products[index].brand,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailsPage(
+                            product: products[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Hero(
+                      tag: 'product-image-${products[index].brand}-$index',
+                      child: CardWidget(
+                        products[index].brand,
+                        products[index].imageUrl,
+                        products[index].technical,
+                      ),
+                    ),
                   );
                 },
               ),

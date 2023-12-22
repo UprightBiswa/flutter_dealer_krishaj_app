@@ -99,16 +99,72 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width * 0.94;
+    double width = MediaQuery.of(context).size.width * 1.0;
     double buttonWidthlow = MediaQuery.of(context).size.width * 0.20;
     double buttonWidth =
         MediaQuery.of(context).size.width * 0.20; // 22% of screen width
     return Scaffold(
-      backgroundColor: AppColors.kBackground,
+      backgroundColor: AppColors.kAppBackground,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Green Container
+            Container(
+              color: AppColors.kAppBackground, // Set the green color
+              padding: const EdgeInsets.all(8.0), // Adjust padding as needed
+              child: const Column(
+                children: [
+                  // Row with Vendor Name and Circular Logo
+                  Row(
+                    children: [
+                      // Circular Logo (You can replace this with your logo)
+                      // Container(
+                      //   width: 25.0,
+                      //   height: 25.0,
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(
+                      //         8.0), // Adjust the border radius for rounded corners
+                      //     color: Colors.white, // Adjust the background color
+                      //   ),
+                      //   child: Icon(
+                      //     Icons.person,
+                      //     size: 20.0,
+                      //     color: Colors.green, // Adjust the icon color
+                      //   ),
+                      // ),
+
+                      // const SizedBox(width: 8.0), // Adjust spacing
+                      // Vendor Name
+                      Text(
+                        'Vendor Name: Biswajit Das',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black, // Adjust text color
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0), // Adjust spacing
+
+                  // Row with Vendor Number
+                  Row(
+                    children: [
+                      // Vendor Number
+                      Text(
+                        'Vendor Id: 1234',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black38, // Adjust text color
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
             // Notification Bell and Marquee Container
             Container(
               color: AppColors.kPrimary, // Set the background color
@@ -119,20 +175,23 @@ class HomeWidget extends StatelessWidget {
                   const Icon(
                     Icons.notifications,
                     color: Colors.white, // Adjust icon color
+                    size: 20.0, // Adjust icon size
                   ),
                   const SizedBox(
-                      width: 8.0), // Adjust spacing between icon and marquee
+                    width: 4.0, // Adjust spacing between icon and marquee
+                  ),
 
                   // Marquee Widget
                   Expanded(
                     child: SizedBox(
-                      height: 30.0, // Set a specific height or adjust as needed
+                      height: 25.0, // Set a specific height or adjust as needed
                       child: Marquee(
                         text: 'Your Marquee Text Here',
                         style: const TextStyle(
                           color: Colors.white, // Adjust text color
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
+                          fontWeight: FontWeight.w200,
+                          fontSize: 14.0, // Adjust font size
+                          fontFamily: 'Roboto', // Set your desired font family
                         ),
                         scrollAxis: Axis.horizontal,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,7 +209,7 @@ class HomeWidget extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 8.0),
             // Quick Access and Action Buttons
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -238,16 +297,19 @@ class HomeWidget extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 16.0),
-            CustomBanner(
-              imagePath:
-                  'assets/images/bannerhome.png', // Replace with your image path
-              width: width, // Set the desired width
-              height: 150.0, // Set the desired height
-              borderRadius:
-                  12.0, // Optional: Set the border radius, default is 12.0
+            const SizedBox(height: 8.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: CustomBanner(
+                imagePath:
+                    'assets/images/bannerhome.png', // Replace with your image path
+                width: width, // Set the desired width
+                height: 150.0, // Set the desired height
+                borderRadius:
+                    12.0, // Optional: Set the border radius, default is 12.0
+              ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 8.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Column(
@@ -324,7 +386,7 @@ class HomeWidget extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16.0),
+                          const SizedBox(height: 8.0),
 
                           // Second Row of Action Buttons
                           Row(
@@ -360,7 +422,7 @@ class HomeWidget extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 8.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Column(
@@ -423,7 +485,7 @@ class HomeWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 8.0),
                 ],
               ),
             ),

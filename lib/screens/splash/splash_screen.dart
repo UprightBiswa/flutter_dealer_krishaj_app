@@ -3,8 +3,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:krishajdealer/screens/language/language_chose.dart';
 import 'package:krishajdealer/utils/colors.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 4),
     );
 
     _logoAnimation = Tween<double>(begin: -300, end: 0).animate(
@@ -89,6 +89,9 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kBackground,
+      appBar: AppBar(
+        backgroundColor: AppColors.kBackground,
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -104,15 +107,17 @@ class _SplashScreenState extends State<SplashScreen>
                         offset: Offset(0, _logoAnimation.value),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          width: 200,
-                          height: 200,
+                          width: 180,
+                          height: 180,
                         ),
                       ),
                       const SizedBox(height: 10),
                       const Text(
-                        'Dealer',
-                        style:
-                            TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        'KRISHAJ',
+                        style: TextStyle(
+                            color: AppColors.kPrimary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       const SpinKitCircle(
@@ -124,24 +129,24 @@ class _SplashScreenState extends State<SplashScreen>
                 },
               ),
             ),
-            // Positioned(
-            //   bottom: -150,
-            //   left: 0,
-            //   right: 0,
-            //   child: Container(
-            //     width: double.infinity,
-            //     height: MediaQuery.of(context).size.height *
-            //         0.6, // 60% of the screen height
-            //     decoration: const BoxDecoration(
-            //       color: Colors.transparent, // Transparent background
-            //     ),
-            //     child: Lottie.asset(
-            //       'assets/animation/road.json',
-            //       width: double.infinity, // Cover full screen width
-            //       height: double.infinity,
-            //     ),
-            //   ),
-            // ),
+            Positioned(
+              bottom: -210,
+              left: 0,
+              right: 0,
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height *
+                    0.6, // 60% of the screen height
+                decoration: const BoxDecoration(
+                  color: Colors.transparent, // Transparent background
+                ),
+                child: Lottie.asset(
+                  'assets/annimations/splash.json',
+                  width: double.infinity, // Cover full screen width
+                  height: double.infinity,
+                ),
+              ),
+            ),
           ],
         ),
       ),

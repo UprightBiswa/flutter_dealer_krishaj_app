@@ -11,13 +11,14 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15, right: 15),
+      padding: const EdgeInsets.only(bottom: 8, right: 8),
       child: Container(
         width: 150,
         height: 150,
-        //padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(6.0),
         decoration: BoxDecoration(
           color: Colors.white,
+          border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(12.5),
           boxShadow: [
             BoxShadow(
@@ -30,10 +31,12 @@ class CardWidget extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.network(imageUrl, height: 70, fit: BoxFit.cover),
+            Image.asset(imageUrl, height: 70, fit: BoxFit.cover),
             const Spacer(),
             Text(
               text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.black,
@@ -44,6 +47,8 @@ class CardWidget extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.grey,

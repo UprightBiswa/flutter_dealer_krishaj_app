@@ -13,8 +13,8 @@ class ProfileWidget extends StatefulWidget {
 class _UserProfileState extends State<ProfileWidget> {
   // Sample user data
   Map<String, String> userData = {
-    'Customer Code': '12345',
-    'Customer Name': 'John Doe',
+    'User Code': '12345',
+    'User Name': 'John Doe',
     'Mobile': '9876543210',
     'E-mail': 'john.doe@example.com',
     'Alternative Mobile no': '9876543211',
@@ -33,7 +33,7 @@ class _UserProfileState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.kBackground,
+      backgroundColor: AppColors.kAppBackground,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -66,7 +66,7 @@ class _UserProfileState extends State<ProfileWidget> {
                                     color: AppColors.kPrimary)),
                             const SizedBox(width: 8.0),
                             Text(
-                              'Customer Number: ${userData['Customer Code']}',
+                              'User Number: ${userData['Customer Code']}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -97,7 +97,7 @@ class _UserProfileState extends State<ProfileWidget> {
                                     color: AppColors.kPrimary)),
                             const SizedBox(width: 8.0),
                             Text(
-                              'Customer Name: ${userData['Customer Name']}',
+                              'User Name: ${userData['Customer Name']}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
