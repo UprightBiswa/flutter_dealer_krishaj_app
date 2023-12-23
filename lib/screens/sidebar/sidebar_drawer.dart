@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/dispatch_order/dispatch_order_details_screen.dart';
 import 'package:krishajdealer/screens/ledger/ledger_screen.dart';
-import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/screens/orders/special_order_screen.dart';
 import 'package:krishajdealer/screens/reports/aging-report_screen.dart';
 import 'package:krishajdealer/screens/reports/aging_report_bill_wise_screen.dart';
@@ -49,11 +48,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     //   icon: Icons.shopping_cart,
     //   screen: const SubmittedOrderListScreen(),
     // ),
-    Section(
-      name: 'Orders Placement',
-      icon: Icons.note_add,
-      screen: const OrderPlacementScreen(),
-    ),
     Section(
       name: 'Dispatch Order',
       icon: Icons.local_shipping,
@@ -116,13 +110,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Drawer(
-        elevation: 10,
+        elevation: 1,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: const BoxDecoration(
-                color: AppColors.kPrimary,
+              curve: Curves.linear,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

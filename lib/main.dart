@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/splash/splash_screen.dart';
 import 'classes/language_constrants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
-      home:  const SplashScreen(),
+      home:  const CustomBottomNavigationBar(),
     );
   }
 }

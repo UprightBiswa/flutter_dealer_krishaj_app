@@ -3,6 +3,7 @@ import 'package:krishajdealer/screens/dispatch_order/dispatch_order_details_scre
 import 'package:krishajdealer/screens/ledger/ledger_screen.dart';
 import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/screens/orders/special_order_screen.dart';
+import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/screens/reports/aging-report_screen.dart';
 import 'package:krishajdealer/screens/reports/aging_report_bill_wise_screen.dart';
 import 'package:krishajdealer/screens/reports/credit_note_details_screen.dart';
@@ -33,11 +34,6 @@ class HomeWidget extends StatelessWidget {
       name: 'Sales Team',
       icon: Icons.people,
       screen: const SalesTeamInfoScreen(),
-    ),
-    Section(
-      name: 'Orders Placement',
-      icon: Icons.note_add,
-      screen: const OrderPlacementScreen(),
     ),
     // Section(
     //   name: 'Orders',
@@ -263,13 +259,13 @@ class HomeWidget extends StatelessWidget {
                             const SalesTeamInfoScreen(),
                           ),
                           _buildActionButton(
-                            Icons.note_add,
-                            'Orders Placement',
+                            Icons.search,
+                            'Product Search',
                             AppColors.kBackground,
                             AppColors.kPrimary,
                             buttonWidth, // Adjust the width as needed
                             context,
-                            const OrderPlacementScreen(),
+                            const SearchPage(),
                           ),
                           _buildActionButton(
                             Icons.insert_chart,

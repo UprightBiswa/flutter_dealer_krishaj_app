@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 
@@ -38,7 +39,7 @@ class ShoppingCartPage extends StatelessWidget {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount:
-                      5, // Replace with the actual count of saved products
+                      3, // Replace with the actual count of saved products
                   separatorBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                     child: Divider(
@@ -69,7 +70,12 @@ class ShoppingCartPage extends StatelessWidget {
             width: double.infinity,
             child: CustomButton(
               onPressed: () {
-                // Proceed to order logic
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderPlacementScreen(),
+                  ),
+                );
               },
               text: 'Proceed to Order',
               icon: Icons.shopping_bag,
@@ -125,7 +131,7 @@ class ShoppingCartPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Product Name with a Very Long Title',
+                      'Technical name: Thifluzamida 24% SC',
                       style: TextStyle(
                         fontSize: 14, // Adjusted font size
                         fontWeight: FontWeight.bold,
@@ -134,41 +140,67 @@ class ShoppingCartPage extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'Brand Name',
+                      'Brand Name : Kursor',
                       style: TextStyle(
                         fontSize: 12, // Adjusted font size
                         color: Colors.black,
                       ),
                     ),
                     Text(
-                      'Total Quantity: 3', // Replace with actual quantity
+                      'Pack Size: 100gml',
                       style: TextStyle(
                         fontSize: 12, // Adjusted font size
                         color: Colors.black,
                       ),
                     ),
-                    Text(
-                      'Unit of Measure: 100g',
-                      style: TextStyle(
-                        fontSize: 12, // Adjusted font size
-                        color: Colors.black,
-                      ),
-                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  // Decrease quantity logic
+                                  // Call a function to update the quantity
+                                  // updateQuantity(-1);
+                                },
+                                icon: Icon(Icons.remove),
+                                color: Colors.black,
+                              ),
+                              Text(
+                                '10', // Replace with actual quantity variable
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  // Increase quantity logic
+                                  // Call a function to update the quantity
+                                  // updateQuantity(1);
+                                },
+                                icon: Icon(Icons.add),
+                                color: Colors.black,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 8.0),
+                        Text(
+                          'Remove',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(width: 8.0),
+                      ],
+                    )
                   ],
                 ),
-              ),
-            ),
-            Container(
-              child: MaterialButton(
-                onPressed: () {
-                  // Remove product logic
-                },
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-                color: Colors.red,
-                shape: CircleBorder(),
               ),
             ),
           ],

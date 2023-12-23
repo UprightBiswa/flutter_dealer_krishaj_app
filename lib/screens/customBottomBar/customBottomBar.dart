@@ -3,8 +3,10 @@ import 'package:krishajdealer/screens/basic_information/basic-information_screen
 import 'package:krishajdealer/screens/dashboard/dashboard_screen.dart';
 import 'package:krishajdealer/screens/home/home_screen.dart';
 import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
+import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/sidebar/sidebar_drawer.dart';
 import 'package:krishajdealer/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
@@ -22,7 +24,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     HomeWidget(),
     const DashboardWidget(),
     const SubmittedOrderListScreen(), // Added the new screen
-    const ProfileWidget(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,13 +32,124 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     });
   }
 
+  late ValueNotifier<int> cartCountNotifier;
+  @override
+  void initState() {
+    super.initState();
+    cartCountNotifier = ValueNotifier<int>(0);
+    _updateCartCount();
+  }
+
+  Future<void> _updateCartCount() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentCount = prefs.getInt('cartCount') ?? 0;
+    cartCountNotifier.value = currentCount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.kAppBackground,
-        title: Text(getAppBarTitle(_selectedIndex)),
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
+        title: Text(
+          getAppBarTitle(_selectedIndex),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          ValueListenableBuilder<int>(
+            valueListenable: cartCountNotifier,
+            builder: (context, count, _) {
+              return IconButton(
+                icon: Stack(
+                  children: [
+                    const Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
+                    if (count > 0)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            count.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                onPressed: () async {
+                  // Navigate to the shopping cart page
+                  // You can implement this part based on your navigation setup
+                  // Here, I'm just pushing a MaterialPageRoute as an example
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ShoppingCartPage(),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              // Navigate to the user profile page
+              // You can implement this part based on your navigation setup
+              // Here, I'm just pushing a MaterialPageRoute as an example
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileWidget(),
+                ),
+              );
+            },
+          ),
+        ],
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu, // Replace with your custom icon
+                color: Colors.white, // Replace with your custom color
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
       ),
       drawer: const DrawerWidget(),
       body: Center(
@@ -54,25 +166,27 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             label: 'Dashboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.shopping_bag_outlined),
+            label: 'Product',
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.green, // Set selected color to green
-        unselectedItemColor: Colors.grey, // Set unselected color to grey
+        unselectedItemColor: Colors.white, // Set unselected color to grey
         onTap: _onItemTapped,
         selectedIconTheme: const IconThemeData(
           color: Colors.green, // Set selected icon color to green
           size: 30.0, // Adjust the selected icon size
         ),
         unselectedIconTheme: const IconThemeData(
-          color: Colors.grey, // Set unselected icon color to grey
+          color: Colors.white, // Set unselected icon color to grey
         ),
+        backgroundColor: Colors.lightGreen
+            .withOpacity(0.5), // Make the background transparent
+        type: BottomNavigationBarType.fixed, // Ensure all items are visible
+        elevation: 0, // Remove the shadow
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
       ),
     );
   }
@@ -84,9 +198,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       case 1:
         return 'Dashboard';
       case 2:
-        return 'Orders';
-      case 3:
-        return 'Profile';
+        return 'Product';
       default:
         return 'KRISHAJ';
     }
