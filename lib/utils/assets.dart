@@ -14,8 +14,10 @@ class AppAssets {
   static String product6 = 'assets/images/PRIVINTAL-BV.png';
   static String product7 = 'assets/images/RM-45.png';
   static String product8 = 'assets/images/Ring.jpg';
+  static String banner = 'assets/images/banner.jpg';
   static String banner1 = 'assets/images/banner1.png';
   static String banner2 = 'assets/images/banner2.png';
+
 
   
 }

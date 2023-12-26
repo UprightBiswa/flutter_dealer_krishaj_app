@@ -4,6 +4,7 @@ import 'package:krishajdealer/screens/dashboard/dashboard_screen.dart';
 import 'package:krishajdealer/screens/home/home_screen.dart';
 import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
+import 'package:krishajdealer/screens/setting/setting_screen.dart';
 import 'package:krishajdealer/screens/sidebar/sidebar_drawer.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -132,6 +133,23 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ProfileWidget(),
+                ),
+              );
+            },
+          ),
+           IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              // Navigate to the user profile page
+              // You can implement this part based on your navigation setup
+              // Here, I'm just pushing a MaterialPageRoute as an example
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
                 ),
               );
             },

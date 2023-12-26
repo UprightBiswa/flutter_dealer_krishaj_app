@@ -163,7 +163,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     children: [
                       // Vendor Number
                       Text(
-                        'Vendor Id: 1234',
+                        'Business Partner Id: 1234',
                         style: TextStyle(
                           fontSize: 12.0,
                           color: Colors.black38, // Adjust text color

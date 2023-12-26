@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/basic_information/edit_profile_page.dart';
+import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 
@@ -51,14 +52,14 @@ class _UserProfileState extends State<ProfileWidget> {
               height: 300,
               decoration: BoxDecoration(
                 color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.kBackground.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: AppColors.kBackground.withOpacity(0.5),
+                //     spreadRadius: 5,
+                //     blurRadius: 7,
+                //     offset: const Offset(0, 3),
+                //   ),
+                // ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +70,7 @@ class _UserProfileState extends State<ProfileWidget> {
                     height: 100.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.kBackground,
+                      color: AppColors.kAppBackground,
                     ),
                     child: const Icon(
                       Icons.person,
@@ -165,6 +166,10 @@ class _UserProfileState extends State<ProfileWidget> {
                       'icon': Icons.location_on,
                     },
                     {
+                      'field': 'Geotag',
+                      'icon': Icons.location_on,
+                    },
+                    {
                       'field': 'DOB',
                       'icon': Icons.cake,
                     },
@@ -181,7 +186,7 @@ class _UserProfileState extends State<ProfileWidget> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 8.0),
+                              vertical: 16.0, horizontal: 16.0),
                           child: Row(
                             children: [
                               Container(
@@ -192,7 +197,7 @@ class _UserProfileState extends State<ProfileWidget> {
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors
-                                      .kBackground, // Adjusted circle color
+                                      .kAppBackground, // Adjusted circle color
                                 ),
                                 child: Center(
                                   child: Icon(
@@ -209,17 +214,39 @@ class _UserProfileState extends State<ProfileWidget> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text(
-                                userData[item['field']] ?? '',
-                                style: TextStyle(
-                                  color: Colors.grey[800],
+                              Expanded(
+                                child: Text(
+                                  item['field'] == 'Geotag'
+                                      ? 'Add your geotag address here' // Replace with the actual geotag address logic
+                                      : userData[item['field']] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.grey[800],
+                                  ),
                                 ),
                               ),
+                              if (item['field'] ==
+                                  'Geotag') // Add an edit button for Geotag Address
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: AppColors.kPrimary,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            LocationSearchPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
                             ],
                           ),
                         ),
                         // Divider line after each text
                         Divider(
+                          height: 0,
                           thickness: 1,
                           color: Colors.grey[300],
                         ),

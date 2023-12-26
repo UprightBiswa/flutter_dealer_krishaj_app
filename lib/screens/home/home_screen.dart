@@ -133,7 +133,7 @@ class HomeWidget extends StatelessWidget {
                       // const SizedBox(width: 8.0), // Adjust spacing
                       // Vendor Name
                       Text(
-                        'Vendor Name: Biswajit Das',
+                        'Business Partner: Biswajit Das', //business partner
                         style: TextStyle(
                           fontSize: 20.0,
                           color: Colors.black, // Adjust text color
@@ -149,7 +149,7 @@ class HomeWidget extends StatelessWidget {
                     children: [
                       // Vendor Number
                       Text(
-                        'Vendor Id: 1234',
+                        'Business Id: 1234',
                         style: TextStyle(
                           fontSize: 12.0,
                           color: Colors.black38, // Adjust text color

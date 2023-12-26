@@ -33,7 +33,8 @@ class SubmittedOrderListScreen extends StatelessWidget {
               children: [
                 TopBar(),
                 SearchButton(),
-                PromoCard(),
+                BannerCard(),
+                // PromoCard(),
                 Headline(),
                 CardListView(),
                 SHeadline(),
@@ -84,8 +85,8 @@ class TopBar extends StatelessWidget {
 
 
 
-class PromoCard extends StatelessWidget {
-  const PromoCard({Key? key}) : super(key: key);
+class BannerCard extends StatelessWidget {
+  const BannerCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,30 +96,11 @@ class PromoCard extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         height: 150,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            gradient: const LinearGradient(
-                colors: [Color(0xff53E88B), Color(0xff15BE77)])),
-        child: Stack(
-          children: [
-            Opacity(
-              opacity: .5,
-              child: Image.asset(AppAssets.banner1, fit: BoxFit.cover),
-            ),
-            Image.asset(AppAssets.banner2),
-            const Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: EdgeInsets.all(25.0),
-                child: Text(
-                  "Crop Protection",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(15),
+          image: DecorationImage(
+            image: AssetImage(AppAssets.banner),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

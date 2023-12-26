@@ -264,7 +264,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           const SizedBox(width: 16),
                           Flexible(
                             fit: FlexFit.tight,
-                            child: buildOption('Krishaj'),
+                            child: buildOption('Krepl'),//krepl
                           ),
                         ],
                       ),
@@ -297,13 +297,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'Quantity',
+                              'Quantity',//case
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Row(
+                            Row(//input type: Text
                               children: [
                                 Container(
                                   decoration: const BoxDecoration(
