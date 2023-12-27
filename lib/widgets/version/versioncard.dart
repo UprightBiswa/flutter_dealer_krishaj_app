@@ -18,6 +18,12 @@ class _AppVersionWidgetState extends State<AppVersionWidget> {
     _appVersion = getAppVersion();
   }
 
+  @override
+  void dispose() {
+    getAppVersion();
+    super.dispose();
+  }
+
   Future<String> getAppVersion() async {
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();

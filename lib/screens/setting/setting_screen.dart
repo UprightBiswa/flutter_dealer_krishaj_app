@@ -5,6 +5,13 @@ import 'package:krishajdealer/classes/language_constrants.dart';
 import 'package:krishajdealer/main.dart';
 import 'package:krishajdealer/screens/authentication/logn_screen.dart';
 import 'package:krishajdealer/screens/basic_information/basic-information_screen.dart';
+import 'package:krishajdealer/screens/locationsearch/locationgeotag.dart';
+import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
+import 'package:krishajdealer/screens/support/complaint.dart';
+import 'package:krishajdealer/screens/support/feedback.dart';
+import 'package:krishajdealer/screens/support/helpscreen.dart';
+import 'package:krishajdealer/screens/support/support.dart';
+import 'package:krishajdealer/screens/support/videotutorial.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 import 'package:krishajdealer/widgets/version/versioncard.dart';
@@ -20,19 +27,47 @@ class _SettingsPageState extends State<SettingsPage> {
   Language? selectedLanguage; // Add this line to store the selected language
   String selectedLanguageCode = ""; // Declare selectedLanguageCode here
   String appVersion = ""; // Declare appVersion here
+  bool loading = true;
+
   @override
   void initState() {
     super.initState();
-    _loadSelectedLanguage();
-    getAppVersion();
+    _loadInitialData();
+    // _loadSelectedLanguage();
+    // getAppVersion();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // Cancel subscriptions, timers, etc.
+  }
+
+  _loadInitialData() async {
+    try {
+      if (mounted) {
+        await Future.wait([
+          _loadSelectedLanguage(),
+          getAppVersion(),
+        ]);
+        setState(() {
+          loading = false;
+        });
+      }
+    } catch (error) {
+      // Handle errors appropriately
+      // ...
+    }
   }
 
   Future<void> getAppVersion() async {
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      setState(() {
-        appVersion = packageInfo.version;
-      });
+      if (mounted) {
+        setState(() {
+          appVersion = packageInfo.version;
+        });
+      }
       print('app version: $appVersion');
     } catch (e) {
       print('Error getting app version: $e');
@@ -101,7 +136,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   SizedBox(width: 16),
                   CustomButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    text:translation(context).yes,
+                    text: translation(context).yes,
                     icon: Icons.warning,
                   ),
                 ],
@@ -185,8 +220,13 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildSettingsPage() {
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
@@ -222,7 +262,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             SettingsGroup(
-              settingsGroupTitle: "Language",
               items: [
                 SettingsItem(
                   onTap: () {
@@ -248,49 +287,107 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-
+            SettingsGroup(
+              items: [
+                SettingsItem(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LocationSearchPage(),
+                      ),
+                    );
+                  },
+                  icons: Icons.pin_drop,
+                  iconStyle: IconStyle(
+                    backgroundColor: Colors.green,
+                  ),
+                  title: 'Change Location',
+                  subtitle: "Add new address",
+                  trailing: SizedBox(
+                    width: 100, // Adjust width as needed
+                    child: LocationGeotagWidget(),
+                  ),
+                ),
+              ],
+            ),
             // Support
             SettingsGroup(
               settingsGroupTitle: "Support",
               items: [
                 SettingsItem(
                   onTap: () {
-                    // Add logic for Help
-                    print("Help");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HelpScreen(),
+                      ),
+                    );
                   },
                   icons: Icons.help,
+                  iconStyle: IconStyle(
+                    backgroundColor: Colors.orange,
+                  ),
                   title: 'Help',
                 ),
                 SettingsItem(
                   onTap: () {
-                    // Add logic for Video Tutorial
-                    print("Video Tutorial");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoTutorialScreen(),
+                      ),
+                    );
                   },
                   icons: Icons.video_library,
+                  iconStyle: IconStyle(
+                    backgroundColor: Colors.red,
+                  ),
                   title: 'Video Tutorial',
                 ),
                 SettingsItem(
                   onTap: () {
-                    // Add logic for Feedback
-                    print("Feedback");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FeedbackScreen(),
+                      ),
+                    );
                   },
                   icons: Icons.feedback,
+                  iconStyle: IconStyle(
+                    backgroundColor: Colors.blueGrey,
+                  ),
                   title: 'Feedback',
                 ),
                 SettingsItem(
                   onTap: () {
-                    // Add logic for Complaint
-                    print("Complaint");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ComplaintScreen(),
+                      ),
+                    );
                   },
                   icons: Icons.report_problem,
+                  iconStyle: IconStyle(
+                    backgroundColor: Colors.green,
+                  ),
                   title: 'Complaint',
                 ),
                 SettingsItem(
                   onTap: () {
-                    // Add logic for Support
-                    print("Support");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SupportScreen(),
+                      ),
+                    );
                   },
                   icons: Icons.support,
+                  iconStyle: IconStyle(
+                    backgroundColor: Colors.brown,
+                  ),
                   title: 'Support',
                 ),
               ],
@@ -338,5 +435,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return loading ? _buildLoadingIndicator() : _buildSettingsPage();
   }
 }

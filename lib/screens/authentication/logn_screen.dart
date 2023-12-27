@@ -47,7 +47,7 @@ class _FoochiSignInViewState extends State<FoochiSignInView> {
                     setState(() {});
                     isIdCorrect = validateId(value);
                   },
-                  hintText: 'Your Customer Id',
+                  hintText: 'Your Customer Id',//userid
                   validator: (value) {
                     if (!validateId(value!)) {
                       return 'Please enter a valid Customer Id';

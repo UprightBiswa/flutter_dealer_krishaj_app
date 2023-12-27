@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
+import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/utils/colors.dart';
@@ -163,7 +164,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ],
                           ),
                           child: const Text(
-                            '1 liter',
+                            'Case',
                             style: TextStyle(
                               color: AppColors.kWhite,
                               fontSize: 16,
@@ -207,20 +208,41 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
                       ),
                       const SizedBox(height: 8),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     Text(
+                      //       'Size: ',
+                      //       style: const TextStyle(
+                      //         fontSize: 16,
+                      //       ),
+                      //     ),
+                      //     Text(
+                      //       '1 liter',
+                      //       style: const TextStyle(
+                      //         fontSize: 16,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Size: ',
+                            'Unit of Measure: ',
                             style: const TextStyle(
                               fontSize: 16,
+                              color: Colors
+                                  .black, // You can set the color to black or any other color you prefer
                             ),
                           ),
                           Text(
-                            '1 liter',
-                            style: const TextStyle(
+                            ' Case',
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: Colors.black, // Set the color to yellow
                             ),
                           ),
                         ],
@@ -401,7 +423,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 80,
+                  height: 8,
+                ),
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(8.0),
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      SHeadline(),
+                      CardListView(),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
                 ),
               ],
             ),

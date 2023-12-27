@@ -11,6 +11,11 @@ import 'package:krishajdealer/screens/reports/order_placement_through_mrp_screen
 import 'package:krishajdealer/screens/reports/mrp_vs_order_placement_report_screen.dart';
 import 'package:krishajdealer/screens/reports/product_wise_sales_report_screen.dart';
 import 'package:krishajdealer/screens/sales_team/sales_team_info_screen.dart';
+import 'package:krishajdealer/screens/support/complaint.dart';
+import 'package:krishajdealer/screens/support/feedback.dart';
+import 'package:krishajdealer/screens/support/helpscreen.dart';
+import 'package:krishajdealer/screens/support/support.dart';
+import 'package:krishajdealer/screens/support/videotutorial.dart';
 import 'package:krishajdealer/utils/colors.dart';
 
 class Section {
@@ -72,12 +77,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       screen: const CreditNoteDetailScreen(),
     ),
     Section(
-      name: 'Aging Report',
+      name: 'Ageing Report',
       icon: Icons.access_time,
       screen: const AgingReportScreen(),
     ),
     Section(
-      name: 'Aging Report Bill Wise',
+      name: 'Ageing Report Bill Wise',
       icon: Icons.access_time,
       screen: const AgingReportBillWiseScreen(),
     ),
@@ -105,6 +110,34 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       screen: const LedgerScreen(),
     ),
   ];
+
+  final List<Section> supportSections = [
+      Section(
+        name: 'Help',
+        icon: Icons.help,
+        screen:  HelpScreen(),
+      ),
+      Section(
+        name: 'Video Tutorial',
+        icon: Icons.video_library,
+        screen:  VideoTutorialScreen(),
+      ),
+      Section(
+        name: 'Feedback',
+        icon: Icons.feedback,
+        screen:  FeedbackScreen(),
+      ),
+      Section(
+        name: 'Complaint',
+        icon: Icons.report_problem,
+        screen:  ComplaintScreen(),
+      ),
+      Section(
+        name: 'Support',
+        icon: Icons.support,
+        screen:  SupportScreen(),
+      ),
+    ];
 
   @override
   Widget build(BuildContext context) {
@@ -216,9 +249,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               height: 1,
             ),
             _buildGroup("Other Group", otherSections),
-            // const Divider(
-            //   height: 1,
-            // ),
+            const Divider(
+              height: 1,
+            ),
+            _buildGroup("Support group", supportSections)
           ],
         ),
       ),

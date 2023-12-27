@@ -18,7 +18,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   // Define the widgets for each tab
   static final List<Widget> _widgetOptions = <Widget>[
@@ -137,7 +137,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               );
             },
           ),
-           IconButton(
+          IconButton(
             icon: Icon(
               Icons.settings,
               color: Colors.white,
@@ -173,38 +173,53 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.lightGreen.withOpacity(0.5),
+              Colors.green,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag_outlined),
-            label: 'Product',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green, // Set selected color to green
-        unselectedItemColor: Colors.white, // Set unselected color to grey
-        onTap: _onItemTapped,
-        selectedIconTheme: const IconThemeData(
-          color: Colors.green, // Set selected icon color to green
-          size: 30.0, // Adjust the selected icon size
         ),
-        unselectedIconTheme: const IconThemeData(
-          color: Colors.white, // Set unselected icon color to grey
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard),
+              label: 'Dashboard',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag_outlined),
+              label: 'Product',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+          selectedFontSize: 14,
+          unselectedFontSize: 12,
+          selectedItemColor: Colors.green, // Set selected color to green
+          unselectedItemColor: Colors.white, // Set unselected color to grey
+          onTap: _onItemTapped,
+          selectedIconTheme: const IconThemeData(
+            color: Colors.green, // Set selected icon color to green
+            size: 30.0, // Adjust the selected icon size
+          ),
+          unselectedIconTheme: const IconThemeData(
+            color: Colors.white, // Set unselected icon color to grey
+          ),
+          backgroundColor:
+              Colors.transparent, // Make the background transparent
+          type: BottomNavigationBarType.fixed, // Ensure all items are visible
+          elevation: 0, // Remove the shadow
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
         ),
-        backgroundColor: Colors.lightGreen
-            .withOpacity(0.5), // Make the background transparent
-        type: BottomNavigationBarType.fixed, // Ensure all items are visible
-        elevation: 0, // Remove the shadow
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
       ),
     );
   }

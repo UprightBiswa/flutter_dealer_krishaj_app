@@ -12,6 +12,11 @@ import 'package:krishajdealer/screens/reports/mrp_vs_order_placement_report_scre
 import 'package:krishajdealer/screens/reports/order_placement_through_mrp_screen.dart';
 import 'package:krishajdealer/screens/reports/product_wise_sales_report_screen.dart';
 import 'package:krishajdealer/screens/sales_team/sales_team_info_screen.dart';
+import 'package:krishajdealer/screens/support/complaint.dart';
+import 'package:krishajdealer/screens/support/feedback.dart';
+import 'package:krishajdealer/screens/support/helpscreen.dart';
+import 'package:krishajdealer/screens/support/support.dart';
+import 'package:krishajdealer/screens/support/videotutorial.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/custombanner/custombanner.dart';
 import 'package:marquee/marquee.dart';
@@ -35,11 +40,11 @@ class HomeWidget extends StatelessWidget {
       icon: Icons.people,
       screen: const SalesTeamInfoScreen(),
     ),
-    // Section(
-    //   name: 'Orders',
-    //   icon: Icons.shopping_cart,
-    //   screen: const SubmittedOrderListScreen(),
-    // ),
+    Section(
+      name: 'Product Search',
+      icon: Icons.search,
+      screen: SearchPage(),
+    ),
     Section(
       name: 'Ledger',
       icon: Icons.account_balance_wallet,
@@ -66,12 +71,12 @@ class HomeWidget extends StatelessWidget {
       screen: const CreditNoteDetailScreen(),
     ),
     Section(
-      name: 'Aging Report',
+      name: 'Ageing Report',
       icon: Icons.hourglass_full,
       screen: const AgingReportScreen(),
     ),
     Section(
-      name: 'Aging Report Bill Wise',
+      name: 'Ageing Report Bill Wise',
       icon: Icons.hourglass_empty,
       screen: const AgingReportBillWiseScreen(),
     ),
@@ -107,7 +112,7 @@ class HomeWidget extends StatelessWidget {
           children: [
             // Green Container
             Container(
-              color: AppColors.kAppBackground, // Set the green color
+              color: AppColors.kWhite, // Set the green color
               padding: const EdgeInsets.all(8.0), // Adjust padding as needed
               child: const Column(
                 children: [
@@ -242,7 +247,6 @@ class HomeWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16.0),
 
                       // Action Buttons
                       Row(
@@ -298,7 +302,7 @@ class HomeWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: CustomBanner(
                 imagePath:
-                    'assets/images/bannerhome.png', // Replace with your image path
+                    'assets/images/bannerhome.jpg', // Replace with your image path
                 width: width, // Set the desired width
                 height: 150.0, // Set the desired height
                 borderRadius:
@@ -364,7 +368,7 @@ class HomeWidget extends StatelessWidget {
                               ),
                               _buildActionButton(
                                 Icons.hourglass_full,
-                                'Aging Report',
+                                'Ageing Report',
                                 AppColors.kBackground,
                                 AppColors.kPrimary,
                                 buttonWidthlow,
@@ -417,7 +421,6 @@ class HomeWidget extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 8.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -481,10 +484,99 @@ class HomeWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8.0),
                 ],
               ),
             ),
+            const SizedBox(height: 8.0),
+            Container(
+              width: double.infinity,
+              color: AppColors.kLine,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    // Move the Container inside the Card
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'Support ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // First Row of Action Buttons
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildActionSupport(
+                            Icons.help,
+                            'Help',
+                            Colors.white,
+                            AppColors.kOrange,
+                            buttonWidthlow,
+                            context,
+                            // Replace with your Help screen widget
+                            HelpScreen(),
+                          ),
+                          _buildActionSupport(
+                            Icons.video_library,
+                            'Video Tutorial',
+                            Colors.white,
+                            Colors.red,
+                            buttonWidthlow,
+                            context,
+                            // Replace with your Video Tutorial screen widget
+                            VideoTutorialScreen(),
+                          ),
+                          _buildActionSupport(
+                            Icons.feedback,
+                            'Feedback',
+                            Colors.white,
+                            Colors.blueGrey,
+                            buttonWidthlow,
+                            context,
+                            // Replace with your Feedback screen widget
+                            FeedbackScreen(),
+                          ),
+                          _buildActionSupport(
+                            Icons.report_problem,
+                            'Complaint',
+                            Colors.white,
+                            AppColors.kPrimary,
+                            buttonWidthlow,
+                            context,
+                            // Replace with your Complaint screen widget
+                            ComplaintScreen(),
+                          ),
+                          _buildActionSupport(
+                            Icons.support,
+                            'Support',
+                            Colors.white,
+                            AppColors.kSecondary,
+                            buttonWidthlow,
+                            context,
+                            // Replace with your Support screen widget
+                            SupportScreen(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 8.0),
           ],
         ),
       ),
@@ -534,6 +626,61 @@ class HomeWidget extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
             // Align text in the center
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionSupport(
+    IconData icon,
+    String text,
+    Color iconColor,
+    Color bgColor,
+    double width,
+    BuildContext context,
+    Widget destinationScreen,
+  ) {
+    return SizedBox(
+      width: width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => destinationScreen),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(12.5),
+                border: Border.all(color: Colors.grey),
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(10, 20),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    color: Colors.grey.withOpacity(.05),
+                  ),
+                ],
+              ),
+              child: Icon(icon,
+                  color: iconColor, size: 30), // Adjust the size as needed
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            text,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w100,
+              fontSize: 12.0,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
