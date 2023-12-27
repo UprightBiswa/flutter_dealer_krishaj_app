@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
+import 'package:krishajdealer/widgets/location/locationcontiner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -18,6 +20,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1; // Initial quantity
   String selectedOption = 'Agro'; // Initial selected option
   late ValueNotifier<int> cartCountNotifier;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add this key
   @override
   void initState() {
     super.initState();
@@ -42,46 +45,48 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ValueListenableBuilder<int>(
             valueListenable: cartCountNotifier,
             builder: (context, count, _) {
-              return IconButton(
-                icon: Stack(
-                  children: [
-                    const Icon(Icons.shopping_cart),
-                    if (count > 0)
-                      Positioned(
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                          ),
-                          child: Text(
-                            count.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
+              return Container(
+                child: IconButton(
+                  icon: Stack(
+                    children: [
+                      const Icon(Icons.shopping_cart),
+                      if (count > 0)
+                        Positioned(
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            textAlign: TextAlign.center,
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              count.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
+                    ],
+                  ),
+                  onPressed: () async {
+                    // Navigate to the shopping cart page
+                    // You can implement this part based on your navigation setup
+                    // Here, I'm just pushing a MaterialPageRoute as an example
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ShoppingCartPage(),
                       ),
-                  ],
+                    );
+                  },
                 ),
-                onPressed: () async {
-                  // Navigate to the shopping cart page
-                  // You can implement this part based on your navigation setup
-                  // Here, I'm just pushing a MaterialPageRoute as an example
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ShoppingCartPage(),
-                    ),
-                  );
-                },
               );
             },
           ),
@@ -100,6 +105,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               mainAxisSize:
                   MainAxisSize.min, // Set mainAxisSize to MainAxisSize.min
               children: [
+                // Location  Container
+                TappableContainer(username: 'John'),
+
                 // Image container with border
                 Container(
                   width: double.infinity,
@@ -155,7 +163,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ],
                           ),
                           child: const Text(
-                            '100 liter',
+                            '1 liter',
                             style: TextStyle(
                               color: AppColors.kWhite,
                               fontSize: 16,
@@ -209,7 +217,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            '100 liter',
+                            '1 liter',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -264,7 +272,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           const SizedBox(width: 16),
                           Flexible(
                             fit: FlexFit.tight,
-                            child: buildOption('Krepl'),//krepl
+                            child: buildOption('Krepl'), //krepl
                           ),
                         ],
                       ),
@@ -291,27 +299,40 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       ),
 
                       // Quantity selection
+                      // Quantity selection
+                      // Quantity selection
                       Container(
                         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'Quantity',//case
+                              'Quantity', //case
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Row(//input type: Text
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              //input type: Text and +/- buttons
                               children: [
                                 Container(
+                                  width:
+                                      28.0, // Adjusted width for the circular container
+                                  height: 28.0,
                                   decoration: const BoxDecoration(
-                                    color: Colors.white,
+                                    color: Colors.green,
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
-                                    icon: const Icon(Icons.remove),
+                                    icon: Center(
+                                      child: const Icon(
+                                        Icons.remove,
+                                        size: 12,
+                                      ),
+                                    ),
                                     onPressed: () {
                                       // Decrease quantity logic
                                       if (quantity > 1) {
@@ -322,30 +343,51 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                     },
                                   ),
                                 ),
+                                TextButton(
+                                  onPressed: () async {
+                                    int? newQuantity =
+                                        await _showQuantityInputDialog();
+                                    if (newQuantity != null) {
+                                      setState(() {
+                                        quantity = newQuantity.clamp(1, 100);
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kAppBackground,
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Text(
+                                      '$quantity',
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                    ), // Display selected quantity
+                                  ),
+                                ),
                                 Container(
+                                  width:
+                                      28.0, // Adjusted width for the circular container
+                                  height: 28.0,
                                   decoration: const BoxDecoration(
                                     color: Colors.green,
                                     shape: BoxShape.circle,
                                   ),
-                                  padding: const EdgeInsets.all(8),
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text(
-                                    '$quantity',
-                                    style: const TextStyle(color: Colors.white),
-                                  ), // Display selected quantity
-                                ),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
                                   child: IconButton(
-                                    icon: const Icon(Icons.add),
+                                    icon: Center(
+                                      child: const Icon(
+                                        Icons.add,
+                                        size: 12,
+                                      ),
+                                    ),
                                     onPressed: () {
                                       // Increase quantity logic
                                       setState(() {
-                                        quantity++;
+                                        quantity = (quantity + 1).clamp(1, 100);
                                       });
                                     },
                                   ),
@@ -355,26 +397,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           ],
                         ),
                       ),
-
-                      // // Total price display
-                      // Container(
-                      //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                      //   child: Container(
-                      //     width: double.infinity,
-                      //     decoration: BoxDecoration(
-                      //       border: Border.all(color: Colors.grey, width: 2),
-                      //       borderRadius: BorderRadius.circular(8),
-                      //     ),
-                      //     padding: const EdgeInsets.all(16),
-                      //     margin: const EdgeInsets.symmetric(vertical: 16),
-                      //     child: Text(
-                      //       'Total Price: \u20B9${quantity * 100}', // Assuming price is 100
-                      //       style: const TextStyle(
-                      //         fontSize: 18,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -473,5 +495,64 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         ),
       ),
     );
+  }
+
+  Future<int> _showQuantityInputDialog() async {
+    int? newQuantity = quantity;
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Enter Quantity'),
+          content: Form(
+            key: _formKey,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Quantity'),
+              initialValue: quantity.toString(),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a quantity.';
+                }
+                int? parsedValue = int.tryParse(value);
+                if (parsedValue == null) {
+                  return 'Please enter a valid number.';
+                }
+                if (parsedValue < 1 || parsedValue > 100) {
+                  return 'Quantity must be between 1 and 100.';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                newQuantity = int.tryParse(value) ?? quantity;
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                if (_formKey.currentState?.validate() ?? false) {
+                  Navigator.of(context).pop(newQuantity);
+                }
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Validate the form before closing the dialog
+                if (_formKey.currentState?.validate() ?? false) {
+                  Navigator.of(context).pop(newQuantity);
+                }
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+
+    return newQuantity ?? quantity;
   }
 }

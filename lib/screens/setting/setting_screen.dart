@@ -95,13 +95,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   CustomButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    text: Text(translation(context).no),
+                    text: translation(context).no,
                     icon: Icons.warning,
                   ),
                   SizedBox(width: 16),
-                  ElevatedButton(
+                  CustomButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    child: Text(translation(context).yes),
+                    text:translation(context).yes,
+                    icon: Icons.warning,
                   ),
                 ],
               ),

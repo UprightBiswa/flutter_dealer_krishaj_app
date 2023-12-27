@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
+import 'package:krishajdealer/widgets/location/locationcontiner.dart';
 
 class ShoppingCartPage extends StatelessWidget {
   const ShoppingCartPage({Key? key});
@@ -25,8 +26,9 @@ class ShoppingCartPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                TappableContainer(username: 'John'),
                 const Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Bag (total products 3)',
                     style: TextStyle(
@@ -54,6 +56,10 @@ class ShoppingCartPage extends StatelessWidget {
                   height: 8,
                 ),
                 _buildTotalSection(),
+                SizedBox(
+                  height: 8,
+                ),
+                _buildInformation(),
                 SizedBox(
                   height: 100,
                 )
@@ -224,29 +230,69 @@ class ShoppingCartPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
-            'Total Price: \500', // Replace with the actual total price
-            style: TextStyle(
-              fontSize: 16,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total Price:', // Replace with the actual total price
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                '\u20B9500', // Replace with the actual total price
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
-          Text(
-            'Additional Information',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            'Actual Price will be applicable on the date of dispatch',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
-              color: AppColors.kPrimary,
-            ),
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Net Price:', // Replace with the actual total price
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '\u20B9500', // Replace with the actual total price
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildInformation() {
+    return Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(16.0),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Additional Information',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'Actual Price will be applicable on the date of dispatch',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
+                color: AppColors.kPrimary,
+              ),
+            ),
+          ],
+        ));
   }
 }
