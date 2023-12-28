@@ -307,6 +307,14 @@ class HomeWidget extends StatelessWidget {
                 height: 150.0, // Set the desired height
                 borderRadius:
                     12.0, // Optional: Set the border radius, default is 12.0
+                    onTap: (){
+                      Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchPage(),
+                ),
+              );
+                    },
               ),
             ),
             const SizedBox(height: 8.0),

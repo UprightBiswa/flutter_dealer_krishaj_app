@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/productProvider/addtocart.dart';
+import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
 import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/splash/splash_screen.dart';
+import 'package:provider/provider.dart';
 import 'classes/language_constrants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +14,19 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const MyApp());
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ProductProvider>(
+          create: (context) => ProductProvider(),
+        ),
+        ChangeNotifierProvider<CartProvider>(
+            create: (context) => CartProvider(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    );
   });
 }
 
@@ -50,7 +65,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
-      home:  const SplashScreen(),
+      home:  const CustomBottomNavigationBar(),
     );
   }
 }

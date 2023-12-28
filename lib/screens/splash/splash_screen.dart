@@ -116,11 +116,11 @@ class _SplashScreenState extends State<SplashScreen>
                         'KRISHAJ',
                         style: TextStyle(
                             color: AppColors.kPrimary,
-                            fontSize: 18,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
-                      const SpinKitCircle(
+                      const SpinKitWaveSpinner(
                         color: AppColors.kPrimary,
                         size: 40,
                       ),
@@ -130,13 +130,13 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
             Positioned(
-              bottom: -210,
+              bottom: 0,
               left: 0,
               right: 0,
               child: Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height *
-                    0.6, // 60% of the screen height
+                    0.4, // 60% of the screen height
                 decoration: const BoxDecoration(
                   color: Colors.transparent, // Transparent background
                 ),
@@ -146,6 +146,32 @@ class _SplashScreenState extends State<SplashScreen>
                   height: double.infinity,
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
+      bottomSheet: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.kBackground,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Your text goes here
+            Text(
+              'Powered by:',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 8), // Add spacing between image and text
+            // Your image goes here
+            Image.asset(
+              'assets/images/indigi.png',
+              width: 50, // Adjust the width as needed
+              height: 50, // Adjust the height as needed
             ),
           ],
         ),

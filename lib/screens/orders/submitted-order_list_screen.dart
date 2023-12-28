@@ -28,7 +28,7 @@ class SubmittedOrderListScreen extends StatelessWidget {
         // drawer: const DrawerWidget(),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(8),
             child: Column(
               children: [
                 TopBar(),

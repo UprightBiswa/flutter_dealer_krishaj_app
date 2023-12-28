@@ -1,12 +1,18 @@
+
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/productProvider/addtocart.dart';
+import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
+import 'package:krishajdealer/providers/productProvider/cartcountwidget.dart';
 import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
 import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
+import 'package:krishajdealer/services/api/api_responce_moodel.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 import 'package:krishajdealer/widgets/location/locationcontiner.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:provider/provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Product product;
@@ -20,77 +26,91 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1; // Initial quantity
   String selectedOption = 'Agro'; // Initial selected option
-  late ValueNotifier<int> cartCountNotifier;
+  // late ValueNotifier<int> cartCountNotifier;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add this key
   @override
   void initState() {
     super.initState();
-    cartCountNotifier = ValueNotifier<int>(0);
-    _updateCartCount();
+    // cartCountNotifier = ValueNotifier<int>(0);
+    // _updateCartCount();
+     context.read<CartProvider>().updateCartCount();
   }
 
-  Future<void> _updateCartCount() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int currentCount = prefs.getInt('cartCount') ?? 0;
-    cartCountNotifier.value = currentCount;
-  }
+  // Future<void> _updateCartCount() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   int currentCount = prefs.getInt('cartCount') ?? 0;
+  //   cartCountNotifier.value = currentCount;
+  // }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
         backgroundColor: AppColors.kAppBackground,
         title: const Text('Product Details'),
         actions: [
-          ValueListenableBuilder<int>(
-            valueListenable: cartCountNotifier,
-            builder: (context, count, _) {
-              return Container(
-                child: IconButton(
-                  icon: Stack(
-                    children: [
-                      const Icon(Icons.shopping_cart),
-                      if (count > 0)
-                        Positioned(
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            constraints: const BoxConstraints(
-                              minWidth: 16,
-                              minHeight: 16,
-                            ),
-                            child: Text(
-                              count.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                  onPressed: () async {
-                    // Navigate to the shopping cart page
-                    // You can implement this part based on your navigation setup
-                    // Here, I'm just pushing a MaterialPageRoute as an example
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ShoppingCartPage(),
-                      ),
-                    );
-                  },
+          IconButton(
+            icon: CartCountWidget(), // Use the new widget here
+            onPressed: () {
+              // Navigate to the shopping cart page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ShoppingCartPage(),
                 ),
               );
             },
           ),
+          // ValueListenableBuilder<int>(
+          //   valueListenable: cartCountNotifier,
+          //   builder: (context, count, _) {
+          //     return Container(
+          //       child: IconButton(
+          //         icon: Stack(
+          //           children: [
+          //             const Icon(Icons.shopping_cart),
+          //             if (count > 0)
+          //               Positioned(
+          //                 right: 0,
+          //                 child: Container(
+          //                   padding: const EdgeInsets.all(2),
+          //                   decoration: BoxDecoration(
+          //                     color: Colors.red,
+          //                     borderRadius: BorderRadius.circular(8),
+          //                   ),
+          //                   constraints: const BoxConstraints(
+          //                     minWidth: 16,
+          //                     minHeight: 16,
+          //                   ),
+          //                   child: Text(
+          //                     count.toString(),
+          //                     style: const TextStyle(
+          //                       color: Colors.white,
+          //                       fontSize: 10,
+          //                     ),
+          //                     textAlign: TextAlign.center,
+          //                   ),
+          //                 ),
+          //               ),
+          //           ],
+          //         ),
+          //         onPressed: () async {
+          //           // Navigate to the shopping cart page
+          //           // You can implement this part based on your navigation setup
+          //           // Here, I'm just pushing a MaterialPageRoute as an example
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (context) => const ShoppingCartPage(),
+          //             ),
+          //           );
+          //         },
+          //       ),
+          //     );
+          //   },
+          // ),
         ],
       ),
       body: SafeArea(
@@ -257,7 +277,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            '\u20B9100',
+                            '\u20B9${widget.product.price}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -452,9 +472,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           child: SizedBox(
             width: double.infinity,
             child: CustomButton(
-              onPressed: () {
-                // Add to bag logic
-                _addToBag();
+              onPressed: () async {
+                await _addToBag();
               },
               icon: Icons.add_shopping_cart,
               text: 'Save to Bag',
@@ -496,41 +515,111 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  void _addToBag() async {
-    // Save the number of products to SharedPreferences
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int currentCount = prefs.getInt('cartCount') ?? 0;
-    int newCount = currentCount + quantity;
-    prefs.setInt('cartCount', newCount);
-    // Update the cart count notifier
-    cartCountNotifier.value = newCount;
+  // void _addToBag() async {
+  //   // Save the number of products to SharedPreferences
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   int currentCount = prefs.getInt('cartCount') ?? 0;
+  //   int newCount = currentCount + quantity;
+  //   prefs.setInt('cartCount', newCount);
+  //   // Update the cart count notifier
+  //   cartCountNotifier.value = newCount;
 
-    // Show a Snackbar instead of a dialog
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Product Added to Bag\n'
-          'Total Quantity: $quantity\n'
-          'Total Price: ${quantity * 100}\n'
-          'Selected Option: $selectedOption\n\n'
-          'Items in Cart: $newCount',
-        ),
-        action: SnackBarAction(
-          label: 'View Cart',
-          onPressed: () {
-            // Navigate to the shopping cart page
-            // You can implement this part based on your navigation setup
-            // Here, I'm just pushing a MaterialPageRoute as an example
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ShoppingCartPage(),
-              ),
-            );
-          },
-        ),
-      ),
+  //   // Show a Snackbar instead of a dialog
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(
+  //         'Product Added to Bag\n'
+  //         'Total Quantity: $quantity\n'
+  //         'Total Price: ${quantity * 100}\n'
+  //         'Selected Option: $selectedOption\n\n'
+  //         'Items in Cart: $newCount',
+  //       ),
+  //       action: SnackBarAction(
+  //         label: 'View Cart',
+  //         onPressed: () {
+  //           // Navigate to the shopping cart page
+  //           // You can implement this part based on your navigation setup
+  //           // Here, I'm just pushing a MaterialPageRoute as an example
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (context) => const ShoppingCartPage(),
+  //             ),
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
+  // Assuming you have a method to show Flushbar in your UI
+
+  Future<void> _addToBag() async {
+    // Your API call logic
+    ProductProvider productProvider = context.read<ProductProvider>();
+    CartProvider cartProvider = context.read<CartProvider>();
+    ApiResponseModel response = await productProvider.addToCart(
+      context: context, // Pass the context here
+      productId: widget.product.id,
+      quantity: quantity,
+      price: widget.product.price,
+      token: 'tkn001',
+      company: selectedOption,
     );
+
+    if (response.success) {
+      await cartProvider.addToCart(response.totalProducts);
+      // Product added successfully
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
+      // int newCount = response.totalProducts;
+      // prefs.setInt('cartCount', newCount);
+      // // Update the cart count notifier
+      // cartCountNotifier.value = newCount;
+
+      // Show a Snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Product: ${response.message}'),
+              Text('Product Added to Bag'),
+              Text('Total Quantity: $quantity'),
+              Text('Total Price: ${quantity * widget.product.price}'),
+              Text('Selected Option: $selectedOption'),
+              Text('Items in Cart: ${response.totalProducts}'),
+              SizedBox(height: 8), // Add some spacing
+              Container(
+                width: double.infinity,
+                child: CustomButton(
+                  icon: Icons.add_shopping_cart,
+                  text: 'View Cart',
+                  onPressed: () {
+                    // Navigate to the shopping cart page
+                    // You can implement this part based on your navigation setup
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ShoppingCartPage(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green[600], // Set color for success
+        ),
+      );
+    } else {
+      // Show an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${response.message}'),
+          backgroundColor: Colors.red, // Set color for error
+        ),
+      );
+    }
   }
 
   Future<int> _showQuantityInputDialog() async {

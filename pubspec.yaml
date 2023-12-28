@@ -67,6 +67,7 @@ dependencies:
   geocoding_android: ^2.1.2
   geocoding_ios: ^2.1.0
   package_info_plus: ^4.1.0
+  another_flushbar: ^1.12.30
 
 
 dev_dependencies:

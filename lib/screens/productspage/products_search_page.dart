@@ -5,12 +5,19 @@ import 'package:krishajdealer/widgets/cardwidget/custom_card_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Product {
+  final int id; // Unique identifier for the product
   final String brand;
   final String technical;
   final String imageUrl;
+  final double price; // Price of the product
 
-  Product(
-      {required this.brand, required this.technical, required this.imageUrl});
+  Product({
+    required this.id,
+    required this.brand,
+    required this.technical,
+    required this.imageUrl,
+    required this.price,
+  });
 }
 
 class SearchPage extends StatefulWidget {
@@ -25,37 +32,61 @@ class _SearchPageState extends State<SearchPage> {
   List<String> recentSearches = [];
   List<Product> products = [
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 1,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 2,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 3,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 4,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 5,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 6,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 7,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
     Product(
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg'),
+      id: 8,
+      brand: 'Kursor',
+      technical: 'Thifluzamide 24% SC',
+      imageUrl: 'assets/images/Direct.jpg',
+      price: 19.99, // Replace with the actual price for this product
+    ),
   ];
 
   @override
