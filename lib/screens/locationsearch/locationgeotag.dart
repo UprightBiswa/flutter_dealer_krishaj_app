@@ -18,9 +18,10 @@ class LocationGeotagWidget extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             return Text(
-              'Location: ${snapshot.data}',
+              ' ${snapshot.data}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Colors.black),
             );
           } else {
             return Text('Location not set');

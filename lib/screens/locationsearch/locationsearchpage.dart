@@ -347,7 +347,7 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
                 if (_currentLocation != null && fullAddress != null)
                   await _saveLocationPreference(
                       _currentLocation!, fullAddress!);
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               icon: Icons.save,
               text: 'Save Location',

@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/providers/productProvider/addtocart.dart';
 import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
 import 'package:krishajdealer/providers/productProvider/cartcountwidget.dart';
-import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
 import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
@@ -16,8 +14,8 @@ import 'package:provider/provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Product product;
-
-  const ProductDetailsPage({Key? key, required this.product}) : super(key: key);
+final int index; // Add index property
+  const ProductDetailsPage({Key? key, required this.product,required this.index}) : super(key: key);
 
   @override
   _ProductDetailsPageState createState() => _ProductDetailsPageState();
@@ -33,7 +31,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     super.initState();
     // cartCountNotifier = ValueNotifier<int>(0);
     // _updateCartCount();
-     context.read<CartProvider>().updateCartCount();
+    context.read<CartProvider>().updateCartCount();
   }
 
   // Future<void> _updateCartCount() async {
@@ -44,11 +42,77 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    
+    List<Product> products3 = [
+      Product(
+        id: 59,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+      Product(
+        id: 60,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+      Product(
+        id: 61,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+      Product(
+        id: 62,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+      Product(
+        id: 63,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+      Product(
+        id: 64,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+      Product(
+        id: 65,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+      Product(
+        id: 66,
+        brand: 'Kursor',
+        technical: 'Thifluzamide 24% SC',
+        imageUrl: 'assets/images/Direct.jpg',
+        price: 19.99, // Replace with the actual price for this product
+      ),
+    ];
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.kAppBackground,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
         title: const Text('Product Details'),
         actions: [
           IconButton(
@@ -153,7 +217,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     children: [
                       Center(
                         child: Hero(
-                          tag: 'product-image-${widget.product.brand}',
+                          tag: 'product-image-${widget.product.brand}-${widget.index}-${widget.product.id}',
                           child: Image.asset(
                             widget.product.imageUrl,
                             width: 150, // Set the desired width for the image
@@ -452,7 +516,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   child: Column(
                     children: [
                       SHeadline(),
-                      CardListView(),
+                      CardListView(products: products3),
                     ],
                   ),
                 ),

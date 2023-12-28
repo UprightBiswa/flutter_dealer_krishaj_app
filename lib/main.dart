@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/providers/productProvider/addtocart.dart';
 import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
+import 'package:krishajdealer/providers/productProvider/cartproductviewprovider.dart';
 import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<CartProvider>(
             create: (context) => CartProvider(),
+          ),
+           ChangeNotifierProvider<CartProductViewProvider>(
+            create: (context) => CartProductViewProvider(),
           ),
         ],
         child: const MyApp(),

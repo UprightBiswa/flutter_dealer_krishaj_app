@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/screens/locationsearch/locationgeotag.dart';
 import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
 import 'package:krishajdealer/utils/colors.dart';
 
@@ -28,6 +29,8 @@ class _TappableContainerState extends State<TappableContainer> {
           );
         },
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Icon(
               Icons.pin_drop,
@@ -39,14 +42,9 @@ class _TappableContainerState extends State<TappableContainer> {
             ),
             Expanded(
               child: SizedBox(
-                height: 25.0,
-                child: Text(
-                  'Delivery to ${widget.username} - location', // Use the provided username
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
+                height: 20.0,
+                child:
+                    LocationGeotagWidget(), // Use LocationGeotagWidget to display location
               ),
             ),
           ],

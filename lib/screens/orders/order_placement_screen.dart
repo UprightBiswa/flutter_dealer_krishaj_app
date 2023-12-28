@@ -10,7 +10,16 @@ class OrderPlacementScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.kAppBackground,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
         title: const Text(
           'Order Placement',
         ),

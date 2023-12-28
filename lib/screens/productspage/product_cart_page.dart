@@ -1,72 +1,158 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/productProvider/cartproductviewprovider.dart';
 import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
+import 'package:krishajdealer/screens/productspage/products_search_page.dart';
+import 'package:krishajdealer/services/api/card_api_responce_model.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 import 'package:krishajdealer/widgets/location/locationcontiner.dart';
+import 'package:provider/provider.dart';
 
-class ShoppingCartPage extends StatelessWidget {
+class ShoppingCartPage extends StatefulWidget {
   const ShoppingCartPage({Key? key});
+
+  @override
+  State<ShoppingCartPage> createState() => _ShoppingCartPageState();
+}
+
+class _ShoppingCartPageState extends State<ShoppingCartPage> {
+  ApiResponseModelCartItem? _cartData; // Change type to nullable
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCartData();
+  }
+
+  Future<void> _loadCartData() async {
+    final provider =
+        Provider.of<CartProductViewProvider>(context, listen: false);
+    final ApiResponseModelCartItem cartData =
+        await provider.viewCartDetails('tkn001', context);
+
+    setState(() {
+      _cartData = cartData;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.kAppBackground,
-        title: const Text('Shopping Cart'),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TappableContainer(username: 'John'),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Bag (total products 3)',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount:
-                      3, // Replace with the actual count of saved products
-                  separatorBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                    child: Divider(
-                      thickness: 1,
-                      height: 0,
-                      color: Colors.black12,
-                    ),
-                  ), // Divider line
-                  itemBuilder: (context, index) => _buildCartItem(),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                _buildTotalSection(),
-                SizedBox(
-                  height: 8,
-                ),
-                _buildInformation(),
-                SizedBox(
-                  height: 100,
-                )
-              ],
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
         ),
+        title: const Text('Shopping Cart'),
+      ),
+      body: SafeArea(
+        child: _cartData != null && _cartData!.success
+            ? SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TappableContainer(username: 'John'),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Container(
+                        color: Colors.white,
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Bag (total products ${_cartData?.totalProducts ?? 0})',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: CustomButton(
+                                onPressed: () {
+                                  // Navigate to the search page or perform your desired action
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          SearchPage(), // Replace YourSearchPage with the actual page you want to navigate to
+                                    ),
+                                  );
+                                },
+                                text: 'Add More',
+                                icon: Icons.add,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _cartData?.cartItems.length ?? 0,
+                        separatorBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Divider(
+                            thickness: 1,
+                            height: 0,
+                            color: Colors.black12,
+                          ),
+                        ), // Divider line
+                        itemBuilder: (context, index) => _buildCartItem(
+                          _cartData!.cartItems[index],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      _buildTotalSection(),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      _buildInformation(),
+                      SizedBox(
+                        height: 100,
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : _cartData != null && _cartData!.cartItems == 'No data available'
+                ? Center(
+                    child: Text('No data available'),
+                  )
+                : _cartData != null &&
+                        _cartData!.message == 'No internet connection'
+                    ? Center(
+                        child: Text('No internet connection'),
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
       ),
       bottomSheet: Container(
         color: Colors.grey[200],
@@ -92,7 +178,7 @@ class ShoppingCartPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCartItem() {
+  Widget _buildCartItem(CartItem cartItem) {
     return Container(
       color: Colors.white,
       width: double.infinity,
@@ -123,8 +209,8 @@ class ShoppingCartPage extends StatelessWidget {
                   ),
                   border: Border.all(color: Colors.black12),
                 ),
-                child: Image.asset(
-                  'assets/images/Direct.jpg',
+                child: Image.network(
+                  cartItem.productImage ?? '',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -146,7 +232,7 @@ class ShoppingCartPage extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'Brand Name : Kursor',
+                      'Brand Name : ${cartItem.company}',
                       style: TextStyle(
                         fontSize: 12, // Adjusted font size
                         color: Colors.black,
@@ -176,7 +262,7 @@ class ShoppingCartPage extends StatelessWidget {
                                 color: Colors.black,
                               ),
                               Text(
-                                '10', // Replace with actual quantity variable
+                                '${cartItem.quantity}', // Replace with actual quantity variable
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -224,7 +310,7 @@ class ShoppingCartPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Bill Details', // Replace with the actual count of products
+            'Bill Details (${_cartData?.totalProducts} products)',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -240,7 +326,7 @@ class ShoppingCartPage extends StatelessWidget {
                 ),
               ),
               Text(
-                '\u20B9500', // Replace with the actual total price
+                '\u20B9${_cartData?.totalPricesSum}',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -256,7 +342,7 @@ class ShoppingCartPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Text(
-                '\u20B9500', // Replace with the actual total price
+                '\u20B9${_cartData?.totalPricesSum}', // Use actual net price
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

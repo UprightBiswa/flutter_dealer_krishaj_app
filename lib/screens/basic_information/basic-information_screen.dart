@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/basic_information/edit_profile_page.dart';
+import 'package:krishajdealer/screens/locationsearch/locationgeotag.dart';
 import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
@@ -36,7 +37,16 @@ class _UserProfileState extends State<ProfileWidget> {
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.kAppBackground,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
         title: Text(
           'Profile',
         ),
@@ -49,7 +59,7 @@ class _UserProfileState extends State<ProfileWidget> {
             // Non-editable fields card
             Container(
               width: double.infinity,
-              height: 300,
+              height: 200,
               decoration: BoxDecoration(
                 color: Colors.white,
                 // boxShadow: [
@@ -215,14 +225,14 @@ class _UserProfileState extends State<ProfileWidget> {
                                 ),
                               ),
                               Expanded(
-                                child: Text(
-                                  item['field'] == 'Geotag'
-                                      ? 'Add your geotag address here' // Replace with the actual geotag address logic
-                                      : userData[item['field']] ?? '',
-                                  style: TextStyle(
-                                    color: Colors.grey[800],
-                                  ),
-                                ),
+                                child: item['field'] == 'Geotag'
+                                    ? LocationGeotagWidget()
+                                    : Text(
+                                        userData[item['field']] ?? '',
+                                        style: TextStyle(
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
                               ),
                               if (item['field'] ==
                                   'Geotag') // Add an edit button for Geotag Address

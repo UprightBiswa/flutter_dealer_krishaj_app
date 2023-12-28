@@ -94,11 +94,25 @@ class ProductProvider extends ChangeNotifier {
         },
       );
 
-      return ApiResponseModel(
-        success: response.data['success'],
-        message: response.data['message'],
-        totalProducts: response.data['total_products'],
-      );
+      // Check for a successful response status (2xx)
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return ApiResponseModel(
+          success: response.data['success'],
+          message: response.data['message'],
+          totalProducts: response.data['total_products'],
+        );
+      } else {
+        // Handle unexpected status codes
+        _showToast(context, 'Unexpected status code: ${response.statusCode}',
+            isError: true);
+        return ApiResponseModel(
+          success: false,
+          message: 'Unexpected status code: ${response.statusCode}',
+          totalProducts: 0,
+        );
+      }
     } catch (e) {
       _showToast(context, 'Error occurred: $e', isError: true);
       return ApiResponseModel(
