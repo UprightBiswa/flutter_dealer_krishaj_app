@@ -58,8 +58,7 @@ class _SearchPageState extends State<SearchPage> {
   void _onSearchChanged() {
     String query = _searchController.text.toLowerCase();
     filteredProductNames = products
-        .where((product) =>
-            product.productName.toLowerCase().contains(query))
+        .where((product) => product.productName.toLowerCase().contains(query))
         .map((product) => product.productName)
         .toList();
 
@@ -128,9 +127,7 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             controller: _searchController,
             onChanged: (value) {
-              setState(() {
-                // Add or remove 'Clear' button based on user input
-              });
+              setState(() {});
             },
             onSubmitted: (value) {
               if (value.isNotEmpty && !recentSearches.contains(value)) {
@@ -239,26 +236,25 @@ class _SearchPageState extends State<SearchPage> {
                 ]),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  if (filteredProductNames.isEmpty) {
-                    return ListTile(
-                      title: Text('No products found with this name.'),
-                    );
-                  }
+            // SliverList(
+            //   delegate: SliverChildBuilderDelegate(
+            //     (context, index) {
+            //       if (filteredProductNames.isEmpty) {
+            //         return ListTile(
+            //           title: Text('No products found with this name.'),
+            //         );
+            //       }
 
-                  return ListTile(
-                    title: Text(filteredProductNames[index]),
-                    onTap: () {
-                      _searchController.text = filteredProductNames[index];
-                      // You can navigate or perform any other action here
-                    },
-                  );
-                },
-                childCount: filteredProductNames.length,
-              ),
-            ),
+            //       return ListTile(
+            //         title: Text(filteredProductNames[index]),
+            //         onTap: () {
+            //           _searchController.text = filteredProductNames[index];
+            //         },
+            //       );
+            //     },
+            //     childCount: filteredProductNames.length,
+            //   ),
+            // ),
             SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -267,13 +263,19 @@ class _SearchPageState extends State<SearchPage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
+                  String productName = filteredProductNames.isNotEmpty
+                      ? filteredProductNames[index]
+                      : products[index].productName;
+
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProductDetailsPage(
-                            product: products[index],
+                            product: products.firstWhere(
+                              (product) => product.productName == productName,
+                            ),
                             index: index,
                           ),
                         ),
@@ -281,16 +283,18 @@ class _SearchPageState extends State<SearchPage> {
                     },
                     child: Hero(
                       tag:
-                          'product-image-${products[index].productName}-$index-${products[index].id}',
+                          'product-image-$productName-$index-${products[index].id}',
                       child: CardWidget(
-                        products[index].productName,
+                        productName,
                         products[index].productImageUrl,
                         products[index].userId,
                       ),
                     ),
                   );
                 },
-                childCount: products.length,
+                childCount: filteredProductNames.isNotEmpty
+                    ? filteredProductNames.length
+                    : products.length,
               ),
             ),
           ],

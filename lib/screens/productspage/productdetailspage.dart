@@ -15,8 +15,10 @@ import 'package:provider/provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final ProductItem product;
-final int index; // Add index property
-  const ProductDetailsPage({Key? key, required this.product,required this.index}) : super(key: key);
+  final int index; // Add index property
+  const ProductDetailsPage(
+      {Key? key, required this.product, required this.index})
+      : super(key: key);
 
   @override
   _ProductDetailsPageState createState() => _ProductDetailsPageState();
@@ -25,82 +27,15 @@ final int index; // Add index property
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1; // Initial quantity
   String selectedOption = 'Agro'; // Initial selected option
-  // late ValueNotifier<int> cartCountNotifier;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add this key
   @override
   void initState() {
     super.initState();
-    // cartCountNotifier = ValueNotifier<int>(0);
-    // _updateCartCount();
     context.read<CartProvider>().updateCartCount();
   }
 
-  // Future<void> _updateCartCount() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   int currentCount = prefs.getInt('cartCount') ?? 0;
-  //   cartCountNotifier.value = currentCount;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // List<Product> products3 = [
-    //   Product(
-    //     id: 59,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    //   Product(
-    //     id: 60,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    //   Product(
-    //     id: 61,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    //   Product(
-    //     id: 62,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    //   Product(
-    //     id: 63,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    //   Product(
-    //     id: 64,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    //   Product(
-    //     id: 65,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    //   Product(
-    //     id: 66,
-    //     brand: 'Kursor',
-    //     technical: 'Thifluzamide 24% SC',
-    //     imageUrl: 'assets/images/Direct.jpg',
-    //     price: 19.99, // Replace with the actual price for this product
-    //   ),
-    // ];
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
@@ -218,8 +153,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     children: [
                       Center(
                         child: Hero(
-                          tag: 'product-image-${widget.product.productName}-${widget.index}-${widget.product.id}',
-                          child: Image.asset(
+                          tag:
+                              'product-image-${widget.product.productName}-${widget.index}-${widget.product.id}',
+                          child: Image.network(
                             widget.product.productImageUrl,
                             width: 150, // Set the desired width for the image
                             height: 150, // Set the desired height for the image
