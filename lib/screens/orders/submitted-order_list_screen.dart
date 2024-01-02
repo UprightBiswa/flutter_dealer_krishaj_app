@@ -370,7 +370,7 @@ class CardListView extends StatelessWidget {
               },
               child: Hero(
                 tag:
-                    'product-image-${products[index].brand}-$index}-${products[index].id}',
+                    'product-image-${products[index].brand}-$index-${products[index].id}',
                 child: CardWidget(
                   products[index].brand,
                   products[index].imageUrl,

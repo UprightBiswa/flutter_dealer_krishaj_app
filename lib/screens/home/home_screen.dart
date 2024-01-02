@@ -187,7 +187,7 @@ class HomeWidget extends StatelessWidget {
                     child: SizedBox(
                       height: 25.0, // Set a specific height or adjust as needed
                       child: Marquee(
-                        text: 'Your Marquee Text Here',
+                        text: "Empowering Agriculture with KREPL Solutions: Cultivating Success, Growing Futures.",
                         style: const TextStyle(
                           color: Colors.white, // Adjust text color
                           fontWeight: FontWeight.w200,
