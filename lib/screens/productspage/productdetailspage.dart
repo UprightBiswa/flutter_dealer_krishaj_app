@@ -152,15 +152,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   child: Stack(
                     children: [
                       Center(
-                        child: Hero(
-                          tag:
-                              'product-image-${widget.product.productName}-${widget.index}-${widget.product.id}',
-                          child: Image.network(
-                            widget.product.productImageUrl,
-                            width: 150, // Set the desired width for the image
-                            height: 150, // Set the desired height for the image
-                            fit: BoxFit.cover,
-                          ),
+                        child: Image.network(
+                          widget.product.productImageUrl,
+                          width: 150, // Set the desired width for the image
+                          height: 150, // Set the desired height for the image
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Positioned(

@@ -281,14 +281,10 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     },
-                    child: Hero(
-                      tag:
-                          'product-image-$productName-$index-${products[index].id}',
-                      child: CardWidget(
-                        productName,
-                        products[index].productImageUrl,
-                        products[index].userId,
-                      ),
+                    child: CardWidget(
+                      productName,
+                      products[index].productImageUrl,
+                      products[index].userId,
                     ),
                   );
                 },
