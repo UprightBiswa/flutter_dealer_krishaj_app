@@ -68,6 +68,8 @@ dependencies:
   geocoding_ios: ^2.1.0
   package_info_plus: ^4.1.0
   another_flushbar: ^1.12.30
+  pinput: ^3.0.1
+  sms_autofill: ^2.3.0
 
 
 dev_dependencies:

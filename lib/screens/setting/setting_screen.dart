@@ -81,8 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
     bool confirmLogout = await _showLogoutConfirmationDialog();
     if (confirmLogout) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.remove('userPhoneNumber'); // Remove only the phone number
-      prefs.remove('userName'); // Remove only the username
+      prefs.remove('token'); // Remove the token
       // Navigate to the login screen
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(

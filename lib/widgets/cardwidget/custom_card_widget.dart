@@ -31,7 +31,7 @@ class CardWidget extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.asset(imageUrl, height: 70, fit: BoxFit.cover),
+            Image.network(imageUrl, height: 70, fit: BoxFit.cover),
             const Spacer(),
             Text(
               text,

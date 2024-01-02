@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:krishajdealer/providers/authentication/auth_token.dart';
+import 'package:krishajdealer/screens/authentication/logn_screen.dart';
+import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/language/language_chose.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -47,13 +51,33 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward().whenComplete(
       () async {
-        // bool isFirstLaunch = await checkFirstLaunch();
-        // if (isFirstLaunch) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LanguageScreen()),
-        );
-        // }
+        bool isFirstLaunch = await checkFirstLaunch();
+        if (isFirstLaunch) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LanguageScreen()),
+          );
+        } else {
+          // Check if the user is logged in
+          bool isLoggedIn =
+              (await Provider.of<AuthState>(context, listen: false).getToken())
+                      ?.isNotEmpty ??
+                  false;
+
+          if (isLoggedIn) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomBottomNavigationBar(),
+              ),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const FoochiSignInView()),
+            );
+          }
+        }
       },
     );
   }
@@ -65,16 +89,6 @@ class _SplashScreenState extends State<SplashScreen>
       prefs.setBool('firstLaunch', false);
     }
     return isFirstLaunch;
-  }
-
-  Future<String?> getUserPhoneNumber() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('userPhoneNumber');
-  }
-
-  Future<String?> getUserUserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('user_name');
   }
 
   @override

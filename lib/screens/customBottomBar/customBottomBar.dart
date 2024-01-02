@@ -6,6 +6,7 @@ import 'package:krishajdealer/screens/dashboard/dashboard_screen.dart';
 import 'package:krishajdealer/screens/home/home_screen.dart';
 import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
+import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/screens/setting/setting_screen.dart';
 import 'package:krishajdealer/screens/sidebar/sidebar_drawer.dart';
 import 'package:krishajdealer/utils/colors.dart';
@@ -27,7 +28,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomeWidget(),
     const DashboardWidget(),
-    const SubmittedOrderListScreen(), // Added the new screen
+    const SearchPage(), // Added the new screen
   ];
 
   void _onItemTapped(int index) {

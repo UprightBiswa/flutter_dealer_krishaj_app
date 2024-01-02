@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/authentication/auth_token.dart';
+import 'package:krishajdealer/providers/authentication/otprequestProvider.dart';
 import 'package:krishajdealer/providers/productProvider/addtocart.dart';
+import 'package:krishajdealer/providers/productProvider/allproducts.dart';
 import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
 import 'package:krishajdealer/providers/productProvider/cartproductviewprovider.dart';
-import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'classes/language_constrants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,13 +19,22 @@ Future<void> main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider<ProductProvider>(
-          create: (context) => ProductProvider(),
-        ),
-        ChangeNotifierProvider<CartProvider>(
+            create: (context) => ProductProvider(),
+          ),
+          ChangeNotifierProvider<CartProvider>(
             create: (context) => CartProvider(),
           ),
-           ChangeNotifierProvider<CartProductViewProvider>(
+          ChangeNotifierProvider<CartProductViewProvider>(
             create: (context) => CartProductViewProvider(),
+          ),
+          ChangeNotifierProvider<RequestOtpProvider>(
+            create: (context) => RequestOtpProvider(),
+          ),
+          ChangeNotifierProvider<AuthState>(
+            create: (context) => AuthState(),
+          ),
+          ChangeNotifierProvider<AllProductViewProvider>(
+            create: (context) => AllProductViewProvider(),
           ),
         ],
         child: const MyApp(),
@@ -69,7 +78,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
-      home:  const CustomBottomNavigationBar(),
+      home: const SplashScreen(),
     );
   }
 }

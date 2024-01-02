@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:krishajdealer/classes/language.dart';
 import 'package:krishajdealer/classes/language_constrants.dart';
 import 'package:krishajdealer/main.dart';
+import 'package:krishajdealer/providers/authentication/auth_token.dart';
 import 'package:krishajdealer/screens/authentication/logn_screen.dart';
 import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/onboarding/onboarding_screen.dart';
 import 'package:krishajdealer/utils/colors.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageScreen extends StatefulWidget {
@@ -36,7 +38,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
     // Check if it's the first-time installation
     bool isFirstInstallation = await checkFirstInstallation();
-    bool isLoggedIn = await checkLoggedIn();
+    // Check if the user is logged in
+    bool isLoggedIn = await Provider.of<AuthState>(context, listen: false).getToken() != null;
 
     if (isFirstInstallation) {
       Navigator.pushReplacement(
@@ -66,11 +69,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
       prefs.setBool('firstInstallation', false);
     }
     return isFirstInstallation;
-  }
-
-  Future<bool> checkLoggedIn() async {
-    // Implement your logic to check if the user is logged in
-    return false; // Replace with your actual logic
   }
 
   @override

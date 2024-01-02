@@ -6,6 +6,7 @@ import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/services/api/api_responce_moodel.dart';
+import 'package:krishajdealer/services/api/peoducts_api_responce_model.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 import 'package:krishajdealer/widgets/location/locationcontiner.dart';
@@ -13,7 +14,7 @@ import 'package:krishajdealer/widgets/location/locationcontiner.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  final Product product;
+  final ProductItem product;
 final int index; // Add index property
   const ProductDetailsPage({Key? key, required this.product,required this.index}) : super(key: key);
 
@@ -42,64 +43,64 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Product> products3 = [
-      Product(
-        id: 59,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-      Product(
-        id: 60,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-      Product(
-        id: 61,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-      Product(
-        id: 62,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-      Product(
-        id: 63,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-      Product(
-        id: 64,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-      Product(
-        id: 65,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-      Product(
-        id: 66,
-        brand: 'Kursor',
-        technical: 'Thifluzamide 24% SC',
-        imageUrl: 'assets/images/Direct.jpg',
-        price: 19.99, // Replace with the actual price for this product
-      ),
-    ];
+    // List<Product> products3 = [
+    //   Product(
+    //     id: 59,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    //   Product(
+    //     id: 60,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    //   Product(
+    //     id: 61,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    //   Product(
+    //     id: 62,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    //   Product(
+    //     id: 63,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    //   Product(
+    //     id: 64,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    //   Product(
+    //     id: 65,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    //   Product(
+    //     id: 66,
+    //     brand: 'Kursor',
+    //     technical: 'Thifluzamide 24% SC',
+    //     imageUrl: 'assets/images/Direct.jpg',
+    //     price: 19.99, // Replace with the actual price for this product
+    //   ),
+    // ];
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
@@ -217,9 +218,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     children: [
                       Center(
                         child: Hero(
-                          tag: 'product-image-${widget.product.brand}-${widget.index}-${widget.product.id}',
+                          tag: 'product-image-${widget.product.productName}-${widget.index}-${widget.product.id}',
                           child: Image.asset(
-                            widget.product.imageUrl,
+                            widget.product.productImageUrl,
                             width: 150, // Set the desired width for the image
                             height: 150, // Set the desired height for the image
                             fit: BoxFit.cover,
@@ -271,14 +272,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Brand: ${widget.product.brand}',
+                        'Brand: ${widget.product.productName}',
                         style: const TextStyle(
                           fontSize: 16,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        widget.product.technical,
+                        widget.product.userId,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -341,7 +342,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            '\u20B9${widget.product.price}',
+                            '\u20B9200',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -509,17 +510,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 SizedBox(
                   height: 8,
                 ),
-                Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.all(8.0),
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      SHeadline(),
-                      CardListView(products: products3),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   color: Colors.white,
+                //   padding: const EdgeInsets.all(8.0),
+                //   width: double.infinity,
+                //   child: Column(
+                //     children: [
+                //       SHeadline(),
+                //       CardListView(products: products3),
+                //     ],
+                //   ),
+                // ),
                 SizedBox(
                   height: 60,
                 ),
@@ -625,7 +626,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       context: context, // Pass the context here
       productId: widget.product.id,
       quantity: quantity,
-      price: widget.product.price,
+      price: 200,
       token: 'tkn001',
       company: selectedOption,
     );
@@ -649,7 +650,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               Text('Product: ${response.message}'),
               Text('Product Added to Bag'),
               Text('Total Quantity: $quantity'),
-              Text('Total Price: ${quantity * widget.product.price}'),
+              Text('Total Price: ${quantity * 200}'),
               Text('Selected Option: $selectedOption'),
               Text('Items in Cart: ${response.totalProducts}'),
               SizedBox(height: 8), // Add some spacing

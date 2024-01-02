@@ -1,24 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/productProvider/allproducts.dart';
 import 'package:krishajdealer/screens/productspage/productdetailspage.dart';
+import 'package:krishajdealer/services/api/peoducts_api_responce_model.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/cardwidget/custom_card_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class Product {
-  final int id; // Unique identifier for the product
-  final String brand;
-  final String technical;
-  final String imageUrl;
-  final double price; // Price of the product
-
-  Product({
-    required this.id,
-    required this.brand,
-    required this.technical,
-    required this.imageUrl,
-    required this.price,
-  });
-}
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -27,72 +13,57 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
+enum SearchPageState {
+  Loading,
+  Data,
+  Error,
+}
+
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
-  List<Product> products = [
-    Product(
-      id: 1,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-    Product(
-      id: 2,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-    Product(
-      id: 3,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-    Product(
-      id: 4,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-    Product(
-      id: 5,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-    Product(
-      id: 6,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-    Product(
-      id: 7,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-    Product(
-      id: 8,
-      brand: 'Kursor',
-      technical: 'Thifluzamide 24% SC',
-      imageUrl: 'assets/images/Direct.jpg',
-      price: 19.99, // Replace with the actual price for this product
-    ),
-  ];
+  List<ProductItem> products = [];
+  final AllProductViewProvider _productProvider = AllProductViewProvider();
+  SearchPageState _pageState = SearchPageState.Loading;
+  List<String> filteredProductNames = [];
 
   @override
   void initState() {
     super.initState();
+    _loadProducts();
     loadSearchHistory();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      setState(() {
+        _pageState = SearchPageState.Loading;
+      });
+
+      ApiResponseModelProducts response =
+          await _productProvider.getProducts(context);
+
+      setState(() {
+        products = response.products;
+        _pageState = SearchPageState.Data;
+      });
+    } catch (e) {
+      setState(() {
+        _pageState = SearchPageState.Error;
+      });
+    }
+  }
+
+  void _onSearchChanged() {
+    String query = _searchController.text.toLowerCase();
+    filteredProductNames = products
+        .where((product) =>
+            product.productName.toLowerCase().contains(query))
+        .map((product) => product.productName)
+        .toList();
+
+    setState(() {});
   }
 
   Future<void> loadSearchHistory() async {
@@ -117,6 +88,25 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    switch (_pageState) {
+      case SearchPageState.Loading:
+        return _buildLoadingState();
+      case SearchPageState.Data:
+        return _buildDataState();
+      case SearchPageState.Error:
+        return _buildErrorState();
+    }
+  }
+
+  Widget _buildLoadingState() {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget _buildDataState() {
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
@@ -187,109 +177,6 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Padding(
-//             padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 if (recentSearches.isNotEmpty)
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       const Text(
-//                         'Your Recent Searches',
-//                         style: TextStyle(
-//                           fontWeight: FontWeight.bold,
-//                           fontSize: 18,
-//                         ),
-//                       ),
-//                       const SizedBox(width: 8),
-//                       TextButton(
-//                         onPressed: () {
-//                           clearSearchHistory();
-//                         },
-//                         child: Text(
-//                           'Clear',
-//                           style: TextStyle(
-//                             color: recentSearches.isNotEmpty
-//                                 ? Colors.blue
-//                                 : Colors.grey,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 // if (recentSearches.isNotEmpty) const SizedBox(height: 8),
-//                 if (recentSearches.isNotEmpty)
-//                   SizedBox(
-//                     height: 40,
-//                     child: ListView.builder(
-//                       scrollDirection: Axis.horizontal,
-//                       itemCount: recentSearches.length,
-//                       itemBuilder: (context, index) {
-//                         return GestureDetector(
-//                           onTap: () {
-//                             _searchController.text = recentSearches[index];
-//                           },
-//                           child: Container(
-//                             margin: const EdgeInsets.only(right: 8),
-//                             padding: const EdgeInsets.all(8),
-//                             decoration: BoxDecoration(
-//                               border: Border.all(color: Colors.grey),
-//                               borderRadius: BorderRadius.circular(8),
-//                             ),
-//                             child: Text(recentSearches[index]),
-//                           ),
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                 if (recentSearches.isNotEmpty) const SizedBox(height: 8),
-//                 Expanded(
-//                   child: GridView.builder(
-//                     gridDelegate:
-//                         const SliverGridDelegateWithFixedCrossAxisCount(
-//                       crossAxisCount: 2,
-//                       crossAxisSpacing: 2.0,
-//                       mainAxisSpacing: 2.0,
-//                     ),
-//                     itemCount: products.length,
-//                     itemBuilder: (context, index) {
-//                       return GestureDetector(
-//                         onTap: () {
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (context) => ProductDetailsPage(
-//                                 product: products[index],
-//                                 index: index,
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                         child: Hero(
-//                           tag:
-//                               'product-image-${products[index].brand}-$index-${products[index].id}',
-//                           child: CardWidget(
-//                             products[index].brand,
-//                             products[index].imageUrl,
-//                             products[index].technical,
-//                           ),
-//                         ),
-//                       );
-//                     },
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -352,6 +239,26 @@ class _SearchPageState extends State<SearchPage> {
                 ]),
               ),
             ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (filteredProductNames.isEmpty) {
+                    return ListTile(
+                      title: Text('No products found with this name.'),
+                    );
+                  }
+
+                  return ListTile(
+                    title: Text(filteredProductNames[index]),
+                    onTap: () {
+                      _searchController.text = filteredProductNames[index];
+                      // You can navigate or perform any other action here
+                    },
+                  );
+                },
+                childCount: filteredProductNames.length,
+              ),
+            ),
             SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -374,17 +281,34 @@ class _SearchPageState extends State<SearchPage> {
                     },
                     child: Hero(
                       tag:
-                          'product-image-${products[index].brand}-$index-${products[index].id}',
+                          'product-image-${products[index].productName}-$index-${products[index].id}',
                       child: CardWidget(
-                        products[index].brand,
-                        products[index].imageUrl,
-                        products[index].technical,
+                        products[index].productName,
+                        products[index].productImageUrl,
+                        products[index].userId,
                       ),
                     ),
                   );
                 },
                 childCount: products.length,
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Error occurred'),
+            ElevatedButton(
+              onPressed: _loadProducts,
+              child: Text('Retry'),
             ),
           ],
         ),
