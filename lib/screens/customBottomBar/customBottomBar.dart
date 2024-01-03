@@ -11,7 +11,6 @@ import 'package:krishajdealer/screens/sidebar/sidebar_drawer.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:provider/provider.dart';
 
-
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
 
@@ -35,21 +34,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       _selectedIndex = index;
     });
   }
-
   // late ValueNotifier<int> cartCountNotifier;
   @override
   void initState() {
     super.initState();
-    // cartCountNotifier = ValueNotifier<int>(0);
-    // _updateCartCount();
-     context.read<CartProvider>().updateCartCount();
+    context.read<CartProvider>().updateCartCount();
   }
-
-  // Future<void> _updateCartCount() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   int currentCount = prefs.getInt('cartCount') ?? 0;
-  //   cartCountNotifier.value = currentCount;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,65 +80,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               ); // Use the CartCountWidget here
             },
           ),
-          // ValueListenableBuilder<int>(
-          //   valueListenable: cartCountNotifier,
-          //   builder: (context, count, _) {
-          //     return IconButton(
-          //       icon: Stack(
-          //         children: [
-          //           const Icon(
-          //             Icons.shopping_cart,
-          //             color: Colors.white,
-          //           ),
-          //           if (count > 0)
-          //             Positioned(
-          //               right: 0,
-          //               top: 0,
-          //               child: Container(
-          //                 padding: const EdgeInsets.all(2),
-          //                 decoration: BoxDecoration(
-          //                   color: Colors.red,
-          //                   borderRadius: BorderRadius.circular(8),
-          //                 ),
-          //                 constraints: const BoxConstraints(
-          //                   minWidth: 16,
-          //                   minHeight: 16,
-          //                 ),
-          //                 child: Text(
-          //                   count.toString(),
-          //                   style: const TextStyle(
-          //                     color: Colors.white,
-          //                     fontSize: 10,
-          //                   ),
-          //                   textAlign: TextAlign.center,
-          //                 ),
-          //               ),
-          //             ),
-          //         ],
-          //       ),
-          //       onPressed: () async {
-          //         // Navigate to the shopping cart page
-          //         // You can implement this part based on your navigation setup
-          //         // Here, I'm just pushing a MaterialPageRoute as an example
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => const ShoppingCartPage(),
-          //           ),
-          //         );
-          //       },
-          //     );
-          //   },
-          // ),
           IconButton(
             icon: Icon(
               Icons.person,
               color: Colors.white,
             ),
             onPressed: () {
-              // Navigate to the user profile page
-              // You can implement this part based on your navigation setup
-              // Here, I'm just pushing a MaterialPageRoute as an example
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -163,9 +100,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               color: Colors.white,
             ),
             onPressed: () {
-              // Navigate to the user profile page
-              // You can implement this part based on your navigation setup
-              // Here, I'm just pushing a MaterialPageRoute as an example
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -223,11 +157,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
           selectedFontSize: 14,
           unselectedFontSize: 12,
-          selectedItemColor: Colors.yellowAccent, // Set selected color to green
+          selectedItemColor: Colors.greenAccent, // Set selected color to green
           unselectedItemColor: Colors.white, // Set unselected color to grey
           onTap: _onItemTapped,
           selectedIconTheme: const IconThemeData(
-            color: Colors.yellowAccent, // Set selected icon color to green
+            color: Colors.greenAccent, // Set selected icon color to green
             size: 30.0, // Adjust the selected icon size
           ),
           unselectedIconTheme: const IconThemeData(

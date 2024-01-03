@@ -6,9 +6,9 @@ class AgingReportBillWiseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Aging Report Bill Wise')),
+      appBar: AppBar(title: const Text('Ageing Report Bill Wise')),
             drawer: const DrawerWidget(  ),
-      body: const Center(child: Text('Aging Report Bill Wise Screen')),
+      body: const Center(child: Text('Ageing Report Bill Wise Screen')),
     );
   }
 }

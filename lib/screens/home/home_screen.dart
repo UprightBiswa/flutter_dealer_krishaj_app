@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/dispatch_order/dispatch_order_details_screen.dart';
 import 'package:krishajdealer/screens/ledger/ledger_screen.dart';
-import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/screens/orders/special_order_screen.dart';
+import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/screens/reports/aging-report_screen.dart';
 import 'package:krishajdealer/screens/reports/aging_report_bill_wise_screen.dart';
@@ -110,6 +110,52 @@ class HomeWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Notification Bell and Marquee Container
+            Container(
+              color: AppColors.kPrimary, // Set the background color
+              padding: const EdgeInsets.all(8.0), // Adjust padding as needed
+              child: Row(
+                children: [
+                  // Notification Bell Icon
+                  const Icon(
+                    Icons.notifications,
+                    color: Colors.white, // Adjust icon color
+                    size: 20.0, // Adjust icon size
+                  ),
+                  const SizedBox(
+                    width: 4.0, // Adjust spacing between icon and marquee
+                  ),
+
+                  // Marquee Widget
+                  Expanded(
+                    child: SizedBox(
+                      height: 25.0, // Set a specific height or adjust as needed
+                      child: Marquee(
+                        text:
+                            "Empowering Agriculture with KREPL Solutions: Cultivating Success, Growing Futures.",
+                        style: const TextStyle(
+                          color: Colors.white, // Adjust text color
+                          fontWeight: FontWeight.w200,
+                          fontSize: 14.0, // Adjust font size
+                          fontFamily: 'Roboto', // Set your desired font family
+                        ),
+                        scrollAxis: Axis.horizontal,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        blankSpace: 20.0,
+                        velocity: 100.0,
+                        pauseAfterRound: const Duration(seconds: 1),
+                        startPadding: 10.0,
+                        accelerationDuration: const Duration(seconds: 1),
+                        accelerationCurve: Curves.linear,
+                        decelerationDuration: const Duration(milliseconds: 500),
+                        decelerationCurve: Curves.easeOut,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8.0),
             // Green Container
             Container(
               color: AppColors.kWhite, // Set the green color
@@ -119,24 +165,6 @@ class HomeWidget extends StatelessWidget {
                   // Row with Vendor Name and Circular Logo
                   Row(
                     children: [
-                      // Circular Logo (You can replace this with your logo)
-                      // Container(
-                      //   width: 25.0,
-                      //   height: 25.0,
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(
-                      //         8.0), // Adjust the border radius for rounded corners
-                      //     color: Colors.white, // Adjust the background color
-                      //   ),
-                      //   child: Icon(
-                      //     Icons.person,
-                      //     size: 20.0,
-                      //     color: Colors.green, // Adjust the icon color
-                      //   ),
-                      // ),
-
-                      // const SizedBox(width: 8.0), // Adjust spacing
-                      // Vendor Name
                       Text(
                         'Business Partner: Biswajit Das', //business partner
                         style: TextStyle(
@@ -165,52 +193,8 @@ class HomeWidget extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Notification Bell and Marquee Container
-            Container(
-              color: AppColors.kPrimary, // Set the background color
-              padding: const EdgeInsets.all(8.0), // Adjust padding as needed
-              child: Row(
-                children: [
-                  // Notification Bell Icon
-                  const Icon(
-                    Icons.notifications,
-                    color: Colors.white, // Adjust icon color
-                    size: 20.0, // Adjust icon size
-                  ),
-                  const SizedBox(
-                    width: 4.0, // Adjust spacing between icon and marquee
-                  ),
-
-                  // Marquee Widget
-                  Expanded(
-                    child: SizedBox(
-                      height: 25.0, // Set a specific height or adjust as needed
-                      child: Marquee(
-                        text: "Empowering Agriculture with KREPL Solutions: Cultivating Success, Growing Futures.",
-                        style: const TextStyle(
-                          color: Colors.white, // Adjust text color
-                          fontWeight: FontWeight.w200,
-                          fontSize: 14.0, // Adjust font size
-                          fontFamily: 'Roboto', // Set your desired font family
-                        ),
-                        scrollAxis: Axis.horizontal,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        blankSpace: 20.0,
-                        velocity: 100.0,
-                        pauseAfterRound: const Duration(seconds: 1),
-                        startPadding: 10.0,
-                        accelerationDuration: const Duration(seconds: 1),
-                        accelerationCurve: Curves.linear,
-                        decelerationDuration: const Duration(milliseconds: 500),
-                        decelerationCurve: Curves.easeOut,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             const SizedBox(height: 8.0),
+
             // Quick Access and Action Buttons
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -257,7 +241,7 @@ class HomeWidget extends StatelessWidget {
                             Icons.group,
                             'Sales Team',
                             AppColors.kBackground,
-                            AppColors.kPrimary,
+                            AppColors.kOrange,
                             buttonWidth,
                             context,
                             const SalesTeamInfoScreen(),
@@ -275,7 +259,7 @@ class HomeWidget extends StatelessWidget {
                             Icons.insert_chart,
                             'Reports',
                             AppColors.kBackground,
-                            AppColors.kPrimary,
+                            AppColors.kSecondary,
                             buttonWidth, // Adjust the width as needed
                             context,
                             const ProductWiseSalesReportScreen(),
@@ -284,7 +268,7 @@ class HomeWidget extends StatelessWidget {
                             Icons.local_shipping,
                             'Dispatch Order',
                             AppColors.kBackground,
-                            AppColors.kPrimary,
+                            AppColors.kred,
                             buttonWidth, // Adjust the width as needed
                             context,
                             const DispatchOrderDetailsScreen(),
@@ -307,14 +291,14 @@ class HomeWidget extends StatelessWidget {
                 height: 150.0, // Set the desired height
                 borderRadius:
                     12.0, // Optional: Set the border radius, default is 12.0
-                    onTap: (){
-                      Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchPage(),
-                ),
-              );
-                    },
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SearchPage(),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 8.0),
@@ -367,12 +351,12 @@ class HomeWidget extends StatelessWidget {
                               ),
                               _buildActionButton(
                                 Icons.note_add,
-                                'Orders Placement',
+                                'Cart',
                                 AppColors.kBackground,
                                 AppColors.kPrimary,
                                 buttonWidthlow,
                                 context,
-                                const OrderPlacementScreen(),
+                                const ShoppingCartPage(),
                               ),
                               _buildActionButton(
                                 Icons.hourglass_full,

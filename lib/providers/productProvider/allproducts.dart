@@ -65,4 +65,52 @@ class AllProductViewProvider extends ChangeNotifier {
       );
     }
   }
+
+  Future<ApiResponseModelProductDetails> getProductDetails({
+  required BuildContext context,
+  required int productId,
+})async {
+    try {
+      bool isConnected = await _checkInternet();
+
+      if (!isConnected) {
+        _showToast(context, 'No internet connection', isError: true);
+
+        return ApiResponseModelProductDetails(
+          success: false,
+          message: 'No internet connection',
+          productDetails: null,
+        );
+      }
+
+      Response response = await _dio.post(
+        'https://krepl.indigidigital.in/api/product_details?product_id=$productId',
+      );
+
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        print('Successful Response: ${response.data}');
+        return ApiResponseModelProductDetails.fromJson(response.data);
+      } else {
+        _showToast(context, 'Error: ${response.statusCode}', isError: true);
+        print('Error Response: ${response.data}');
+
+        return ApiResponseModelProductDetails(
+          success: false,
+          message: 'Error: ${response.statusCode}',
+          productDetails: null,
+        );
+      }
+    } catch (e) {
+      _showToast(context, 'Error occurred: $e', isError: true);
+      print('Exception: $e');
+
+      return ApiResponseModelProductDetails(
+        success: false,
+        message: 'Error occurred: $e',
+        productDetails: null,
+      );
+    }
+  }
 }

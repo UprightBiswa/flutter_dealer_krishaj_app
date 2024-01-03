@@ -18,4 +18,9 @@ class CartProvider extends ChangeNotifier {
     prefs.setInt('cartCount', _cartCount);
     notifyListeners();
   }
+
+  void resetCart() {
+    _cartCount = 0;
+    notifyListeners();
+  }
 }

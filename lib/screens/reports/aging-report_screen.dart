@@ -6,9 +6,9 @@ class AgingReportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Aging Report')),
+      appBar: AppBar(title: const Text('Ageing Report')),
             drawer: const DrawerWidget(  ),
-      body: const Center(child: Text('Aging Report Screen')),
+      body: const Center(child: Text('Ageing Report Screen')),
     );
   }
 }

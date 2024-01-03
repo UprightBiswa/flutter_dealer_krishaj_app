@@ -1,4 +1,7 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/authentication/auth_token.dart';
+import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
 import 'package:krishajdealer/providers/productProvider/cartproductviewprovider.dart';
 import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
@@ -25,14 +28,48 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
   }
 
   Future<void> _loadCartData() async {
+    CartProvider cartProvider = context.read<CartProvider>();
     final provider =
         Provider.of<CartProductViewProvider>(context, listen: false);
+    // Retrieve the user's token
+    String? token = await AuthState().getToken();
     final ApiResponseModelCartItem cartData =
-        await provider.viewCartDetails('tkn001', context);
-
+        await provider.viewCartDetails(token!, context);
+    cartProvider.addToCart(cartData.totalProducts);
     setState(() {
       _cartData = cartData;
     });
+  }
+
+  Future<void> _removeCartItem(int cartId) async {
+    CartProvider cartProvider = context.read<CartProvider>();
+    final removecartProvider = context.read<CartProductViewProvider>();
+    String? token = await AuthState().getToken();
+
+    final response =
+        await removecartProvider.removeCartItem(context, token!, cartId);
+
+    if (response.success) {
+      _showToast('Item removed successfully', isError: false);
+      await _loadCartData(); // Reload the cart data
+      if (response.totalProducts > 0) {
+        cartProvider.addToCart(response.totalProducts);
+      } else {
+        // Reset the cart count to 0 if there are no products in the cart
+        cartProvider.resetCart();
+      }
+    } else {
+      print('Failed to remove item: ' + response.data);
+      _showToast('Failed to remove item', isError: true);
+    }
+  }
+
+  void _showToast(String message, {bool isError = false}) {
+    Flushbar(
+      message: message,
+      duration: Duration(seconds: 3),
+      backgroundColor: isError ? Colors.red : Colors.green,
+    )..show(context); // Pass the context to the show method.
   }
 
   @override
@@ -141,7 +178,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                   ),
                 ),
               )
-            : _cartData != null && _cartData!.cartItems == 'No data available'
+            : _cartData != null && _cartData!.message == 'No data available'
                 ? Center(
                     child: Text('No data available'),
                   )
@@ -165,7 +202,12 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrderPlacementScreen(),
+                    builder: (context) => OrderPlacementScreen(
+                      totalProducts: _cartData?.totalProducts ?? 0,
+                      totalPricesSum:
+                          double.tryParse(_cartData?.totalPricesSum ?? '0.0') ??
+                              0.0,
+                    ),
                   ),
                 );
               },
@@ -281,11 +323,15 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                           ),
                         ),
                         SizedBox(width: 8.0),
-                        Text(
-                          'Remove',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
+                        GestureDetector(
+                          onTap: () => _removeCartItem(
+                              cartItem.id), // Pass the cart item ID
+                          child: Text(
+                            'Remove',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                         SizedBox(width: 8.0),
@@ -328,6 +374,24 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
               Text(
                 '\u20B9${_cartData?.totalPricesSum}',
                 style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Discount:', // Replace with the actual total price
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                '\u20B9-0.00',
+                style: TextStyle(
+                  color: Colors.green,
                   fontSize: 16,
                 ),
               ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/authentication/auth_token.dart';
 import 'package:krishajdealer/providers/productProvider/addtocart.dart';
+import 'package:krishajdealer/providers/productProvider/allproducts.dart';
 import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
 import 'package:krishajdealer/providers/productProvider/cartcountwidget.dart';
 import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
@@ -12,6 +14,12 @@ import 'package:krishajdealer/widgets/common/custom_button.dart';
 import 'package:krishajdealer/widgets/location/locationcontiner.dart';
 
 import 'package:provider/provider.dart';
+
+enum LoadProductDetailsState {
+  Loading,
+  Data,
+  Error,
+}
 
 class ProductDetailsPage extends StatefulWidget {
   final ProductItem product;
@@ -26,16 +34,81 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1; // Initial quantity
-  String selectedOption = 'Agro'; // Initial selected option
+  String selectedOption = 'AGRO'; // Initial selected option
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add this key
+  LoadProductDetailsState _productDetailsState =
+      LoadProductDetailsState.Loading;
+  ProductDetailsData? _productDetails; // Store the product details
   @override
   void initState() {
     super.initState();
+    _loadProductDetails();
     context.read<CartProvider>().updateCartCount();
+  }
+
+  Future<void> _loadProductDetails() async {
+    try {
+      setState(() {
+        _productDetailsState = LoadProductDetailsState.Loading;
+      });
+
+      ApiResponseModelProductDetails productDetails =
+          await context.read<AllProductViewProvider>().getProductDetails(
+                context: context,
+                productId: widget.product.id,
+              );
+
+      setState(() {
+        _productDetails = productDetails.productDetails;
+        _productDetailsState = LoadProductDetailsState.Data;
+      });
+    } catch (e) {
+      setState(() {
+        _productDetailsState = LoadProductDetailsState.Error;
+      });
+      // Handle the error state
+      print('Error loading product details: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    switch (_productDetailsState) {
+      case LoadProductDetailsState.Loading:
+        return LoadingState();
+      case LoadProductDetailsState.Data:
+        return DataState();
+      case LoadProductDetailsState.Error:
+        return ErrorState(retryCallback: _loadProductDetails);
+    }
+  }
+
+  Widget LoadingState() {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget ErrorState({required VoidCallback retryCallback}) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Error occurred'),
+            ElevatedButton(
+              onPressed: retryCallback,
+              child: Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget DataState() {
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
@@ -63,54 +136,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               );
             },
           ),
-          // ValueListenableBuilder<int>(
-          //   valueListenable: cartCountNotifier,
-          //   builder: (context, count, _) {
-          //     return Container(
-          //       child: IconButton(
-          //         icon: Stack(
-          //           children: [
-          //             const Icon(Icons.shopping_cart),
-          //             if (count > 0)
-          //               Positioned(
-          //                 right: 0,
-          //                 child: Container(
-          //                   padding: const EdgeInsets.all(2),
-          //                   decoration: BoxDecoration(
-          //                     color: Colors.red,
-          //                     borderRadius: BorderRadius.circular(8),
-          //                   ),
-          //                   constraints: const BoxConstraints(
-          //                     minWidth: 16,
-          //                     minHeight: 16,
-          //                   ),
-          //                   child: Text(
-          //                     count.toString(),
-          //                     style: const TextStyle(
-          //                       color: Colors.white,
-          //                       fontSize: 10,
-          //                     ),
-          //                     textAlign: TextAlign.center,
-          //                   ),
-          //                 ),
-          //               ),
-          //           ],
-          //         ),
-          //         onPressed: () async {
-          //           // Navigate to the shopping cart page
-          //           // You can implement this part based on your navigation setup
-          //           // Here, I'm just pushing a MaterialPageRoute as an example
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //               builder: (context) => const ShoppingCartPage(),
-          //             ),
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   },
-          // ),
         ],
       ),
       body: SafeArea(
@@ -152,12 +177,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   child: Stack(
                     children: [
                       Center(
-                        child: Image.network(
-                          widget.product.productImageUrl,
-                          width: 150, // Set the desired width for the image
-                          height: 150, // Set the desired height for the image
-                          fit: BoxFit.cover,
-                        ),
+                        child: _productDetails != null &&
+                                _productDetails!.productImageUrl.isNotEmpty
+                            ? Image.network(
+                                _productDetails!.productImageUrl,
+                                width:
+                                    150, // Set the desired width for the image
+                                height:
+                                    150, // Set the desired height for the image
+                                fit: BoxFit.cover,
+                              )
+                            : Placeholder(), // You can replace Placeholder() with any widget you prefer for no image
                       ),
                       Positioned(
                         bottom: 8,
@@ -204,11 +234,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Brand: ${widget.product.productName}',
+                        'Brand: ${_productDetails?.productName ?? ''}',
                         style: const TextStyle(
                           fontSize: 16,
                         ),
                       ),
+
                       const SizedBox(height: 8),
                       Text(
                         widget.product.userId,
@@ -303,16 +334,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       ),
                       const SizedBox(height: 8),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: buildOption('Agro'),
-                          ),
-                          const SizedBox(width: 16),
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: buildOption('Krepl'), //krepl
-                          ),
+                          for (String companyCode
+                              in _productDetails?.companyCodes ?? [])
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: Column(
+                                children: [
+                                  buildOption(companyCode),
+                                  const SizedBox(
+                                      height: 8), // Add space between options
+                                ],
+                              ),
+                            ),
+                          const SizedBox(width: 8),
                         ],
                       ),
                     ],
@@ -337,9 +373,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         // ),
                       ),
 
-                      // Quantity selection
-                      // Quantity selection
-                      // Quantity selection
                       Container(
                         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                         child: Row(
@@ -481,30 +514,32 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Widget buildOption(String option) {
+  Widget buildOption(String companyCode) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          selectedOption = option;
+          selectedOption = companyCode;
         });
       },
       child: Container(
         width: 120,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: selectedOption == option ? Colors.green : Colors.transparent,
+          color:
+              selectedOption == companyCode ? Colors.green : Colors.transparent,
           border: Border.all(
-            color: selectedOption == option ? Colors.green : Colors.black12,
+            color:
+                selectedOption == companyCode ? Colors.green : Colors.black12,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
           child: Text(
-            option,
+            companyCode,
             style: TextStyle(
               fontSize: 16,
-              color: selectedOption == option ? Colors.white : Colors.grey,
+              color: selectedOption == companyCode ? Colors.white : Colors.grey,
             ),
           ),
         ),
@@ -512,65 +547,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  // void _addToBag() async {
-  //   // Save the number of products to SharedPreferences
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   int currentCount = prefs.getInt('cartCount') ?? 0;
-  //   int newCount = currentCount + quantity;
-  //   prefs.setInt('cartCount', newCount);
-  //   // Update the cart count notifier
-  //   cartCountNotifier.value = newCount;
-
-  //   // Show a Snackbar instead of a dialog
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: Text(
-  //         'Product Added to Bag\n'
-  //         'Total Quantity: $quantity\n'
-  //         'Total Price: ${quantity * 100}\n'
-  //         'Selected Option: $selectedOption\n\n'
-  //         'Items in Cart: $newCount',
-  //       ),
-  //       action: SnackBarAction(
-  //         label: 'View Cart',
-  //         onPressed: () {
-  //           // Navigate to the shopping cart page
-  //           // You can implement this part based on your navigation setup
-  //           // Here, I'm just pushing a MaterialPageRoute as an example
-  //           Navigator.push(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (context) => const ShoppingCartPage(),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
-  // Assuming you have a method to show Flushbar in your UI
-
   Future<void> _addToBag() async {
     // Your API call logic
     ProductProvider productProvider = context.read<ProductProvider>();
     CartProvider cartProvider = context.read<CartProvider>();
+    // Get the token from SharedPreferences
+    String? token = await AuthState().getToken();
+     print('Token saved: $token');
     ApiResponseModel response = await productProvider.addToCart(
       context: context, // Pass the context here
-      productId: widget.product.id,
+      productId: _productDetails!.id,
       quantity: quantity,
       price: 200,
-      token: 'tkn001',
+      token: token ?? '',
       company: selectedOption,
     );
 
     if (response.success) {
       await cartProvider.addToCart(response.totalProducts);
-      // Product added successfully
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // int newCount = response.totalProducts;
-      // prefs.setInt('cartCount', newCount);
-      // // Update the cart count notifier
-      // cartCountNotifier.value = newCount;
 
       // Show a Snackbar
       ScaffoldMessenger.of(context).showSnackBar(

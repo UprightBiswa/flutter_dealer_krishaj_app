@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/authentication/auth_token.dart';
+import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
+import 'package:krishajdealer/providers/productProvider/cartproductviewprovider.dart';
+import 'package:krishajdealer/screens/orders/ordersuccess.dart';
+import 'package:krishajdealer/services/api/orderplacementresponce.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
+import 'package:provider/provider.dart';
 
 class OrderPlacementScreen extends StatelessWidget {
-  const OrderPlacementScreen({super.key});
+  final int totalProducts;
+  final double totalPricesSum;
+  const OrderPlacementScreen({
+    Key? key,
+    required this.totalProducts,
+    required this.totalPricesSum,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +96,8 @@ class OrderPlacementScreen extends StatelessWidget {
                             children: [
                               Text('Items:'),
                               SizedBox(width: 8.0),
-                              Text('5'), // Replace with the actual item count
+                              Text(
+                                  '$totalProducts'), // Replace with the actual item count
                             ],
                           ),
                         ),
@@ -103,7 +116,7 @@ class OrderPlacementScreen extends StatelessWidget {
                               ),
                               SizedBox(width: 8.0),
                               Text(
-                                '₹99.00',
+                                '₹${totalPricesSum.toStringAsFixed(2)}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -128,17 +141,70 @@ class OrderPlacementScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
             width: double.infinity,
-            child: CustomButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderPlacementScreen(),
-                  ),
+            child: Builder(
+              builder: (BuildContext builderContext) {
+                return CustomButton(
+                  onPressed: () async {
+                    try {
+                      // Show loading indicator
+                      showDialog(
+                        barrierDismissible: false,
+                        context: builderContext,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      );
+
+                      String? token = await AuthState().getToken();
+                      double totalPricesSumAsDouble =
+                          double.parse(totalPricesSum.toString());
+
+                      print('₹${totalPricesSumAsDouble.toStringAsFixed(2)}');
+
+                      final response = await builderContext
+                          .read<CartProductViewProvider>()
+                          .placeOrder(builderContext, token!, totalPricesSum);
+
+                      // Check if the widget is not in the process of being popped
+                      if (Navigator.canPop(builderContext)) {
+                        // Check if the widget is still mounted before proceeding
+                        if (context != null &&
+                            context.findRenderObject() != null) {
+                          // Do your processing here
+                          if (response.success) {
+                            CartProvider cartProvider =
+                                builderContext.read<CartProvider>();
+                            cartProvider.addToCart(response.cartCount);
+
+                            Navigator.push(
+                              builderContext,
+                              MaterialPageRoute(
+                                builder: (context) => OrderSuccessScreen(
+                                  orderId: response.orderId ?? '',
+                                ),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(builderContext).showSnackBar(
+                              SnackBar(
+                                content: Text(response.message),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                        }
+                      }
+                    } catch (e) {
+                      print('Error during order placement: $e');
+                      // Handle the error as needed
+                    }
+                  },
+                  text: 'Place your Order',
+                  icon: Icons.shopping_bag,
                 );
               },
-              text: 'Place your Order',
-              icon: Icons.shopping_bag,
             ),
           ),
         ),
