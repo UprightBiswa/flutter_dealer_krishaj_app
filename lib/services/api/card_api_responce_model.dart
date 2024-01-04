@@ -11,6 +11,9 @@ class CartItem {
   final String createdAt;
   final String updatedAt;
   final String? productImage;
+  final String productName;
+  final String brandName;
+
 
   CartItem({
     required this.id,
@@ -25,6 +28,8 @@ class CartItem {
     required this.createdAt,
     required this.updatedAt,
     this.productImage,
+    required this.productName,
+    required this.brandName,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
@@ -41,6 +46,9 @@ class CartItem {
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
       productImage: json['product_image'],
+      productName: json['product_name'] ?? '',
+      brandName: json['brand_name'] ?? '',
+
     );
   }
 }
@@ -50,7 +58,7 @@ class ApiResponseModelCartItem {
   final String message;
   final int totalProducts;
   final List<CartItem> cartItems;
-  final String totalPricesSum;
+  final dynamic  totalPricesSum;
 
   ApiResponseModelCartItem({
     required this.success,

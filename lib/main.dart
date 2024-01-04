@@ -4,6 +4,7 @@ import 'package:krishajdealer/providers/authentication/otprequestProvider.dart';
 import 'package:krishajdealer/providers/productProvider/addtocart.dart';
 import 'package:krishajdealer/providers/productProvider/allproducts.dart';
 import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
+import 'package:krishajdealer/providers/productProvider/cartincrementdecrementprovider.dart';
 import 'package:krishajdealer/providers/productProvider/cartproductviewprovider.dart';
 import 'package:krishajdealer/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,9 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<AllProductViewProvider>(
             create: (context) => AllProductViewProvider(),
+          ),
+           ChangeNotifierProvider<CartIncrementDecrementProvider>(
+            create: (context) => CartIncrementDecrementProvider(),
           ),
         ],
         child: const MyApp(),

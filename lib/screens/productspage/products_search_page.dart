@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/providers/productProvider/allproducts.dart';
+import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/productspage/productdetailspage.dart';
 import 'package:krishajdealer/services/api/peoducts_api_responce_model.dart';
 import 'package:krishajdealer/utils/colors.dart';
@@ -25,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   List<ProductItem> products = [];
   final AllProductViewProvider _productProvider = AllProductViewProvider();
   SearchPageState _pageState = SearchPageState.Loading;
-  List<String> filteredProductNames = [];
+  List<ProductItem> filteredProductNames = [];
 
   @override
   void initState() {
@@ -59,7 +60,6 @@ class _SearchPageState extends State<SearchPage> {
     String query = _searchController.text.toLowerCase();
     filteredProductNames = products
         .where((product) => product.productName.toLowerCase().contains(query))
-        .map((product) => product.productName)
         .toList();
 
     setState(() {});
@@ -106,194 +106,210 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildDataState() {
-    return Scaffold(
-      backgroundColor: AppColors.kAppBackground,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+    return WillPopScope(
+      onWillPop: () async {
+        // Navigate to the homepage when the back button is pressed
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CustomBottomNavigationBar(),
+          ),
+          (route) => false,
+        );
+
+        // Return true to allow the back button press
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.kAppBackground,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ),
-        ),
-        automaticallyImplyLeading: true,
-        toolbarHeight: 60,
-        elevation: 0,
-        title: SizedBox(
-          height: 40,
-          child: TextField(
-            controller: _searchController,
-            onChanged: (value) {
-              setState(() {});
-            },
-            onSubmitted: (value) {
-              if (value.isNotEmpty && !recentSearches.contains(value)) {
-                setState(() {
-                  recentSearches.insert(0, value);
-                  if (recentSearches.length > 3) {
-                    recentSearches.removeLast();
-                  }
-                });
-                saveSearchHistory();
-              }
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding: const EdgeInsets.all(0),
-              prefixIcon: Icon(
-                Icons.search,
-                color: Colors.grey.shade800,
-              ),
-              suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.grey.shade500,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _searchController.clear();
-                        });
-                      },
-                    )
-                  : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
-                borderSide: BorderSide.none,
-              ),
-              hintStyle: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade800,
-              ),
-              hintText: 'Search for products, brands, etc.',
-            ),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.all(8.0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  if (recentSearches.isNotEmpty) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Your Recent Searches',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
+          automaticallyImplyLeading: true,
+          toolbarHeight: 60,
+          elevation: 0,
+          title: SizedBox(
+            height: 40,
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {});
+              },
+              onSubmitted: (value) {
+                if (value.isNotEmpty && !recentSearches.contains(value)) {
+                  setState(() {
+                    recentSearches.insert(0, value);
+                    if (recentSearches.length > 3) {
+                      recentSearches.removeLast();
+                    }
+                  });
+                  saveSearchHistory();
+                }
+              },
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.all(0),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.grey.shade800,
+                ),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.grey.shade500,
                         ),
-                        const SizedBox(width: 8),
-                        TextButton(
-                          onPressed: () {
-                            clearSearchHistory();
-                          },
-                          child: Text(
-                            'Clear',
-                            style: TextStyle(
-                              color: recentSearches.isNotEmpty
-                                  ? Colors.blue
-                                  : Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 40,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: recentSearches.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              _searchController.text = recentSearches[index];
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(recentSearches[index]),
-                            ),
-                          );
+                        onPressed: () {
+                          setState(() {
+                            _searchController.clear();
+                          });
                         },
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                ]),
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: BorderSide.none,
+                ),
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade800,
+                ),
+                hintText: 'Search for products, brands, etc.',
               ),
             ),
-            // SliverList(
-            //   delegate: SliverChildBuilderDelegate(
-            //     (context, index) {
-            //       if (filteredProductNames.isEmpty) {
-            //         return ListTile(
-            //           title: Text('No products found with this name.'),
-            //         );
-            //       }
-
-            //       return ListTile(
-            //         title: Text(filteredProductNames[index]),
-            //         onTap: () {
-            //           _searchController.text = filteredProductNames[index];
-            //         },
-            //       );
-            //     },
-            //     childCount: filteredProductNames.length,
-            //   ),
-            // ),
-            SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 2.0,
-                mainAxisSpacing: 2.0,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  String productName = filteredProductNames.isNotEmpty
-                      ? filteredProductNames[index]
-                      : products[index].productName;
-
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductDetailsPage(
-                            product: products.firstWhere(
-                              (product) => product.productName == productName,
+          ),
+        ),
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.only(),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    if (recentSearches.isNotEmpty) ...[
+                      Container(
+                        color: AppColors.kWhite,
+                        child: Column(
+                          // Wrap the children in a Column
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Your Recent Searches',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  TextButton(
+                                    onPressed: () {
+                                      clearSearchHistory();
+                                    },
+                                    child: Text(
+                                      'Clear',
+                                      style: TextStyle(
+                                        color: recentSearches.isNotEmpty
+                                            ? Colors.blue
+                                            : Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            index: index,
-                          ),
+                            SizedBox(
+                              height: 40,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: recentSearches.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      _searchController.text =
+                                          recentSearches[index];
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          right: 8, left: 8),
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.kWhite,
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(recentSearches[index]),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
                         ),
-                      );
-                    },
-                    child: CardWidget(
-                      productName,
-                      products[index].productImageUrl,
-                      products[index].userId,
-                    ),
-                  );
-                },
-                childCount: filteredProductNames.isNotEmpty
-                    ? filteredProductNames.length
-                    : products.length,
+                      ),
+                    ],
+                  ]),
+                ),
               ),
-            ),
-          ],
+             
+              SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    ProductItem product;
+
+                    if (filteredProductNames.isNotEmpty) {
+                      // If filteredProductNames is not empty, use the product at the given index
+                      product = filteredProductNames[index];
+                    } else {
+                      // If filteredProductNames is empty, use the original products list
+                      product = products[index];
+                    }
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsPage(
+                              product: product,
+                              index: index,
+                            ),
+                          ),
+                        );
+                      },
+                      child: CardWidget(
+                        product.productName,
+                        product.productImageUrl,
+                        product.materialGroupDescription,
+                      ),
+                    );
+                  },
+                  childCount: filteredProductNames.isNotEmpty
+                      ? filteredProductNames.length
+                      : products.length,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

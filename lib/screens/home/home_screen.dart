@@ -132,7 +132,7 @@ class HomeWidget extends StatelessWidget {
                       height: 25.0, // Set a specific height or adjust as needed
                       child: Marquee(
                         text:
-                            "Empowering Agriculture with KREPL Solutions: Cultivating Success, Growing Futures.",
+                            "Special offer is open from 1.12.2024 to 2.12.2024.",
                         style: const TextStyle(
                           color: Colors.white, // Adjust text color
                           fontWeight: FontWeight.w200,

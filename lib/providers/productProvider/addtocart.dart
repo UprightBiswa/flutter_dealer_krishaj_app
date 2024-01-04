@@ -70,6 +70,7 @@ class ProductProvider extends ChangeNotifier {
     required double price,
     required String token,
     required String company,
+    required int materialId,
   }) async {
     try {
       bool isConnected = await _checkInternet();
@@ -91,6 +92,7 @@ class ProductProvider extends ChangeNotifier {
           'price': price,
           'token': token,
           'company': company.toUpperCase(),
+          'material_id': materialId,
         },
       );
 
@@ -114,6 +116,7 @@ class ProductProvider extends ChangeNotifier {
         );
       }
     } catch (e) {
+        print('Error occurred: $e'); // Log the error
       _showToast(context, 'Error occurred: $e', isError: true);
       return ApiResponseModel(
         success: false,

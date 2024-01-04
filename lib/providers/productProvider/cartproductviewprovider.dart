@@ -83,7 +83,7 @@ class CartProductViewProvider extends ChangeNotifier {
     } catch (e) {
       _showToast(context, 'Error occurred: $e', isError: true);
       // Log exception
-      print('Exception: $e');
+      print('Exceptiofgfhfhn: $e');
 
       return ApiResponseModelCartItem(
         success: false,

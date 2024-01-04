@@ -9,6 +9,7 @@ import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/services/api/api_responce_moodel.dart';
 import 'package:krishajdealer/services/api/peoducts_api_responce_model.dart';
+import 'package:krishajdealer/utils/assets.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/common/custom_button.dart';
 import 'package:krishajdealer/widgets/location/locationcontiner.dart';
@@ -39,6 +40,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   LoadProductDetailsState _productDetailsState =
       LoadProductDetailsState.Loading;
   ProductDetailsData? _productDetails; // Store the product details
+  MaterialInfo? _materialInfo; // Store the material
   @override
   void initState() {
     super.initState();
@@ -56,16 +58,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           await context.read<AllProductViewProvider>().getProductDetails(
                 context: context,
                 productId: widget.product.id,
+                materialId: int.parse(widget.product.materialId),
               );
-
-      setState(() {
-        _productDetails = productDetails.productDetails;
-        _productDetailsState = LoadProductDetailsState.Data;
-      });
+      if (productDetails.success) {
+        setState(() {
+          _productDetails = productDetails.productDetails;
+          _materialInfo = productDetails.materialInfo;
+          _productDetailsState = LoadProductDetailsState.Data;
+        });
+      } else {
+        setState(() {
+          _productDetailsState = LoadProductDetailsState.Error;
+        });
+      }
     } catch (e) {
       setState(() {
         _productDetailsState = LoadProductDetailsState.Error;
       });
+
       // Handle the error state
       print('Error loading product details: $e');
     }
@@ -165,14 +175,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     //   topRight: Radius.circular(12.5),
                     //   bottomRight: Radius.circular(12.5),
                     // ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.kBackground.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: AppColors.kBackground.withOpacity(0.5),
+                    //     spreadRadius: 5,
+                    //     blurRadius: 7,
+                    //     offset: const Offset(0, 3),
+                    //   ),
+                    // ],
                   ),
                   child: Stack(
                     children: [
@@ -185,7 +195,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                     150, // Set the desired width for the image
                                 height:
                                     150, // Set the desired height for the image
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
                               )
                             : Placeholder(), // You can replace Placeholder() with any widget you prefer for no image
                       ),
@@ -210,8 +220,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                               ),
                             ],
                           ),
-                          child: const Text(
-                            'Case',
+                          child: Text(
+                            '${widget.product.mseht}',
                             style: TextStyle(
                               color: AppColors.kWhite,
                               fontSize: 16,
@@ -237,14 +247,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         'Brand: ${_productDetails?.productName ?? ''}',
                         style: const TextStyle(
                           fontSize: 16,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
 
                       const SizedBox(height: 8),
                       Text(
-                        widget.product.userId,
+                        'Technical Name: ${widget.product.materialGroupDescription} ',
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -278,7 +289,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Unit of Measure: ',
+                            'Unit: ',
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors
@@ -286,7 +297,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            ' Case',
+                            '${_materialInfo?.umrez} ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black, // Set the color to yellow
+                            ),
+                          ),
+                          Text(
+                            '${_materialInfo?.baseUnitOfMeasure}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -305,7 +324,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            '\u20B9200',
+                            '\u20B9${_materialInfo?.price ?? 0}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -378,8 +397,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              'Quantity', //case
+                            Text(
+                              'Quantity: ${_materialInfo?.mseht}', //case
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -475,19 +494,38 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 SizedBox(
                   height: 8,
                 ),
-                // Container(
-                //   color: Colors.white,
-                //   padding: const EdgeInsets.all(8.0),
-                //   width: double.infinity,
-                //   child: Column(
-                //     children: [
-                //       SHeadline(),
-                //       CardListView(products: products3),
-                //     ],
-                //   ),
-                // ),
+                Divider(
+                  thickness: 4,
+                  color: Colors.green,
+                ),
                 SizedBox(
-                  height: 60,
+                  height: 8,
+                ),
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.only(top: 8.0),
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                        ),
+                        child: SHeadline(),
+                      ),
+                      BannerCard(),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Divider(
+                  thickness: 4,
+                  color: Colors.green,
+                ),
+                SizedBox(
+                  height: 90,
                 ),
               ],
             ),
@@ -553,14 +591,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     CartProvider cartProvider = context.read<CartProvider>();
     // Get the token from SharedPreferences
     String? token = await AuthState().getToken();
-     print('Token saved: $token');
+    print('Token saved: $token');
     ApiResponseModel response = await productProvider.addToCart(
       context: context, // Pass the context here
       productId: _productDetails!.id,
       quantity: quantity,
-      price: 200,
+      price: (_materialInfo?.price ?? 0).toDouble(),
       token: token ?? '',
-      company: selectedOption,
+      company: selectedOption, 
+      materialId: _materialInfo!.id,
     );
 
     if (response.success) {
@@ -576,7 +615,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               Text('Product: ${response.message}'),
               Text('Product Added to Bag'),
               Text('Total Quantity: $quantity'),
-              Text('Total Price: ${quantity * 200}'),
+              Text(
+                  'Total Price: ${quantity * (_materialInfo?.price ?? 0).toDouble()}'),
               Text('Selected Option: $selectedOption'),
               Text('Items in Cart: ${response.totalProducts}'),
               SizedBox(height: 8), // Add some spacing
@@ -670,5 +710,71 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
 
     return newQuantity ?? quantity;
+  }
+
+  Widget BannerCard() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SearchPage(),
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(
+            top: 16.0, bottom: 16.0, left: 16.0, right: 16.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 150,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            image: DecorationImage(
+              image: AssetImage(AppAssets.banner),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget SHeadline() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Shop More",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchPage(),
+              ),
+            );
+          },
+          child: Text(
+            "View More",
+            style: TextStyle(
+              color: Color(0xff15BE77),
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

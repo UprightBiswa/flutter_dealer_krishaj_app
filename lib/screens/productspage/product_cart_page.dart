@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:krishajdealer/providers/authentication/auth_token.dart';
 import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
+import 'package:krishajdealer/providers/productProvider/cartincrementdecrementprovider.dart';
 import 'package:krishajdealer/providers/productProvider/cartproductviewprovider.dart';
 import 'package:krishajdealer/screens/orders/order_placement_screen.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
@@ -197,23 +198,31 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
             width: double.infinity,
-            child: CustomButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderPlacementScreen(
-                      totalProducts: _cartData?.totalProducts ?? 0,
-                      totalPricesSum:
-                          double.tryParse(_cartData?.totalPricesSum ?? '0.0') ??
-                              0.0,
-                    ),
+            child: _cartData != null &&
+                    (_cartData!.message == 'No data available' ||
+                        _cartData!.message == 'No internet connection')
+                ? CustomButton(
+                    onPressed: () {}, // Disabled button
+                    text: 'Proceed to Order',
+                    icon: Icons.shopping_bag,
+                  )
+                : CustomButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderPlacementScreen(
+                            totalProducts: _cartData?.totalProducts ?? 0,
+                            totalPricesSum: double.tryParse(
+                                    _cartData?.totalPricesSum ?? '0.0') ??
+                                0.0,
+                          ),
+                        ),
+                      );
+                    },
+                    text: 'Proceed to Order',
+                    icon: Icons.shopping_bag,
                   ),
-                );
-              },
-              text: 'Proceed to Order',
-              icon: Icons.shopping_bag,
-            ),
           ),
         ),
       ),
@@ -253,7 +262,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 ),
                 child: Image.network(
                   cartItem.productImage ?? '',
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -265,7 +274,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Technical name: Thifluzamida 24% SC',
+                      'Technical name: ${cartItem.productName}',
                       style: TextStyle(
                         fontSize: 14, // Adjusted font size
                         fontWeight: FontWeight.bold,
@@ -274,14 +283,14 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'Brand Name : ${cartItem.company}',
+                      'Brand Name : ${cartItem.brandName}',
                       style: TextStyle(
                         fontSize: 12, // Adjusted font size
                         color: Colors.black,
                       ),
                     ),
                     Text(
-                      'Pack Size: 100gml',
+                      'company: ${cartItem.company}',
                       style: TextStyle(
                         fontSize: 12, // Adjusted font size
                         color: Colors.black,
@@ -295,10 +304,18 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                           child: Row(
                             children: [
                               IconButton(
-                                onPressed: () {
-                                  // Decrease quantity logic
-                                  // Call a function to update the quantity
-                                  // updateQuantity(-1);
+                                onPressed: () async {
+                                  if (int.tryParse(cartItem.quantity)! > 1) {
+                                    await _updateCartQuantitydecrement(
+                                      cartItem.id,
+                                    );
+                                  } else {
+                                    _showToast(
+                                        'Cannot decrement quantity below 1',
+                                        isError: true);
+                                    // Optionally show a message or perform another action
+                                    print('Cannot decrement quantity below 1');
+                                  }
                                 },
                                 icon: Icon(Icons.remove),
                                 color: Colors.black,
@@ -311,10 +328,9 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {
-                                  // Increase quantity logic
-                                  // Call a function to update the quantity
-                                  // updateQuantity(1);
+                                onPressed: () async {
+                                  await _updateCartQuantityincremnt(
+                                      cartItem.id);
                                 },
                                 icon: Icon(Icons.add),
                                 color: Colors.black,
@@ -444,5 +460,43 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
             ),
           ],
         ));
+  }
+
+  Future<void> _updateCartQuantityincremnt(int cartItemId) async {
+    final updateCartProvider = context.read<CartIncrementDecrementProvider>();
+    String? token = await AuthState().getToken();
+
+    final response = await updateCartProvider.cartIncrement(
+      context: context,
+      token: token!,
+      quantity: 1,
+      cartId: cartItemId,
+    );
+
+    if (response.success) {
+      _showToast('Quantity updated successfully', isError: false);
+      await _loadCartData(); // Reload the cart data
+    } else {
+      _showToast('Failed to update quantity', isError: true);
+    }
+  }
+
+  Future<void> _updateCartQuantitydecrement(int cartItemId) async {
+    final updateCartProvider = context.read<CartIncrementDecrementProvider>();
+    String? token = await AuthState().getToken();
+
+    final response = await updateCartProvider.cartDecrement(
+      context: context,
+      token: token!,
+      quantity: 1,
+      cartId: cartItemId,
+    );
+
+    if (response.success) {
+      _showToast('Quantity updated successfully', isError: false);
+      await _loadCartData(); // Reload the cart data
+    } else {
+      _showToast('Failed to update quantity', isError: true);
+    }
   }
 }

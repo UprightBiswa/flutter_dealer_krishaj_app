@@ -97,7 +97,7 @@ class _SubmittedOrderListScreenState extends State<SubmittedOrderListScreen> {
       backgroundColor: AppColors.kAppBackground,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(16),
           child: Column(
             children: [
               TopBar(),

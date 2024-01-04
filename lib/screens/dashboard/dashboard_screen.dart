@@ -42,7 +42,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   ];
   @override
   Widget build(BuildContext context) {
-    var mediaQueryHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.kAppBackground,
       body: SingleChildScrollView(
@@ -71,7 +70,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                       height: 25.0, // Set a specific height or adjust as needed
                       child: Marquee(
                         text:
-                            "Your ledger has not confirm. Your dispatch has not confirmed. Special offer is open from 1.12.2023 to 2.12.2023. Price going to be change from…….",
+                            "Your ledger has not confirm. Your dispatch has not confirmed.",
                         style: const TextStyle(
                           color: Colors.white, // Adjust text color
                           fontWeight: FontWeight.w200,
@@ -95,37 +94,79 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               ),
             ),
             const SizedBox(height: 8.0),
-            // Green Container
             Container(
-              color: AppColors.kWhite, // Set the green color
-              padding: const EdgeInsets.all(8.0), // Adjust padding as needed
-              child: const Column(
+              height: 140,
+              color: AppColors.kWhite,
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
                 children: [
-                  // Row with Vendor Name and Circular Logo
+                  // CircleAvatar aligned to top left
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.green.withOpacity(0.1),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.green.withOpacity(0.1),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.green.withOpacity(0.1),
+                    ),
+                  ),
+
+                  // Row containing text and image
                   Row(
                     children: [
-                      Text(
-                        'Business Partner: Biswajit Das', //business partner
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black, // Adjust text color
-                          fontWeight: FontWeight.w300,
+                      // First child in the row
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Text: 'Business Partner'
+                            Text(
+                              'Business Partner: Biswajit Das',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            SizedBox(height: 8.0), // Adjust spacing
+
+                            // Text: 'Business Id' and 'Club gold'
+                            Text(
+                              'Business Id: 1234',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.black38,
+                              ),
+                            ),
+                            Text(
+                              'Club: Gold',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amber,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 8.0), // Adjust spacing
 
-                  // Row with Vendor Number
-                  Row(
-                    children: [
-                      // Vendor Number
-                      Text(
-                        'Business Id: 1234',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.black38, // Adjust text color
-                        ),
+                      // Second child in the row
+                      Image.asset(
+                        getCategoryImage('gold'), // Pass the actual category
+                        width: 100,
+                        height: 100,
                       ),
                     ],
                   ),
@@ -134,100 +175,47 @@ class _DashboardWidgetState extends State<DashboardWidget> {
             ),
 
             const SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Container(
-                height: mediaQueryHeight / 6,
-                decoration: BoxDecoration(
-                  color: AppColors.kWhite,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.green.withOpacity(0.1),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: CircleAvatar(
-                        radius: 100,
-                        backgroundColor: Colors.greenAccent.withOpacity(0.05),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Replace 'gold' with the actual club category from your data
-                          Text(
-                            'Club gold',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.amber,
-                            ),
-                          ),
-                          SizedBox(width: 8.0),
-                          // Dynamically load image based on the category
-                          Image.asset(
-                            getCategoryImage(
-                                'gold'), // Pass the actual category
-                            width: 100,
-                            height: 100,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 8.0),
-
             // Announcement Container
             Container(
-              padding: const EdgeInsets.all(16.0),
               color: AppColors.kWhite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Announcements',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      // Show more/less button
-                      TextButton(
-                        onPressed: () {
-                          // Handle the see more/less button press to toggle the list
-                          setState(() {
-                            itemCountToShow =
-                                itemCountToShow == 2 ? announcements.length : 2;
-                          });
-                        },
-                        child: Text(
-                          itemCountToShow == 2 ? 'See more' : 'See less',
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Announcements',
                           style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.blue,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
-                      ),
-                    ],
+                        // Show more/less button
+                        TextButton(
+                          onPressed: () {
+                            // Handle the see more/less button press to toggle the list
+                            setState(() {
+                              itemCountToShow = itemCountToShow == 2
+                                  ? announcements.length
+                                  : 2;
+                            });
+                          },
+                          child: Text(
+                            itemCountToShow == 2 ? 'See more' : 'See less',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 8.0),
+
                   // Use a ListView.builder to dynamically build the list
                   ListView.builder(
                     shrinkWrap: true,
@@ -237,13 +225,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                       return AnnouncementItem(
                         index: index + 1,
                         text: announcements[index],
+                        date: '2022-01-01',
                       );
                     },
                   ),
+                  const SizedBox(height: 16.0),
                 ],
               ),
             ),
-            SizedBox(height: 8.0),
           ],
         ),
       ),
@@ -254,23 +243,53 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 class AnnouncementItem extends StatelessWidget {
   final int index;
   final String text;
+  final String date;
 
-  const AnnouncementItem({Key? key, required this.index, required this.text})
-      : super(key: key);
+  const AnnouncementItem({
+    Key? key,
+    required this.index,
+    required this.text,
+    required this.date,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '$index. $text',
-          style: TextStyle(
-            fontSize: 16.0,
-            color: Colors.black,
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: index.isEven
+                ? Colors.greenAccent.withOpacity(.2)
+                : Colors.blueAccent.withOpacity(.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$index. $text',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 4.0),
+              Text(
+                'Date: $date',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.black38,
+                ),
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 8.0),
+        SizedBox(height: 0.0),
+        Divider(
+          color: Colors.grey,
+          height: 1.0,
+        ),
       ],
     );
   }

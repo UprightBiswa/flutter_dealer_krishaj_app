@@ -21,6 +21,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   int _selectedIndex = 0;
+  DateTime? currentBackPressTime;
 
   // Define the widgets for each tab
   static final List<Widget> _widgetOptions = <Widget>[
@@ -34,6 +35,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       _selectedIndex = index;
     });
   }
+
   // late ValueNotifier<int> cartCountNotifier;
   @override
   void initState() {
@@ -43,136 +45,153 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.kAppBackground,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
+    return WillPopScope(
+      onWillPop: () async {
+        if (currentBackPressTime == null ||
+            DateTime.now().difference(currentBackPressTime!) >
+                Duration(seconds: 2)) {
+          currentBackPressTime = DateTime.now();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Press back again to exit'),
+            ),
+          );
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.kAppBackground,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+          ),
+          title: Text(
+            getAppBarTitle(_selectedIndex),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            Consumer<CartProvider>(
+              builder: (context, cartProvider, _) {
+                return IconButton(
+                  icon: CartCountWidget(), // Use the new widget here
+                  onPressed: () {
+                    // Navigate to the shopping cart page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ShoppingCartPage(),
+                      ),
+                    );
+                  },
+                ); // Use the CartCountWidget here
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileWidget(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(
+                  Icons.menu, // Replace with your custom icon
+                  color: Colors.white, // Replace with your custom color
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+        ),
+        drawer: const DrawerWidget(),
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+              colors: [
+                Colors.lightGreen.withOpacity(0.5),
+                Colors.green,
+              ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),
-        ),
-        title: Text(
-          getAppBarTitle(_selectedIndex),
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          Consumer<CartProvider>(
-            builder: (context, cartProvider, _) {
-              return IconButton(
-                icon: CartCountWidget(), // Use the new widget here
-                onPressed: () {
-                  // Navigate to the shopping cart page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ShoppingCartPage(),
-                    ),
-                  );
-                },
-              ); // Use the CartCountWidget here
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.person,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileWidget(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingsPage(),
-                ),
-              );
-            },
-          ),
-        ],
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(
-                Icons.menu, // Replace with your custom icon
-                color: Colors.white, // Replace with your custom color
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
               ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-      ),
-      drawer: const DrawerWidget(),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.lightGreen.withOpacity(0.5),
-              Colors.green,
+              BottomNavigationBarItem(
+                icon: Icon(Icons.dashboard),
+                label: 'Dashboard',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_bag_outlined),
+                label: 'Product',
+              ),
             ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+            currentIndex: _selectedIndex,
+            selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+            selectedFontSize: 14,
+            unselectedFontSize: 12,
+            selectedItemColor: Colors.white, // Set selected color to green
+            unselectedItemColor:
+                Colors.grey[700], // Set unselected color to grey
+            onTap: _onItemTapped,
+            selectedIconTheme: const IconThemeData(
+              color: Colors.white, // Set selected icon color to green
+              size: 30.0, // Adjust the selected icon size
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: 'Dashboard',
+            unselectedIconTheme: IconThemeData(
+              color: Colors.grey[700], // Set unselected icon color to grey
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag_outlined),
-              label: 'Product',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-          selectedFontSize: 14,
-          unselectedFontSize: 12,
-          selectedItemColor: Colors.greenAccent, // Set selected color to green
-          unselectedItemColor: Colors.white, // Set unselected color to grey
-          onTap: _onItemTapped,
-          selectedIconTheme: const IconThemeData(
-            color: Colors.greenAccent, // Set selected icon color to green
-            size: 30.0, // Adjust the selected icon size
+            backgroundColor:
+                Colors.transparent, // Make the background transparent
+            type: BottomNavigationBarType.fixed, // Ensure all items are visible
+            elevation: 0, // Remove the shadow
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
           ),
-          unselectedIconTheme: const IconThemeData(
-            color: Colors.white, // Set unselected icon color to grey
-          ),
-          backgroundColor:
-              Colors.transparent, // Make the background transparent
-          type: BottomNavigationBarType.fixed, // Ensure all items are visible
-          elevation: 0, // Remove the shadow
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
         ),
       ),
     );
