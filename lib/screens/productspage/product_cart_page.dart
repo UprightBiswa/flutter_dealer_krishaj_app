@@ -213,9 +213,8 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                         MaterialPageRoute(
                           builder: (context) => OrderPlacementScreen(
                             totalProducts: _cartData?.totalProducts ?? 0,
-                            totalPricesSum: double.tryParse(
-                                    _cartData?.totalPricesSum ?? '0.0') ??
-                                0.0,
+                            totalPricesSum: _parseTotalPricesSum(_cartData?.totalPricesSum),
+                              
                           ),
                         ),
                       );
@@ -228,6 +227,15 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
       ),
     );
   }
+double _parseTotalPricesSum(dynamic totalPricesSum) {
+  if (totalPricesSum is String) {
+    return double.tryParse(totalPricesSum) ?? 0.0;
+  } else if (totalPricesSum is num) {
+    return totalPricesSum.toDouble();
+  } else {
+    return 0.0; // Handle other cases or return a default value
+  }
+}
 
   Widget _buildCartItem(CartItem cartItem) {
     return Container(

@@ -6,9 +6,9 @@ class MRPvsOrderPlacementReportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('MRP vs Order Placement Report')),
+      appBar: AppBar(title: const Text('Demand Plan vs Order Placement Report')),
             drawer: const DrawerWidget(  ),
-      body: const Center(child: Text('MRP vs Order Placement Report Screen')),
+      body: const Center(child: Text('Demand Plan vs Order Placement Report Screen')),
     );
   }
 }

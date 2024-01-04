@@ -3,6 +3,7 @@ import 'package:krishajdealer/screens/customBottomBar/customBottomBar.dart';
 import 'package:krishajdealer/screens/dispatch_order/dispatch_order_details_screen.dart';
 import 'package:krishajdealer/screens/ledger/ledger_screen.dart';
 import 'package:krishajdealer/screens/orders/special_order_screen.dart';
+import 'package:krishajdealer/screens/orders/submitted_order_list_page.dart';
 import 'package:krishajdealer/screens/reports/aging-report_screen.dart';
 import 'package:krishajdealer/screens/reports/aging_report_bill_wise_screen.dart';
 import 'package:krishajdealer/screens/reports/credit_note_details_screen.dart';
@@ -48,11 +49,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     ),
   ];
   final List<Section> orderSections = [
-    // Section(
-    //   name: 'Orders',
-    //   icon: Icons.shopping_cart,
-    //   screen: const SubmittedOrderListScreen(),
-    // ),
+    Section(
+      name: 'Submitted Order List',
+      icon: Icons.shopping_bag,
+      screen: const SubmittedOrderListPage(),
+    ),
     Section(
       name: 'Dispatch Order',
       icon: Icons.local_shipping,
@@ -87,17 +88,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       screen: const AgingReportBillWiseScreen(),
     ),
     Section(
-      name: 'Material Requirement Planning',
+      name: 'Demand Plan',
       icon: Icons.format_list_numbered,
       screen: const MaterialRequirementPlanningScreen(),
     ),
     Section(
-      name: 'Order Placement Through MRP',
+      name: 'Order Placement Through Demand Plan',
       icon: Icons.note_add,
       screen: const OrderPlacementThroughMRPScreen(),
     ),
     Section(
-      name: 'MRP vs Order Placement Report',
+      name: 'Demand Plan vs Order Placement Report',
       icon: Icons.analytics,
       screen: const MRPvsOrderPlacementReportScreen(),
     ),
@@ -112,32 +113,32 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   ];
 
   final List<Section> supportSections = [
-      Section(
-        name: 'Help',
-        icon: Icons.help,
-        screen:  HelpScreen(),
-      ),
-      Section(
-        name: 'Video Tutorial',
-        icon: Icons.video_library,
-        screen:  VideoTutorialScreen(),
-      ),
-      Section(
-        name: 'Feedback',
-        icon: Icons.feedback,
-        screen:  FeedbackScreen(),
-      ),
-      Section(
-        name: 'Complaint',
-        icon: Icons.report_problem,
-        screen:  ComplaintScreen(),
-      ),
-      Section(
-        name: 'Support',
-        icon: Icons.support,
-        screen:  SupportScreen(),
-      ),
-    ];
+    Section(
+      name: 'Help',
+      icon: Icons.help,
+      screen: HelpScreen(),
+    ),
+    Section(
+      name: 'Video Tutorial',
+      icon: Icons.video_library,
+      screen: VideoTutorialScreen(),
+    ),
+    Section(
+      name: 'Feedback',
+      icon: Icons.feedback,
+      screen: FeedbackScreen(),
+    ),
+    Section(
+      name: 'Complaint',
+      icon: Icons.report_problem,
+      screen: ComplaintScreen(),
+    ),
+    Section(
+      name: 'Support',
+      icon: Icons.support,
+      screen: SupportScreen(),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +208,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ],
               ),
             ),
-
             ListTile(
               leading: const Icon(Icons.home),
               title: Text(

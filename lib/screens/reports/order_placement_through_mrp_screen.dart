@@ -6,9 +6,9 @@ class OrderPlacementThroughMRPScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Order Placement Through MRP')),
+      appBar: AppBar(title: const Text('Order Placement Through Demand Plan')),
             drawer: const DrawerWidget(  ),
-      body: const Center(child: Text('Order Placement Through MRP Screen')),
+      body: const Center(child: Text('Order Placement Through Demand Plan Screen')),
     );
   }
 }

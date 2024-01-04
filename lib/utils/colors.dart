@@ -78,5 +78,5 @@ class AppColors {
   static const Color kLine = Color(0xFFFFFFFF);
   static const Color kred = Color.fromARGB(255, 220, 18, 18);
   static const Color kyolow = Color.fromARGB(255, 255, 237, 44);
-  static const Color klightgreen = Color.fromARGB(255, 36, 255, 193);
+  static const Color klightgreen = Color.fromARGB(255, 0, 225, 116);
 }

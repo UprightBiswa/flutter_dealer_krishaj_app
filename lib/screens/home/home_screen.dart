@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:krishajdealer/screens/dispatch_order/dispatch_order_details_screen.dart';
 import 'package:krishajdealer/screens/ledger/ledger_screen.dart';
 import 'package:krishajdealer/screens/orders/special_order_screen.dart';
+import 'package:krishajdealer/screens/orders/submitted_order_list_page.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/screens/reports/aging-report_screen.dart';
@@ -46,6 +47,11 @@ class HomeWidget extends StatelessWidget {
       screen: SearchPage(),
     ),
     Section(
+      name: 'Submitted Order List',
+      icon: Icons.shopping_bag,
+      screen: const SubmittedOrderListPage(),
+    ),
+    Section(
       name: 'Ledger',
       icon: Icons.account_balance_wallet,
       screen: const LedgerScreen(),
@@ -81,17 +87,17 @@ class HomeWidget extends StatelessWidget {
       screen: const AgingReportBillWiseScreen(),
     ),
     Section(
-      name: 'Material Requirement Planning',
+      name: 'Demand Plan',
       icon: Icons.build,
       screen: const MaterialRequirementPlanningScreen(),
     ),
     Section(
-      name: 'Order Placement Through MRP',
+      name: 'Order Placement Through Demand Plan',
       icon: Icons.add_shopping_cart,
       screen: const OrderPlacementThroughMRPScreen(),
     ),
     Section(
-      name: 'MRP vs Order Placement Report',
+      name: 'Demand Plan vs Order Placement Report',
       icon: Icons.compare_arrows,
       screen: const MRPvsOrderPlacementReportScreen(),
     ),
@@ -206,7 +212,7 @@ class HomeWidget extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment
                         .stretch, // Make the column stretch to the full width
@@ -220,7 +226,6 @@ class HomeWidget extends StatelessWidget {
                         ),
                         child: const Row(
                           children: [
-                            SizedBox(width: 8.0),
                             Text(
                               'Quick Access',
                               style: TextStyle(
@@ -237,15 +242,15 @@ class HomeWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildActionButton(
-                            Icons.group,
-                            'Sales Team',
-                            AppColors.kBackground,
-                            AppColors.kOrange,
-                            buttonWidth,
-                            context,
-                            const SalesTeamInfoScreen(),
-                          ),
+                          // _buildActionButton(
+                          //   Icons.group,
+                          //   'Sales Team',
+                          //   AppColors.kBackground,
+                          //   AppColors.kOrange,
+                          //   buttonWidth,
+                          //   context,
+                          //   const SalesTeamInfoScreen(),
+                          // ),
                           _buildActionButton(
                             Icons.search,
                             'Product Search',
@@ -256,14 +261,32 @@ class HomeWidget extends StatelessWidget {
                             const SearchPage(),
                           ),
                           _buildActionButton(
-                            Icons.insert_chart,
-                            'Reports',
+                            Icons.shopping_bag,
+                            'Cart',
                             AppColors.kBackground,
-                            AppColors.kSecondary,
-                            buttonWidth, // Adjust the width as needed
+                            AppColors.klightgreen,
+                            buttonWidthlow,
                             context,
-                            const ProductWiseSalesReportScreen(),
+                            const ShoppingCartPage(),
                           ),
+                          _buildActionButton(
+                            Icons.shopping_bag,
+                            'Submitted Order List',
+                            AppColors.kBackground,
+                            AppColors.kOrange,
+                            buttonWidthlow,
+                            context,
+                            const SubmittedOrderListPage(),
+                          ),
+                          // _buildActionButton(
+                          //   Icons.insert_chart,
+                          //   'Reports',
+                          //   AppColors.kBackground,
+                          //   AppColors.kSecondary,
+                          //   buttonWidth, // Adjust the width as needed
+                          //   context,
+                          //   const ProductWiseSalesReportScreen(),
+                          // ),
                           _buildActionButton(
                             Icons.local_shipping,
                             'Dispatch Order',
@@ -275,6 +298,7 @@ class HomeWidget extends StatelessWidget {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 16.0),
                     ],
                   ),
                 ),
@@ -316,7 +340,7 @@ class HomeWidget extends StatelessWidget {
                         ),
                     // elevation: 2.0, // Add elevation for a card-like effect
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
                           // Move the Container inside the Card
@@ -350,15 +374,6 @@ class HomeWidget extends StatelessWidget {
                                 const SalesTeamInfoScreen(),
                               ),
                               _buildActionButton(
-                                Icons.note_add,
-                                'Cart',
-                                AppColors.kBackground,
-                                AppColors.kPrimary,
-                                buttonWidthlow,
-                                context,
-                                const ShoppingCartPage(),
-                              ),
-                              _buildActionButton(
                                 Icons.hourglass_full,
                                 'Ageing Report',
                                 AppColors.kBackground,
@@ -378,11 +393,11 @@ class HomeWidget extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8.0),
+                          const SizedBox(height: 16.0),
 
                           // Second Row of Action Buttons
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildActionButton(
@@ -403,9 +418,18 @@ class HomeWidget extends StatelessWidget {
                                 context,
                                 const ProductWiseSalesReportScreen(),
                               ),
-                              // Add more action buttons as needed
+                              _buildActionButton(
+                                Icons.shopping_bag,
+                                'Submitted Order List',
+                                AppColors.kBackground,
+                                AppColors.kPrimary,
+                                buttonWidthlow,
+                                context,
+                                const SubmittedOrderListPage(),
+                              ),
                             ],
                           ),
+                          const SizedBox(height: 16.0),
                         ],
                       ),
                     ),
@@ -420,13 +444,13 @@ class HomeWidget extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        gradient: const LinearGradient(
-                            colors: [AppColors.kLine, AppColors.kWhite])),
-                    //elevation: 2.0,
-
+                      borderRadius: BorderRadius.circular(12.0),
+                      gradient: const LinearGradient(
+                        colors: [AppColors.kLine, AppColors.kWhite],
+                      ),
+                    ),
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
                           Container(
@@ -520,6 +544,9 @@ class HomeWidget extends StatelessWidget {
                             // Replace with your Help screen widget
                             HelpScreen(),
                           ),
+                          SizedBox(
+                            width: 8,
+                          ),
                           _buildActionSupport(
                             Icons.video_library,
                             'Video Tutorial',
@@ -529,6 +556,9 @@ class HomeWidget extends StatelessWidget {
                             context,
                             // Replace with your Video Tutorial screen widget
                             VideoTutorialScreen(),
+                          ),
+                          SizedBox(
+                            width: 8,
                           ),
                           _buildActionSupport(
                             Icons.feedback,
@@ -540,6 +570,9 @@ class HomeWidget extends StatelessWidget {
                             // Replace with your Feedback screen widget
                             FeedbackScreen(),
                           ),
+                          SizedBox(
+                            width: 8,
+                          ),
                           _buildActionSupport(
                             Icons.report_problem,
                             'Complaint',
@@ -550,6 +583,9 @@ class HomeWidget extends StatelessWidget {
                             // Replace with your Complaint screen widget
                             ComplaintScreen(),
                           ),
+                          SizedBox(
+                            width: 8,
+                          ),
                           _buildActionSupport(
                             Icons.support,
                             'Support',
@@ -559,6 +595,9 @@ class HomeWidget extends StatelessWidget {
                             context,
                             // Replace with your Support screen widget
                             SupportScreen(),
+                          ),
+                          SizedBox(
+                            width: 8,
                           ),
                         ],
                       ),
@@ -607,17 +646,27 @@ class HomeWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8.0),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w100,
-              // fontFamily: AutofillHints.addressCity,
-              fontSize: 12.0,
-              fontStyle: FontStyle.normal,
+          SizedBox(
+            height: 16.0,
+            child: Marquee(
+              text: text,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w100,
+                fontSize: 12.0,
+                fontStyle: FontStyle.normal,
+              ),
+              scrollAxis: Axis.horizontal,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              blankSpace: 20.0,
+              velocity: 10.0,
+              pauseAfterRound: Duration(seconds: 5),
+              startPadding: 1.0,
+              accelerationDuration: Duration(seconds: 1),
+              accelerationCurve: Curves.linear,
+              decelerationDuration: Duration(milliseconds: 500),
+              decelerationCurve: Curves.easeInOut,
             ),
-            textAlign: TextAlign.center,
-            // Align text in the center
           ),
         ],
       ),
@@ -665,14 +714,27 @@ class HomeWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8.0),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w100,
-              fontSize: 12.0,
+          SizedBox(
+            height: 16.0,
+            child: Marquee(
+              text: text,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w100,
+                fontSize: 12.0,
+                fontStyle: FontStyle.normal,
+              ),
+              scrollAxis: Axis.horizontal,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              blankSpace: 20.0,
+              velocity: 10.0,
+              pauseAfterRound: Duration(seconds: 5),
+              startPadding: 1.0,
+              accelerationDuration: Duration(seconds: 1),
+              accelerationCurve: Curves.linear,
+              decelerationDuration: Duration(milliseconds: 500),
+              decelerationCurve: Curves.easeInOut,
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

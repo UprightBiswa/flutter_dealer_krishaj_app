@@ -6,9 +6,9 @@ class MaterialRequirementPlanningScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Material Requirement Planning')),
+      appBar: AppBar(title: const Text('Demand Plan')),
             drawer: const DrawerWidget(  ),
-      body: const Center(child: Text('Material Requirement Planning Screen')),
+      body: const Center(child: Text('Demand Plan Screen')),
     );
   }
 }
