@@ -29,17 +29,21 @@ class SearchButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
             color: Colors.white,
           ),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
             child: Row(
               children: [
                 Icon(Icons.search, color: Colors.grey),
-                SizedBox(width: 10.0),
-                Text(
-                  'Search for products, brands,etc.',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16.0,
+                const SizedBox(width: 10.0),
+                Expanded( // Wrap the Row with Expanded
+                  child: Text(
+                    'Search for products, brands, etc.',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
               ],

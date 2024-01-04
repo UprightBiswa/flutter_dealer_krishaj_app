@@ -56,6 +56,7 @@ dependencies:
   animate_do: ^3.1.2
   marquee: ^2.2.3
   babstrap_settings_screen: ^0.1.6
+  fl_chart: ^0.66.0
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/utils/colors.dart';
 
 class Order {
   final int orderNo;
@@ -29,14 +30,16 @@ class SubmittedOrderListPage extends StatefulWidget {
   _SubmittedOrderListPageState createState() => _SubmittedOrderListPageState();
 }
 
-class _SubmittedOrderListPageState extends State<SubmittedOrderListPage> {
+class _SubmittedOrderListPageState extends State<SubmittedOrderListPage>
+    with SingleTickerProviderStateMixin {
   List<Order> _pendingOrders = [];
   List<Order> _dispatchedOrders = [];
-
+  late TabController _tabController;
   @override
   void initState() {
     super.initState();
     _loadDummyData();
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   void _loadDummyData() {
@@ -76,33 +79,59 @@ class _SubmittedOrderListPageState extends State<SubmittedOrderListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.kAppBackground,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
         title: Text('Submitted Order List'),
+        bottom: TabBar(
+          dividerColor: Colors.green,
+          labelColor: Colors.green,
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          indicatorColor: Colors.green,
+          controller: _tabController,
+          tabs: [
+            Tab(text: 'Pending'),
+            Tab(text: 'Dispatched'),
+          ],
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverToBoxAdapter(
+            child: SizedBox(height: 8), // Add some spacing above the TabBarView
+          ),
+        ],
+        body: TabBarView(
+          controller: _tabController,
           children: [
-            _buildOrderSection('Pending', _pendingOrders),
-            _buildOrderSection('Dispatched', _dispatchedOrders),
+            _buildOrderSection(_pendingOrders),
+            _buildOrderSection(_dispatchedOrders),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOrderSection(String sectionName, List<Order> orders) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+  Widget _buildOrderSection(List<Order> orders) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            sectionName,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
           if (orders.isEmpty)
             Center(
-              child: Text('No $sectionName orders available'),
+              child: Text('No  orders available'),
             )
           else
             ListView.builder(
@@ -120,52 +149,73 @@ class _SubmittedOrderListPageState extends State<SubmittedOrderListPage> {
   }
 
   Widget _buildOrderItem(Order order) {
-    return ListTile(
-      leading: Image.network(
-        order.image,
-        width: 50,
-        height: 50,
-        fit: BoxFit.cover,
-      ),
-      title: Text('Order No: ${order.orderNo}'),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('SKU: ${order.sku}'),
-          Text('Quantity: ${order.quantity}'),
-          Text('Price Before GST: ${order.priceBeforeGST}'),
-          Text('Amount Before GST: ${order.amountBeforeGST}'),
-          Text('Status: ${order.status}'),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              // Handle cancel action
-              print('Cancel Order No: ${order.orderNo}');
-            },
-            child: Text('Cancel'),
+    bool isDispatched = order.status == 'Dispatched';
+
+    return Column(
+      children: [
+        Container(
+          color: order.orderNo.isOdd
+              ? Colors.grey.withOpacity(0.1)
+              : Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Leading Image
+              Container(
+                width: 100,
+                height: 100,
+                padding: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.only(right: 8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Image.network(
+                  order.image,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.contain,
+                ),
+              ),
+
+              // Order Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Order No: ${order.orderNo}'),
+                    SizedBox(height: 4.0),
+                    Text('SKU: ${order.sku}'),
+                    Text('Quantity: ${order.quantity}'),
+                    Text('Price Before GST: ${order.priceBeforeGST}'),
+                    Text('Amount Before GST: ${order.amountBeforeGST}'),
+                    Row(
+                      // Status and Cancel Button in the same row
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Status: ${order.status}'),
+                        if (!isDispatched)
+                          TextButton(
+                            onPressed: () {
+                              // Handle cancel action
+                              print('Cancel Order No: ${order.orderNo}');
+                            },
+                            child: Text('Cancel'),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          SizedBox(width: 8),
-          ElevatedButton(
-            onPressed: () {
-              // Handle save action
-              print('Save Order No: ${order.orderNo}');
-            },
-            child: Text('Save'),
-          ),
-          SizedBox(width: 8),
-          ElevatedButton(
-            onPressed: () {
-              // Handle dispatch action
-              print('Dispatch Order No: ${order.orderNo}');
-            },
-            child: Text('Dispatch'),
-          ),
-        ],
-      ),
+        ),
+        Divider(
+          color: Colors.grey,
+          height: 1.0,
+        ),
+      ],
     );
   }
 }

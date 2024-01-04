@@ -22,17 +22,18 @@ class CardWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.5),
           boxShadow: [
             BoxShadow(
-              offset: const Offset(10, 20),
-              blurRadius: 10,
-              spreadRadius: 0,
-              color: Colors.grey.withOpacity(.05),
+              offset: const Offset(4, 4),
+              blurRadius: 1,
+              spreadRadius: 2,
+              color: Colors.green.withOpacity(.40),
             ),
           ],
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Image.network(imageUrl, height: 70, fit: BoxFit.cover),
-            const Spacer(),
             Text(
               text,
               maxLines: 1,
@@ -44,7 +45,7 @@ class CardWidget extends StatelessWidget {
                 fontSize: 18,
               ),
             ),
-            const SizedBox(height: 8),
+            // const SizedBox(height: 8),
             Text(
               subtitle,
               maxLines: 1,
@@ -56,7 +57,7 @@ class CardWidget extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
-            const SizedBox(height: 8),
+            // const SizedBox(height: 8),
           ],
         ),
       ),

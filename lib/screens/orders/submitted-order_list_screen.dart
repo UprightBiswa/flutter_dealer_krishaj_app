@@ -119,10 +119,14 @@ class _SubmittedOrderListScreenState extends State<SubmittedOrderListScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Find your Products",
-          style: TextStyle(
-              color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
+        Expanded(
+          child: Text(
+            "Find your Products",
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
+          ),
         ),
         Container(
           decoration: BoxDecoration(boxShadow: [
@@ -250,10 +254,10 @@ class _SubmittedOrderListScreenState extends State<SubmittedOrderListScreen> {
 
   Widget CardListView({required List<ProductItem> products}) {
     return Padding(
-      padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: 175,
+        height: 200,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: products.length,
@@ -273,7 +277,7 @@ class _SubmittedOrderListScreenState extends State<SubmittedOrderListScreen> {
               child: CardWidget(
                 products[index].productName,
                 products[index].productImageUrl,
-                products[index].userId,
+                products[index].materialGroupDescription,
               ),
             );
           },

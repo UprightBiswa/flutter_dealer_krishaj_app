@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:krishajdealer/utils/assets.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:marquee/marquee.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DashboardWidget extends StatefulWidget {
   const DashboardWidget({super.key});
@@ -111,14 +112,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   Align(
                     alignment: Alignment.center,
                     child: CircleAvatar(
-                      radius: 50,
+                      radius: 30,
                       backgroundColor: Colors.green.withOpacity(0.1),
                     ),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: CircleAvatar(
-                      radius: 70,
+                      radius: 30,
                       backgroundColor: Colors.green.withOpacity(0.1),
                     ),
                   ),
@@ -132,12 +133,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Text: 'Business Partner'
-                            Text(
-                              'Business Partner: Biswajit Das',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w300,
+                            Flexible(
+                              child: Text(
+                                'Business Partner: Biswajit Das',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w300,
+                                ),
                               ),
                             ),
                             SizedBox(height: 8.0), // Adjust spacing
@@ -175,44 +178,77 @@ class _DashboardWidgetState extends State<DashboardWidget> {
             ),
 
             const SizedBox(height: 8.0),
+
+            // First Container (Sales Chart)
+            buildChartContainer(
+              title: 'Sales',
+              data: [
+                FlSpot(0, 0),
+                FlSpot(1, 105),
+                FlSpot(2, 100),
+                FlSpot(3, 21),
+                FlSpot(4, 20),
+                FlSpot(5, 1),
+                FlSpot(6, 1.25),
+              ],
+            ),
+            const SizedBox(height: 8.0),
+
+            // Second Container (Collection Chart)
+            buildChartContainer(
+              title: 'Collection',
+              data: [
+                FlSpot(0, 0),
+                FlSpot(1, 85),
+                FlSpot(2, 80),
+                FlSpot(3, 11),
+                FlSpot(4, 10),
+                FlSpot(5, 1),
+                FlSpot(6, 1.25),
+              ],
+            ),
+            const SizedBox(height: 8.0),
             // Announcement Container
             Container(
               color: AppColors.kWhite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Announcements',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        // Show more/less button
-                        TextButton(
-                          onPressed: () {
-                            // Handle the see more/less button press to toggle the list
-                            setState(() {
-                              itemCountToShow = itemCountToShow == 2
-                                  ? announcements.length
-                                  : 2;
-                            });
-                          },
-                          child: Text(
-                            itemCountToShow == 2 ? 'See more' : 'See less',
+                  ColoredBox(
+                    color: Colors.green.shade300,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Announcements',
                             style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.blue,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.white,
                             ),
                           ),
-                        ),
-                      ],
+                          // Show more/less button
+                          TextButton(
+                            onPressed: () {
+                              // Handle the see more/less button press to toggle the list
+                              setState(() {
+                                itemCountToShow = itemCountToShow == 2
+                                    ? announcements.length
+                                    : 2;
+                              });
+                            },
+                            child: Text(
+                              itemCountToShow == 2 ? 'See more' : 'See less',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
 
@@ -229,15 +265,64 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                       );
                     },
                   ),
-                  const SizedBox(height: 16.0),
                 ],
               ),
             ),
+            const SizedBox(height: 8.0),
           ],
         ),
       ),
     );
   }
+}
+
+Widget buildChartContainer(
+    {required String title, required List<FlSpot> data}) {
+  return Container(
+    padding: const EdgeInsets.all(8.0),
+    decoration: BoxDecoration(
+      color: Colors.white,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 10),
+        Container(
+          height: 200, // Adjust the height as needed
+          child: LineChart(
+            LineChartData(
+              backgroundColor: Colors.blueAccent[100],
+              gridData: FlGridData(show: true),
+              titlesData: FlTitlesData(show: true),
+              borderData: FlBorderData(
+                show: true,
+                border: Border.all(color: Colors.black),
+              ),
+              minX: 0,
+              maxX: 6,
+              minY: 0,
+              maxY: 140,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: data,
+                  isCurved: true,
+                  color: Colors.green,
+                  belowBarData: BarAreaData(show: false),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class AnnouncementItem extends StatelessWidget {
@@ -258,6 +343,7 @@ class AnnouncementItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
+          width: double.infinity,
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             color: index.isEven

@@ -142,14 +142,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return SafeArea(
       child: Drawer(
-        elevation: 1,
+        elevation: 16.0,
+        shadowColor: AppColors.kOrange,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              curve: Curves.linear,
+            Container(
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.green, Colors.lightGreen.withOpacity(0.5)],
@@ -160,50 +164,47 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Row with Vendor Name and Circular Logo
                   Row(
                     children: [
-                      // Circular Logo (You can replace this with your logo)
+                      // Circular Logo
                       Container(
                         width: 25.0,
                         height: 25.0,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                              8.0), // Adjust the border radius for rounded corners
-                          color: Colors.white, // Adjust the background color
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: Colors.white,
                         ),
                         child: const Icon(
                           Icons.person,
                           size: 20.0,
-                          color: Colors.green, // Adjust the icon color
+                          color: Colors.green,
                         ),
                       ),
-                      const SizedBox(width: 8.0), // Adjust spacing
+                      const SizedBox(width: 8.0),
                       // Vendor Name
-                      const Text(
-                        'Welcome, Biswajit Das',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black, // Adjust text color
-                          fontWeight: FontWeight.w300,
+                      const Expanded(
+                        child: Text(
+                          'Welcome, Biswajit Das',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w300,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8.0), // Adjust spacing
+                  const SizedBox(height: 8.0),
 
-                  // Row with Vendor Number
-                  const Row(
-                    children: [
-                      // Vendor Number
-                      Text(
-                        'Business Partner Id: 1234',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.black38, // Adjust text color
-                        ),
-                      ),
-                    ],
+                  // Vendor Number
+                  const Text(
+                    'Business Partner Id: 1234',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.black38,
+                    ),
                   ),
                 ],
               ),
