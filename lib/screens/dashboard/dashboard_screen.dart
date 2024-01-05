@@ -447,6 +447,7 @@ import 'package:krishajdealer/providers/Dashboard/announcement_provider.dart';
 import 'package:krishajdealer/services/api/announcement_model.dart';
 import 'package:krishajdealer/utils/assets.dart';
 import 'package:krishajdealer/utils/colors.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DashboardWidget extends StatefulWidget {
   const DashboardWidget({Key? key}) : super(key: key);
@@ -461,6 +462,7 @@ enum DashboardState {
   Error,
   NoData,
 }
+
 String getCategoryImage(String category) {
   switch (category) {
     case 'gold':
@@ -473,6 +475,7 @@ String getCategoryImage(String category) {
       return ''; // Provide a default image path or handle accordingly
   }
 }
+
 class _DashboardWidgetState extends State<DashboardWidget> {
   int itemCountToShow = 2;
   List<String> announcementTexts = <String>[];
@@ -484,29 +487,29 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     super.initState();
     _loadAnnouncements();
   }
-Future<void> _loadAnnouncements() async {
-  try {
-    setState(() {
-      _dashboardState = DashboardState.Loading;
-    });
 
-    AnnouncementModel announcementModel =
-        await AnnouncementProvider().getAnnouncements(context);
+  Future<void> _loadAnnouncements() async {
+    try {
+      setState(() {
+        _dashboardState = DashboardState.Loading;
+      });
 
-    setState(() {
-      announcements = announcementModel.message
-          .map((announcement) => announcement.announcement)
-          .toList();
-      _dashboardState =
-          announcements.isEmpty ? DashboardState.NoData : DashboardState.Data;
-    });
-  } catch (e) {
-    setState(() {
-      _dashboardState = DashboardState.Error;
-    });
+      AnnouncementModel announcementModel =
+          await AnnouncementProvider().getAnnouncements(context);
+
+      setState(() {
+        announcements = announcementModel.message
+            .map((announcement) => announcement.announcement)
+            .toList();
+        _dashboardState =
+            announcements.isEmpty ? DashboardState.NoData : DashboardState.Data;
+      });
+    } catch (e) {
+      setState(() {
+        _dashboardState = DashboardState.Error;
+      });
+    }
   }
-}
-
 
   Widget _buildDashboardState(BuildContext context) {
     switch (_dashboardState) {
@@ -546,7 +549,8 @@ Future<void> _loadAnnouncements() async {
       ),
     );
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return _buildDashboardState(context);
   }
@@ -569,19 +573,50 @@ Future<void> _loadAnnouncements() async {
             const SizedBox(height: 8.0),
 
             // Sales Chart Container
-            buildChartContainer(
-              title: 'Sales',
-              data: [
-                FlSpot(0, 0),
-                FlSpot(1, 105),
-                FlSpot(2, 100),
-                FlSpot(3, 21),
-                FlSpot(4, 20),
-                FlSpot(5, 1),
-                FlSpot(6, 1.25),
-              ],
+            // buildChartContainer(
+            //   title: 'Sales',
+            //   data: [
+            //     FlSpot(0, 0),
+            //     FlSpot(1, 105),
+            //     FlSpot(2, 100),
+            //     FlSpot(3, 21),
+            //     FlSpot(4, 20),
+            //     FlSpot(5, 1),
+            //     FlSpot(6, 1.25),
+            //   ],
+            // ),
+            SalesComparisonChart(
+              title1: 'Sales-Last Year YTD',
+              title2: 'Sales-Curt Year YTD',
+              data1: [FlSpot(0, 85)],
+              data2: [FlSpot(0, 79)],
+              year1: '2024',
+              year2: '2023',
+              color1: Colors.green,
+              color2: Colors.red,
             ),
 
+            SalesComparisonChart(
+              title1: 'Sales-Last Year YTD',
+              title2: 'Sales-Curt Year YTD',
+              data1: [FlSpot(0, 47)],
+              data2: [FlSpot(0, 39)],
+              year1: '2024',
+              year2: '2023',
+              color1: Colors.green,
+              color2: Colors.red,
+            ),
+
+            SalesComparisonChart(
+              title1: 'Sales-Last Year YTD',
+              title2: 'Sales-Curt Year YTD',
+              data1: [FlSpot(0, 35)],
+              data2: [FlSpot(0, 20)],
+              year1: '2024',
+              year2: '2023',
+              color1: Colors.green,
+              color2: Colors.red,
+            ),
             const SizedBox(height: 8.0),
 
             // Collection Chart Container
@@ -753,9 +788,8 @@ Future<void> _loadAnnouncements() async {
                   TextButton(
                     onPressed: () {
                       setState(() {
-                        itemCountToShow = itemCountToShow == 2
-                            ? announcementTexts.length
-                            : 2;
+                        itemCountToShow =
+                            itemCountToShow == 2 ? announcementTexts.length : 2;
                       });
                     },
                     child: Text(
@@ -791,7 +825,8 @@ Future<void> _loadAnnouncements() async {
     );
   }
 
-  Widget buildChartContainer({required String title, required List<FlSpot> data}) {
+  Widget buildChartContainer(
+      {required String title, required List<FlSpot> data}) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -887,6 +922,79 @@ class AnnouncementItem extends StatelessWidget {
           height: 1.0,
         ),
       ],
+    );
+  }
+}
+
+class SalesComparisonChart extends StatelessWidget {
+  final String title1;
+  final String title2;
+  final List<FlSpot> data1;
+  final List<FlSpot> data2;
+  final String year1;
+  final String year2;
+  final Color color1;
+  final Color color2;
+
+  SalesComparisonChart({
+    required this.title1,
+    required this.title2,
+    required this.data1,
+    required this.data2,
+    required this.year1,
+    required this.year2,
+    required this.color1,
+    required this.color2,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title1,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            height: 200,
+            child: SfCartesianChart(
+              series: <CartesianSeries>[
+                BarSeries<FlSpot, String>(
+                  dataSource: data1,
+                  xValueMapper: (FlSpot spot, _) => year1,
+                  yValueMapper: (FlSpot spot, _) => spot.y,
+                  color: color1,
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                  ),
+                ),
+                BarSeries<FlSpot, String>(
+                  dataSource: data2,
+                  xValueMapper: (FlSpot spot, _) => year2,
+                  yValueMapper: (FlSpot spot, _) => spot.y,
+                  color: color2,
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                  ),
+                ),
+              ],
+              primaryXAxis: CategoryAxis(),
+              primaryYAxis: NumericAxis(),
+            ),
+          ),
+          SizedBox(height: 10),
+        ],
+      ),
     );
   }
 }
