@@ -261,7 +261,7 @@ class HomeWidget extends StatelessWidget {
                             const SearchPage(),
                           ),
                           _buildActionButton(
-                            Icons.shopping_bag,
+                            Icons.shopping_cart,
                             'Cart',
                             AppColors.kBackground,
                             AppColors.klightgreen,
@@ -273,7 +273,7 @@ class HomeWidget extends StatelessWidget {
                             Icons.shopping_bag,
                             'Submitted Order List',
                             AppColors.kBackground,
-                            AppColors.kOrange,
+                            AppColors.klightgreenmore,
                             buttonWidthlow,
                             context,
                             const SubmittedOrderListPage(),
@@ -291,7 +291,7 @@ class HomeWidget extends StatelessWidget {
                             Icons.local_shipping,
                             'Dispatch Order',
                             AppColors.kBackground,
-                            AppColors.kred,
+                            AppColors.klightgreenmoremore,
                             buttonWidth, // Adjust the width as needed
                             context,
                             const DispatchOrderDetailsScreen(),
@@ -648,7 +648,7 @@ class HomeWidget extends StatelessWidget {
           const SizedBox(height: 8.0),
           Text(
             text,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.black,

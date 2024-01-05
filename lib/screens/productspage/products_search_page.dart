@@ -6,6 +6,7 @@ import 'package:krishajdealer/services/api/peoducts_api_responce_model.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/cardwidget/custom_card_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -99,8 +100,41 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _buildLoadingState() {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: Center(
-        child: CircularProgressIndicator(),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16.0,
+              mainAxisSpacing: 16.0,
+            ),
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return Container(
+                height: 200, // Adjust the height based on your design
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(12.5),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(4, 4),
+                      blurRadius: 1,
+                      spreadRadius: 2,
+                      color: Colors.green.withOpacity(.40),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -267,7 +301,6 @@ class _SearchPageState extends State<SearchPage> {
                   ]),
                 ),
               ),
-             
               SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

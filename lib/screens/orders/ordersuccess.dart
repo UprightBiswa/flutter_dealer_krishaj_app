@@ -74,12 +74,12 @@ class OrderSuccessScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Navigate to the SearchPage and remove all previous routes
-                  Navigator.pushAndRemoveUntil(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => SearchPage(),
                     ),
-                    (route) => false,
+                    // (route) => false,
                   );
                 },
                 child: Text('Continue Shopping'),

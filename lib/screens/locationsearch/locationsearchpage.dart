@@ -139,7 +139,7 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
         _showSnackbar('No places found matching your query');
       }
     } on SocketException catch (e) {
-      _showSnackbar('Failed to connect to the server');
+      _showSnackbar('Failed to connect to the server error: $e');
     } catch (e) {
       _showSnackbar('An error occurred');
     }
@@ -311,7 +311,7 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
                     return Column(
                       children: [
                         ListTile(
-                          title: Text(result.name ?? ''),
+                          title: Text(result.name),
                           subtitle: Text(result.formattedAddress ?? ''),
                           onTap: () async {
                             final lat = result.geometry!.location.lat;

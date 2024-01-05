@@ -4,7 +4,6 @@ import 'package:krishajdealer/providers/productProvider/addtocart.dart';
 import 'package:krishajdealer/providers/productProvider/allproducts.dart';
 import 'package:krishajdealer/providers/productProvider/cartProvidercount.dart';
 import 'package:krishajdealer/providers/productProvider/cartcountwidget.dart';
-import 'package:krishajdealer/screens/orders/submitted-order_list_screen.dart';
 import 'package:krishajdealer/screens/productspage/product_cart_page.dart';
 import 'package:krishajdealer/screens/productspage/products_search_page.dart';
 import 'package:krishajdealer/services/api/api_responce_moodel.dart';
@@ -15,6 +14,39 @@ import 'package:krishajdealer/widgets/common/custom_button.dart';
 import 'package:krishajdealer/widgets/location/locationcontiner.dart';
 
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+
+class ShimmerSection extends StatelessWidget {
+  final double width;
+
+  const ShimmerSection({Key? key, required this.width}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: 16,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
+}
+
+class ShimmerBannerCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
+}
 
 enum LoadProductDetailsState {
   Loading,
@@ -95,8 +127,81 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   Widget LoadingState() {
     return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
+      appBar: AppBar(automaticallyImplyLeading: false),
+      body: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 300,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 8),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(8.0),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShimmerSection(width: 100),
+                    const SizedBox(height: 8),
+                    ShimmerSection(width: 200),
+                    const SizedBox(height: 8),
+                    ShimmerSection(width: 150),
+                    const SizedBox(height: 8),
+                    ShimmerSection(width: 120),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(8.0),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShimmerSection(width: 200),
+                    const SizedBox(height: 8),
+                    ShimmerSection(width: 150),
+                    const SizedBox(height: 8),
+                    ShimmerSection(width: 120),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8),
+              Divider(thickness: 4, color: Colors.green),
+              SizedBox(height: 8),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.only(top: 8.0),
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ShimmerSection(width: 100),
+                    ),
+                    ShimmerBannerCard(),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8),
+              Divider(thickness: 4, color: Colors.green),
+              SizedBox(height: 90),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -438,7 +543,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   onPressed: () async {
                                     int? newQuantity =
                                         await _showQuantityInputDialog();
-                                    if (newQuantity != null) {
+                                    if (newQuantity != 0) {
                                       setState(() {
                                         quantity = newQuantity.clamp(1, 100);
                                       });
@@ -598,7 +703,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       quantity: quantity,
       price: (_materialInfo?.price ?? 0).toDouble(),
       token: token ?? '',
-      company: selectedOption, 
+      company: selectedOption,
       materialId: _materialInfo!.id,
     );
 

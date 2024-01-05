@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/providers/Dashboard/announcement_provider.dart';
 import 'package:krishajdealer/providers/authentication/auth_token.dart';
 import 'package:krishajdealer/providers/authentication/otprequestProvider.dart';
 import 'package:krishajdealer/providers/productProvider/addtocart.dart';
@@ -37,8 +38,11 @@ Future<void> main() async {
           ChangeNotifierProvider<AllProductViewProvider>(
             create: (context) => AllProductViewProvider(),
           ),
-           ChangeNotifierProvider<CartIncrementDecrementProvider>(
+          ChangeNotifierProvider<CartIncrementDecrementProvider>(
             create: (context) => CartIncrementDecrementProvider(),
+          ),
+          ChangeNotifierProvider<AnnouncementProvider>(
+            create: (context) => AnnouncementProvider(),
           ),
         ],
         child: const MyApp(),

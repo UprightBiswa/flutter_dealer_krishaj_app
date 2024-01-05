@@ -7,6 +7,7 @@ import 'package:krishajdealer/utils/assets.dart';
 import 'package:krishajdealer/utils/colors.dart';
 import 'package:krishajdealer/widgets/cardwidget/custom_card_widget.dart';
 import 'package:krishajdealer/widgets/search_product/search_button.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SubmittedOrderListScreen extends StatefulWidget {
   const SubmittedOrderListScreen({Key? key}) : super(key: key);
@@ -70,7 +71,54 @@ class _SubmittedOrderListScreenState extends State<SubmittedOrderListScreen> {
   Widget _buildLoadingState() {
     return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: TopBar(),
+              ),
+              SizedBox(height: 16),
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: SearchButton(),
+              ),
+              SizedBox(height: 16),
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: BannerCard(),
+              ),
+              SizedBox(height: 16),
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Headline(),
+              ),
+              SizedBox(height: 16),
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: CardListView(products: products),
+              ),
+              SizedBox(height: 16),
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: SHeadline(),
+              ),
+              SizedBox(height: 16),
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: CardListView(products: products),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -279,6 +327,15 @@ class _SubmittedOrderListScreenState extends State<SubmittedOrderListScreen> {
                 products[index].productImageUrl,
                 products[index].materialGroupDescription,
               ),
+              // child: Shimmer.fromColors(
+              //   baseColor: Colors.grey[300]!,
+              //   highlightColor: Colors.grey[100]!,
+              //   child: CardWidget(
+              //     products[index].productName,
+              //     products[index].productImageUrl,
+              //     products[index].materialGroupDescription,
+              //   ),
+              // ),
             );
           },
         ),

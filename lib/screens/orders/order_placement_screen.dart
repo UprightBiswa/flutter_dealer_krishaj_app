@@ -218,7 +218,7 @@ class OrderPlacementScreen extends StatelessWidget {
       // Check if the widget is not in the process of being popped
       if (Navigator.canPop(context)) {
         // Check if the widget is still mounted before proceeding
-        if (context != null && context.findRenderObject() != null) {
+        if (context.findRenderObject() != null) {
           // Do your processing here
           if (response.success) {
             CartProvider cartProvider = context.read<CartProvider>();
