@@ -585,53 +585,122 @@ class _DashboardWidgetState extends State<DashboardWidget> {
             //     FlSpot(6, 1.25),
             //   ],
             // ),
+            Container(
+              height: 50, // Set the desired height
+              width: double.infinity,
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.blue, // Set the desired color
+              ),
+              child: Center(
+                child: Text(
+                  'Sales Information',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // Set the text color
+                  ),
+                ),
+              ),
+            ),
             SalesComparisonChart(
               title1: 'Sales-Last Year YTD',
               title2: 'Sales-Curt Year YTD',
-              data1: [FlSpot(0, 85)],
-              data2: [FlSpot(0, 79)],
+              data1: [FlSpot(0, 105)],
+              data2: [FlSpot(0, 99)],
               year1: '2024',
               year2: '2023',
               color1: Colors.green,
               color2: Colors.red,
             ),
-
+            SizedBox(height: 8.0),
             SalesComparisonChart(
-              title1: 'Sales-Last Year YTD',
-              title2: 'Sales-Curt Year YTD',
+              title1: 'Sales-Last Year MTD',
+              title2: 'Sales-Curt Year MTD',
               data1: [FlSpot(0, 47)],
               data2: [FlSpot(0, 39)],
-              year1: '2024',
-              year2: '2023',
+              year1: 'January-2024',
+              year2: 'January-2023',
               color1: Colors.green,
               color2: Colors.red,
             ),
+            SizedBox(height: 8.0),
 
             SalesComparisonChart(
-              title1: 'Sales-Last Year YTD',
-              title2: 'Sales-Curt Year YTD',
+              title1: 'Sales-Last Year Y',
+              title2: 'Sales-Curt Year Y',
               data1: [FlSpot(0, 35)],
               data2: [FlSpot(0, 20)],
+              year1: '07/01/2024',
+              year2: '07/01/2023',
+              color1: Colors.green,
+              color2: Colors.red,
+            ),
+            const SizedBox(height: 8.0),
+            Container(
+              height: 50, // Set the desired height
+              width: double.infinity,
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.blue, // Set the desired color
+              ),
+              child: Center(
+                child: Text(
+                  'Collection Information',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // Set the text color
+                  ),
+                ),
+              ),
+            ),
+            CollectionComparisonChart(
+              title1: 'Coll-Last Year -YTD',
+              title2: 'Coll-Cur. Year YTD',
+              data1: [FlSpot(0, 85)],
+              data2: [FlSpot(0, 75)],
               year1: '2024',
               year2: '2023',
               color1: Colors.green,
               color2: Colors.red,
             ),
             const SizedBox(height: 8.0),
-
-            // Collection Chart Container
-            buildChartContainer(
-              title: 'Collection',
-              data: [
-                FlSpot(0, 0),
-                FlSpot(1, 85),
-                FlSpot(2, 80),
-                FlSpot(3, 11),
-                FlSpot(4, 10),
-                FlSpot(5, 1),
-                FlSpot(6, 1.25),
-              ],
+            CollectionComparisonChart(
+              title1: 'Coll-Last Year -MTD',
+              title2: 'Coll-Cur. Year MTD',
+              data1: [FlSpot(0, 70)],
+              data2: [FlSpot(0, 60)],
+              year1: 'January-2024',
+              year2: 'January-2023',
+              color1: Colors.green,
+              color2: Colors.red,
             ),
+            const SizedBox(height: 8.0),
+            CollectionComparisonChart(
+              title1: 'Coll-Last Year -Y',
+              title2: 'Coll-Cur. Year Y',
+              data1: [FlSpot(0, 40)],
+              data2: [FlSpot(0, 25)],
+              year1: '07/01/2024',
+              year2: '07/01/2023',
+              color1: Colors.green,
+              color2: Colors.red,
+            ),
+            // const SizedBox(height: 8.0),
+            // // Collection Chart Container
+            // buildChartContainer(
+            //   title: 'Collection',
+            //   data: [
+            //     FlSpot(0, 0),
+            //     FlSpot(1, 85),
+            //     FlSpot(2, 80),
+            //     FlSpot(3, 11),
+            //     FlSpot(4, 10),
+            //     FlSpot(5, 1),
+            //     FlSpot(6, 1.25),
+            //   ],
+            // ),
 
             const SizedBox(height: 8.0),
 
@@ -825,54 +894,54 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     );
   }
 
-  Widget buildChartContainer(
-      {required String title, required List<FlSpot> data}) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            height: 200,
-            child: LineChart(
-              LineChartData(
-                backgroundColor: Colors.blueAccent[100],
-                gridData: FlGridData(show: true),
-                titlesData: FlTitlesData(show: true),
-                borderData: FlBorderData(
-                  show: true,
-                  border: Border.all(color: Colors.black),
-                ),
-                minX: 0,
-                maxX: 6,
-                minY: 0,
-                maxY: 140,
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: data,
-                    isCurved: true,
-                    color: Colors.green,
-                    belowBarData: BarAreaData(show: false),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget buildChartContainer(
+  //     {required String title, required List<FlSpot> data}) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(8.0),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           title,
+  //           style: TextStyle(
+  //             fontSize: 20.0,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         SizedBox(height: 10),
+  //         Container(
+  //           height: 200,
+  //           child: LineChart(
+  //             LineChartData(
+  //               backgroundColor: Colors.blueAccent[100],
+  //               gridData: FlGridData(show: true),
+  //               titlesData: FlTitlesData(show: true),
+  //               borderData: FlBorderData(
+  //                 show: true,
+  //                 border: Border.all(color: Colors.black),
+  //               ),
+  //               minX: 0,
+  //               maxX: 6,
+  //               minY: 0,
+  //               maxY: 140,
+  //               lineBarsData: [
+  //                 LineChartBarData(
+  //                   spots: data,
+  //                   isCurved: true,
+  //                   color: Colors.green,
+  //                   belowBarData: BarAreaData(show: false),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class AnnouncementItem extends StatelessWidget {
@@ -926,6 +995,85 @@ class AnnouncementItem extends StatelessWidget {
   }
 }
 
+// class SalesComparisonChart extends StatelessWidget {
+//   final String title1;
+//   final String title2;
+//   final List<FlSpot> data1;
+//   final List<FlSpot> data2;
+//   final String year1;
+//   final String year2;
+//   final Color color1;
+//   final Color color2;
+
+//   SalesComparisonChart({
+//     required this.title1,
+//     required this.title2,
+//     required this.data1,
+//     required this.data2,
+//     required this.year1,
+//     required this.year2,
+//     required this.color1,
+//     required this.color2,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.all(8.0),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Text(
+//             title1,
+//             style: TextStyle(
+//               fontSize: 12.0,
+//               fontWeight: FontWeight.bold,
+//             ),
+//           ),
+//           Text(
+//             title2,
+//             style: TextStyle(
+//               fontSize: 12.0,
+//               fontWeight: FontWeight.bold,
+//             ),
+//           ),
+//           SizedBox(height: 10),
+//           Container(
+//             height: 200,
+//             child: SfCartesianChart(
+//               series: <CartesianSeries>[
+//                 BarSeries<FlSpot, String>(
+//                   dataSource: data1,
+//                   xValueMapper: (FlSpot spot, _) => year1,
+//                   yValueMapper: (FlSpot spot, _) => spot.y,
+//                   color: color1,
+//                   dataLabelSettings: DataLabelSettings(
+//                     isVisible: true,
+//                   ),
+//                 ),
+//                 BarSeries<FlSpot, String>(
+//                   dataSource: data2,
+//                   xValueMapper: (FlSpot spot, _) => year2,
+//                   yValueMapper: (FlSpot spot, _) => spot.y,
+//                   color: color2,
+//                   dataLabelSettings: DataLabelSettings(
+//                     isVisible: true,
+//                   ),
+//                 ),
+//               ],
+//               primaryXAxis: CategoryAxis(),
+//               primaryYAxis: NumericAxis(),
+//             ),
+//           ),
+//           SizedBox(height: 10),
+//         ],
+//       ),
+//     );
+//   }
+// }
 class SalesComparisonChart extends StatelessWidget {
   final String title1;
   final String title2;
@@ -957,39 +1105,242 @@ class SalesComparisonChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title1,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              Text(
+                title1,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title1 and year1
+              Text(
+                year1,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title1 and year1
+              Text(
+                data1.isNotEmpty ? data1[0].y.toString() : '',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(width: 8), // Add spacing between year1 and color1
+              Container(
+                width: 16, // Adjust the width of the color box as needed
+                height: 16, // Adjust the height of the color box as needed
+                color: color1,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                title2,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title2 and year2
+              Text(
+                year2,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title1 and year1
+              Text(
+                data1.isNotEmpty ? data2[0].y.toString() : '',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(width: 8), // Add spacing between year2 and color2
+              Container(
+                width: 16, // Adjust the width of the color box as needed
+                height: 16, // Adjust the height of the color box as needed
+                color: color2,
+              ),
+            ],
           ),
           SizedBox(height: 10),
           Container(
             height: 200,
             child: SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              primaryYAxis: NumericAxis(),
               series: <CartesianSeries>[
-                BarSeries<FlSpot, String>(
+                ColumnSeries<FlSpot, String>(
                   dataSource: data1,
                   xValueMapper: (FlSpot spot, _) => year1,
                   yValueMapper: (FlSpot spot, _) => spot.y,
                   color: color1,
+                  enableTooltip: true,
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
+                    angle: 0,
                   ),
                 ),
-                BarSeries<FlSpot, String>(
+                ColumnSeries<FlSpot, String>(
                   dataSource: data2,
                   xValueMapper: (FlSpot spot, _) => year2,
                   yValueMapper: (FlSpot spot, _) => spot.y,
                   color: color2,
+                  enableTooltip: true,
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
+                    angle: 0,
                   ),
                 ),
               ],
+            ),
+          ),
+          SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+}
+
+class CollectionComparisonChart extends StatelessWidget {
+  final String title1;
+  final String title2;
+  final List<FlSpot> data1;
+  final List<FlSpot> data2;
+  final String year1;
+  final String year2;
+  final Color color1;
+  final Color color2;
+
+  CollectionComparisonChart({
+    required this.title1,
+    required this.title2,
+    required this.data1,
+    required this.data2,
+    required this.year1,
+    required this.year2,
+    required this.color1,
+    required this.color2,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                title1,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title1 and year1
+              Text(
+                year1,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title1 and year1
+              Text(
+                data1.isNotEmpty ? data1[0].y.toString() : '',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(width: 8), // Add spacing between year1 and color1
+              Container(
+                width: 16, // Adjust the width of the color box as needed
+                height: 16, // Adjust the height of the color box as needed
+                color: color1,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                title2,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title2 and year2
+              Text(
+                year2,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 8), // Add spacing between title1 and year1
+              Text(
+                data1.isNotEmpty ? data2[0].y.toString() : '',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(width: 8), // Add spacing between year2 and color2
+              Container(
+                width: 16, // Adjust the width of the color box as needed
+                height: 16, // Adjust the height of the color box as needed
+                color: color2,
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Container(
+            height: 200,
+            child: SfCartesianChart(
               primaryXAxis: CategoryAxis(),
               primaryYAxis: NumericAxis(),
+              series: <CartesianSeries>[
+                ColumnSeries<FlSpot, String>(
+                  dataSource: data1,
+                  xValueMapper: (FlSpot spot, _) => year1,
+                  yValueMapper: (FlSpot spot, _) => spot.y,
+                  color: color1,
+                  enableTooltip: true,
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                    angle: 0,
+                  ),
+                ),
+                ColumnSeries<FlSpot, String>(
+                  dataSource: data2,
+                  xValueMapper: (FlSpot spot, _) => year2,
+                  yValueMapper: (FlSpot spot, _) => spot.y,
+                  color: color2,
+                  enableTooltip: true,
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                    angle: 0,
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 10),

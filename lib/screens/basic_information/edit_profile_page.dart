@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditProfilePage extends StatefulWidget {
-  final Map<String, String> userData;
+  // final Map<String, String> userData;
   final Function(Map<String, String>) onUpdate;
 
   const EditProfilePage(
-      {required this.userData, required this.onUpdate, Key? key})
+      {required this.onUpdate, Key? key})
       : super(key: key);
 
   @override
@@ -21,17 +21,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController anniversaryController;
   late TextEditingController itrnumberController;
 
-  @override
-  void initState() {
-    super.initState();
-    mobileController = TextEditingController(text: widget.userData['Mobile']);
-    emailController = TextEditingController(text: widget.userData['E-mail']);
-    altMobileController =
-        TextEditingController(text: widget.userData['Alternative Mobile no']);
-    dobController = TextEditingController(text: widget.userData['DOB']);
-    anniversaryController =
-        TextEditingController(text: widget.userData['Anniversary Date']);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   mobileController = TextEditingController(text: widget.userData['Mobile']);
+  //   emailController = TextEditingController(text: widget.userData['E-mail']);
+  //   altMobileController =
+  //       TextEditingController(text: widget.userData['Alternative Mobile no']);
+  //   dobController = TextEditingController(text: widget.userData['DOB']);
+  //   anniversaryController =
+  //       TextEditingController(text: widget.userData['Anniversary Date']);
+  // }
 
   @override
   Widget build(BuildContext context) {
