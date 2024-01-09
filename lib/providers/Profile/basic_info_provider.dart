@@ -1,8 +1,10 @@
+import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:krishajdealer/services/api/edit_user_info_responce_model.dart';
 import 'package:krishajdealer/services/api/user_basic_info_responce_model.dart';
 
 class UserInfoProvider extends ChangeNotifier {
@@ -13,9 +15,10 @@ class UserInfoProvider extends ChangeNotifier {
     return connectivityResult != ConnectivityResult.none;
   }
 
-  Future<UserInfoResponse> getUserInfo(BuildContext context, String token) async {
+  Future<UserInfoResponse> getUserInfo(
+      BuildContext context, String token) async {
     try {
-       print('token: ${token}');
+      print('token: ${token}');
       if (await _checkInternet()) {
         final response = await _dio.post(
           'https://krepl.indigidigital.in/api/user_info?token=$token',
@@ -30,6 +33,68 @@ class UserInfoProvider extends ChangeNotifier {
           _showToast(context, 'User info loaded successfully', false);
 
           return UserInfoResponse.fromJson(response.data);
+        } else {
+          print('Error Response: ${response.data}');
+
+          // Show error toast
+          _showToast(context, 'Error: ${response.statusCode}', true);
+
+          throw Exception('Error: ${response.statusCode}');
+        }
+      } else {
+        // Show no internet connection toast
+        _showToast(context, 'No internet connection', true);
+
+        throw Exception('No internet connection');
+      }
+    } catch (e) {
+      print('Exception: $e');
+
+      // Show generic error toast
+      _showToast(context, 'Error occurred: $e', true);
+
+      throw Exception('Error occurred: $e');
+    }
+  }
+
+  Future<EditUserInfoResponse> editUserInfo(
+    BuildContext context,
+    String token,
+    String email,
+    String alternativeMobileNo,
+    String dateOfBirth,
+    String anniversaryDate,
+    String itrSubmit,
+    String itrNumber,
+    File? itrImage,
+  ) async {
+    try {
+      print('token: ${token}');
+      if (await _checkInternet()) {
+        final response = await _dio.post(
+          'https://krepl.indigidigital.in/api/edit_user_info?token=$token',
+          data: {
+            'email': email,
+            'alternative_mobile_no': alternativeMobileNo,
+            'date_of_birth': dateOfBirth,
+            'anniversary_date': anniversaryDate,
+            'itr_submit': itrSubmit,
+            'itr_number': itrNumber,
+            'itr_image': itrImage != null
+            ? await MultipartFile.fromFile(itrImage.path, filename: 'itr_image')
+            : null,
+          },
+        );
+
+        if (response.statusCode != null &&
+            response.statusCode! >= 200 &&
+            response.statusCode! < 300) {
+          print('Successful Response: ${response.data}');
+
+          // Show success toast
+          _showToast(context, 'User info updated successfully', false);
+
+          return EditUserInfoResponse.fromJson(response.data);
         } else {
           print('Error Response: ${response.data}');
 

@@ -51,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
         _pageState = SearchPageState.Data;
       });
     } catch (e) {
+       print('Error loading product details: $e');
       setState(() {
         _pageState = SearchPageState.Error;
       });
@@ -60,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
   void _onSearchChanged() {
     String query = _searchController.text.toLowerCase();
     filteredProductNames = products
-        .where((product) => product.productName.toLowerCase().contains(query))
+        .where((product) => product.materialGroupDescriptionShort.toLowerCase().contains(query))
         .toList();
 
     setState(() {});
@@ -330,9 +331,9 @@ class _SearchPageState extends State<SearchPage> {
                         );
                       },
                       child: CardWidget(
-                        product.productName,
-                        product.productImageUrl,
                         product.materialGroupDescription,
+                        product.productImageUrl,
+                        product.materialGroupDescriptionShort,
                       ),
                     );
                   },

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_animations/animation_builder/play_animation_builder.dart';
 import 'package:simple_animations/movie_tween/movie_tween.dart';
 import 'package:pinput/pinput.dart';
-import 'package:sms_autofill/sms_autofill.dart';
+
 
 class FoochiSignInView extends StatefulWidget {
   const FoochiSignInView({Key? key}) : super(key: key);
@@ -114,9 +114,13 @@ class _FoochiSignInViewState extends State<FoochiSignInView> {
 
                         if (response.success) {
                           // Save token to SharedPreferences using the AuthState provider
-                          await context
-                              .read<AuthState>()
-                              .setToken(response.data?.token ?? '');
+                          await context.read<AuthState>().setToken(
+                                response.data?.token ?? '',
+                                response.data?.customerName ??
+                                    '', // Provide customerName from the response
+                                response.data?.regionCode ?? '',
+                                response.data?.vendorCode ?? '',
+                              );
                           // Navigate to home or the next screen
                           Navigator.pushReplacement(
                             context,

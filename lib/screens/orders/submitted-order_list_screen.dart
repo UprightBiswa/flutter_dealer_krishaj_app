@@ -323,9 +323,9 @@ class _SubmittedOrderListScreenState extends State<SubmittedOrderListScreen> {
                 );
               },
               child: CardWidget(
-                products[index].productName,
-                products[index].productImageUrl,
                 products[index].materialGroupDescription,
+                products[index].productImageUrl,
+                products[index].materialGroupDescriptionShort,
               ),
               // child: Shimmer.fromColors(
               //   baseColor: Colors.grey[300]!,

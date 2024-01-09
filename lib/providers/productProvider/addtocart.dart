@@ -65,12 +65,11 @@ class ProductProvider extends ChangeNotifier {
 
   Future<ApiResponseModel> addToCart({
     required BuildContext context,
-    required int productId,
+    required String productNumber,
     required int quantity,
     required double price,
     required String token,
     required String company,
-    required int materialId,
   }) async {
     try {
       bool isConnected = await _checkInternet();
@@ -87,12 +86,12 @@ class ProductProvider extends ChangeNotifier {
       Response response = await _dio.post(
         'https://krepl.indigidigital.in/api/add_to_cart',
         data: {
-          'product_id': productId,
+          'product_number': productNumber,
           'quantity': quantity,
           'price': price,
           'token': token,
           'company': company.toUpperCase(),
-          'material_id': materialId,
+          
         },
       );
 

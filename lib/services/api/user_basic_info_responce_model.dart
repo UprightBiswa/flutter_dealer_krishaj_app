@@ -36,6 +36,8 @@ class UserInfoMessage {
   String? geotag;
   String? email;
   String? alternativeMobileNo;
+  String? itrImage; // Nullable field for itr_image
+  String? itrNumber; // Nullable field for itr_number
   String createdAt;
   String updatedAt;
 
@@ -57,6 +59,8 @@ class UserInfoMessage {
     required this.geotag,
     required this.email,
     required this.alternativeMobileNo,
+    required this.itrImage,
+    required this.itrNumber,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -80,6 +84,8 @@ class UserInfoMessage {
       geotag: json['geotag'] ?? '',
       email: json['email'] ?? '',
       alternativeMobileNo: json['alternative_mobile_no'] ?? '',
+      itrImage: json['itr_image'] ?? '',
+      itrNumber: json['itr_number']  ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
     );

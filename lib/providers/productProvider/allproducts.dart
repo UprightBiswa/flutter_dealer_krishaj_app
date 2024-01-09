@@ -68,8 +68,9 @@ class AllProductViewProvider extends ChangeNotifier {
 
   Future<ApiResponseModelProductDetails> getProductDetails({
     required BuildContext context,
-    required int productId,
-    required int materialId,
+    required String regionCode,
+    required String customerNumber,
+    required String materialNumber,
   }) async {
     try {
       bool isConnected = await _checkInternet();
@@ -79,17 +80,16 @@ class AllProductViewProvider extends ChangeNotifier {
 
         return ApiResponseModelProductDetails(
           success: false,
-          message: 'No internet connection',
-          productDetails: null,
-          materialInfo: null,
+          message: null,
         );
       }
 
       Response response = await _dio.post(
         'https://krepl.indigidigital.in/api/product_details',
         data: {
-          'product_id': productId,
-          'material_id': materialId, // Pass materialId in the request
+          'region_code': regionCode,
+          'customer_number': customerNumber,
+          'material_number': materialNumber,
         },
       );
 
@@ -97,12 +97,6 @@ class AllProductViewProvider extends ChangeNotifier {
           response.statusCode! >= 200 &&
           response.statusCode! < 300) {
         print('Successful Response: ${response.data}');
-        // Print material info data
-        if (response.data['material_info'] != null) {
-          print('Material Info Data: ${response.data['material_info']}');
-        } else {
-          print('Material Info Data is null');
-        }
         return ApiResponseModelProductDetails.fromJson(response.data);
       } else {
         _showToast(context, 'Error: ${response.statusCode}', isError: true);
@@ -110,9 +104,9 @@ class AllProductViewProvider extends ChangeNotifier {
 
         return ApiResponseModelProductDetails(
           success: false,
-          message: 'Error: ${response.statusCode}',
-          productDetails: null,
-          materialInfo: null,
+          message: null,
+          // productDetails: null,
+          // materialInfo: null,
         );
       }
     } catch (e) {
@@ -121,9 +115,9 @@ class AllProductViewProvider extends ChangeNotifier {
 
       return ApiResponseModelProductDetails(
         success: false,
-        message: 'Error occurred: $e',
-        productDetails: null,
-        materialInfo: null,
+        message: null,
+        // productDetails: null,
+        // materialInfo: null,
       );
     }
   }

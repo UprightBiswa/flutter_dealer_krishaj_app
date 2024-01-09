@@ -24,6 +24,8 @@ class VerifyOtpData {
   final String phoneNo;
   final String token;
   final String otp;
+  final String customerName; // New field
+  final String regionCode;
   final String createdAt;
   final String updatedAt;
 
@@ -33,6 +35,8 @@ class VerifyOtpData {
     required this.phoneNo,
     required this.token,
     required this.otp,
+    required this.customerName, // New field
+    required this.regionCode,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -44,6 +48,8 @@ class VerifyOtpData {
       phoneNo: json['phone_no'],
       token: json['token'],
       otp: json['otp'],
+      customerName: json['customer_name'], // New field
+      regionCode: json['region_code'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );

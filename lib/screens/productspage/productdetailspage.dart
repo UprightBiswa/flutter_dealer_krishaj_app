@@ -67,12 +67,13 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1; // Initial quantity
-  String selectedOption = 'AGRO'; // Initial selected option
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Add this key
   LoadProductDetailsState _productDetailsState =
       LoadProductDetailsState.Loading;
-  ProductDetailsData? _productDetails; // Store the product details
-  MaterialInfo? _materialInfo; // Store the material
+  ProductDetails? _productDetails; // Store the product details
+  // MaterialInfo? _materialInfo; // Store the material
+  String _customerNumber = '';
+  String _regionCode = '';
   @override
   void initState() {
     super.initState();
@@ -85,17 +86,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       setState(() {
         _productDetailsState = LoadProductDetailsState.Loading;
       });
-
+      AuthState authState = AuthState();
+      _customerNumber = await authState.getCustomerNumnber() ?? '';
+      _regionCode = await authState.getRegionCode() ?? '';
+      // Log the values before making the API call
+      print('Customer Number: $_customerNumber');
+      print('Region Code: $_regionCode');
+      print('Material Number: ${widget.product.materialNumber}');
       ApiResponseModelProductDetails productDetails =
           await context.read<AllProductViewProvider>().getProductDetails(
                 context: context,
-                productId: widget.product.id,
-                materialId: int.parse(widget.product.materialId),
+                regionCode: _regionCode,
+                customerNumber: _customerNumber,
+                materialNumber: widget.product.materialNumber,
               );
       if (productDetails.success) {
         setState(() {
-          _productDetails = productDetails.productDetails;
-          _materialInfo = productDetails.materialInfo;
+          _productDetails = productDetails.message;
+          print('Company code: ${_productDetails!.companyCodes}');
           _productDetailsState = LoadProductDetailsState.Data;
         });
       } else {
@@ -104,6 +112,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         });
       }
     } catch (e) {
+      print('Error loading product details: $e');
       setState(() {
         _productDetailsState = LoadProductDetailsState.Error;
       });
@@ -349,7 +358,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Brand: ${_productDetails?.productName ?? ''}',
+                        'Brand: ${_productDetails?.materialGroupDescription ?? ''}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -358,7 +367,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
                       const SizedBox(height: 8),
                       Text(
-                        'Technical Name: ${widget.product.materialGroupDescription} ',
+                        'Technical Name: ${widget.product.materialGroupDescriptionShort} ',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -402,7 +411,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            '${_materialInfo?.umrez} ',
+                            '${_productDetails?.umrez} ',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -410,7 +419,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            '${_materialInfo?.baseUnitOfMeasure}',
+                            '${_productDetails?.baseUnitOfMeasure}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -429,7 +438,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                           Text(
-                            '\u20B9${_materialInfo?.price ?? 0}',
+                            '\u20B9${_productDetails?.price ?? 0}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -446,35 +455,27 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   color: Colors.white,
                   padding: const EdgeInsets.all(8.0),
                   width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Select Company',
+                        'Select Company: ',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          for (String companyCode
-                              in _productDetails?.companyCodes ?? [])
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Column(
-                                children: [
-                                  buildOption(companyCode),
-                                  const SizedBox(
-                                      height: 8), // Add space between options
-                                ],
-                              ),
-                            ),
-                          const SizedBox(width: 8),
-                        ],
-                      ),
+                      const SizedBox(width: 8),
+
+                      // Check if companyCodes is not empty before accessing the first code
+                      if (_productDetails?.companyCodes.isNotEmpty ?? false)
+                        Column(
+                          children: [
+                            buildOption(_productDetails!.companyCodes),
+                          ],
+                        ),
+                      const SizedBox(width: 8),
                     ],
                   ),
                 ),
@@ -503,7 +504,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Quantity: ${_materialInfo?.mseht}', //case
+                              'Quantity: ${_productDetails?.mseht}', //case
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -657,32 +658,44 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
+  String getCompanyName(String companyCode) {
+    switch (companyCode) {
+      case '1000':
+        return 'KREPL';
+      case '2000':
+        return 'AGRO';
+      // Add more cases for other company codes if needed
+      default:
+        return '';
+    }
+  }
+
   Widget buildOption(String companyCode) {
+    String companyName = getCompanyName(companyCode);
+    print('companyName: ' + companyName);
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedOption = companyCode;
-        });
+        // Handle onTap logic here
+        print('Company Code tapped: $companyCode');
+        print('Selected Company Name: $companyName');
       },
       child: Container(
         width: 120,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color:
-              selectedOption == companyCode ? Colors.green : Colors.transparent,
+          color: Colors.green, // Adjust the color as needed
           border: Border.all(
-            color:
-                selectedOption == companyCode ? Colors.green : Colors.black12,
+            color: Colors.green,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
           child: Text(
-            companyCode,
+            companyName,
             style: TextStyle(
               fontSize: 16,
-              color: selectedOption == companyCode ? Colors.white : Colors.grey,
+              color: Colors.white, // Adjust the color as needed
             ),
           ),
         ),
@@ -699,12 +712,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     print('Token saved: $token');
     ApiResponseModel response = await productProvider.addToCart(
       context: context, // Pass the context here
-      productId: _productDetails!.id,
+      productNumber: _productDetails!.materialNumber,
       quantity: quantity,
-      price: (_materialInfo?.price ?? 0).toDouble(),
+      price: double.parse(_productDetails!.price),
       token: token ?? '',
-      company: selectedOption,
-      materialId: _materialInfo!.id,
+      company: _productDetails!.companyCodes,
     );
 
     if (response.success) {
@@ -721,8 +733,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               Text('Product Added to Bag'),
               Text('Total Quantity: $quantity'),
               Text(
-                  'Total Price: ${quantity * (_materialInfo?.price ?? 0).toDouble()}'),
-              Text('Selected Option: $selectedOption'),
+                  'Total Price: ${quantity * double.parse(_productDetails!.price)}'),
+              Text('Selected Option: ${_productDetails!.companyCodes}'),
               Text('Items in Cart: ${response.totalProducts}'),
               SizedBox(height: 8), // Add some spacing
               Container(

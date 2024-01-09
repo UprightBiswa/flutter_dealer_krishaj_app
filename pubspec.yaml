@@ -45,6 +45,7 @@ dependencies:
   shimmer: ^3.0.0
   fluttertoast: ^8.2.4
   image_picker: ^1.0.5
+  file_picker: ^6.1.1
   url_launcher: ^6.2.2
   http:
   animations: ^2.0.10

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:krishajdealer/providers/Profile/basic_info_provider.dart';
 import 'package:krishajdealer/providers/authentication/auth_token.dart';
 import 'package:krishajdealer/screens/basic_information/edit_profile_page.dart';
-import 'package:krishajdealer/screens/locationsearch/locationgeotag.dart';
 import 'package:krishajdealer/screens/locationsearch/locationsearchpage.dart';
 import 'package:krishajdealer/services/api/user_basic_info_responce_model.dart';
 import 'package:krishajdealer/utils/colors.dart';
@@ -82,20 +81,14 @@ class _UserProfileState extends State<ProfileWidget> {
   }
 
   void _navigateToEditPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditProfilePage(
-          // userData: userData,
-          onUpdate: (updatedData) {
-            // setState(() {
-            //   userData = updatedData;
-            // });
-          },
-        ),
-      ),
-    );
-  }
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => EditProfilePage(userData: userData),
+    ),
+  );
+}
+
 }
 
 class LoadingState extends StatelessWidget {
@@ -299,9 +292,9 @@ class DataState extends StatelessWidget {
         'value': userData?.customerTaxNumber,
       },
       {
-        'field': 'Address',
+        'field': 'Region',
         'icon': Icons.location_on,
-        'value': 'Address Value', // Replace with actual value
+        'value': userData?.regionDescription,
       },
       {
         'field': 'Geotag',
@@ -351,23 +344,16 @@ class DataState extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8.0),
-                  Text(
-                    '${item['field']}: ${item['value'] ?? 'N/A'}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      '${item['field']}: ${item['value'] ?? 'N/A'}',
+                      maxLines:
+                          2, // Set the number of lines you want to display
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: item['field'] == 'Geotag'
-                        ? LocationGeotagWidget()
-                        : Text(
-                            userData?.geotag ?? '',
-                            style: TextStyle(
-                              color: Colors.grey[800],
-                            ),
-                          ),
                   ),
                   if (item['field'] == 'Geotag')
                     IconButton(
